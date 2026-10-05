@@ -22,6 +22,7 @@ export const hero = {
     ['Product thinking', 'Framing the right problem before drawing the first screen.'],
     ['Visual craft', 'Interfaces held to a level of detail you can feel.'],
     ['Pace', 'Shipping inside fast-moving teams, next to Product and Engineering.'],
+    ['Range', 'Eight years across consulting, UX/UI and product design.'],
   ],
 };
 
@@ -31,12 +32,12 @@ export const journey = {
   steps: [
     {
       n: '01',
-      org: 'EY Consulting',
-      unit: 'Financial Services',
-      role: 'Senior Consultant',
-      dates: '2018 – 2021',
-      focus: 'Strategy, business & digital transformation',
-      body: 'Worked on multidisciplinary consulting projects, turning complex business problems into strategies and digital solutions.',
+      org: 'Waterplan',
+      role: 'Senior Product Designer',
+      dates: '2022 – Present',
+      current: true,
+      focus: 'Product design across Waterplan & Civarea',
+      body: 'Leading end-to-end product design across Waterplan and Civarea, from early customer problems to shipped products, working closely with Product and Engineering.',
     },
     {
       n: '02',
@@ -48,12 +49,12 @@ export const journey = {
     },
     {
       n: '03',
-      org: 'Waterplan',
-      role: 'Senior Product Designer',
-      dates: '2022 – Present',
-      current: true,
-      focus: 'Product design across Waterplan & Civarea',
-      body: 'Leading end-to-end product design across Waterplan and Civarea, from early customer problems to shipped products, working closely with Product and Engineering.',
+      org: 'EY Consulting',
+      unit: 'Financial Services',
+      role: 'Senior Consultant',
+      dates: '2018 – 2021',
+      focus: 'Strategy, business & digital transformation',
+      body: 'Worked on multidisciplinary consulting projects, turning complex business problems into strategies and digital solutions.',
     },
   ],
 };

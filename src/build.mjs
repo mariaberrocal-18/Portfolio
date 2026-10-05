@@ -22,10 +22,10 @@ function head({ title, desc, p, noindex }) {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
-<meta name="theme-color" content="#eeede9">
+<meta name="theme-color" content="#f7f7f5">
 ${noindex ? '<meta name="robots" content="noindex">\n' : ''}<link rel="preload" href="${p}assets/fonts/inter-tight-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="${p}assets/fonts/instrument-serif-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230c0c0c'/%3E%3Ctext x='16' y='22.5' font-family='Georgia,serif' font-size='20' font-style='italic' text-anchor='middle' fill='%23eeede9'%3Em%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230c0c0c'/%3E%3Ctext x='16' y='22.5' font-family='Georgia,serif' font-size='20' font-style='italic' text-anchor='middle' fill='%23f7f7f5'%3Em%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="${p}assets/css/site.css">
 <script>document.documentElement.classList.add('js');setTimeout(function(){window.__ok||document.documentElement.classList.add('failsafe')},3500)</script>
 </head>`;
@@ -98,16 +98,34 @@ function workCard(proj) {
   </a>`;
 }
 
+function chars(text) {
+  // split into words → characters so the headline can animate letter by letter
+  let i = 0;
+  return text
+    .split(' ')
+    .map((w) => `<span class="w">${[...w].map((c) => `<span class="ch" style="--c:${i++}">${esc(c)}</span>`).join('')}</span>`)
+    .join(' ');
+}
+
 function home() {
   const strengths = hero.strengths
-    .map(([t, d]) => `<li><h2>${esc(t)}</h2><p>${esc(d)}</p></li>`)
+    .map(([t, d]) => `<li><h3>${esc(t)}</h3><p>${esc(d)}</p></li>`)
+    .join('');
+  const tiles = hero.strengths
+    .map(([t, d], i) => {
+      const proj = projects[i];
+      return `<div class="tile" data-tile="${i}"><div class="tile__bob"><div class="tile__in">
+        <div class="tile__face tile__front"><h3>${esc(t)}</h3><p>${esc(d)}</p></div>
+        <div class="tile__face tile__back"><div class="v v--${proj.tone} is-in">${render(proj.visual, 3)}</div></div>
+      </div></div></div>`;
+    })
     .join('');
   const steps = journey.steps
     .map(
       (s) => `<li class="step${s.current ? ' step--current' : ''}">
         <span class="step__n">${s.n}</span>
         <span class="step__dot" aria-hidden="true"></span>
-        <div class="step__body">
+        <div class="step__card">
           <p class="step__dates">${esc(s.dates)}</p>
           <h3 class="step__org">${esc(s.org)}</h3>
           <p class="step__role">${esc(s.role)}${s.unit ? ` · ${esc(s.unit)}` : ''}</p>
@@ -120,6 +138,7 @@ function home() {
   const tools = toolkit.groups
     .map(([g, list]) => `<div class="tool"><dt>${esc(g)}</dt><dd>${list.map((t) => `<span>${esc(t)}</span>`).join('')}</dd></div>`)
     .join('');
+  const heroLabel = `${hero.greeting} ${hero.name} ${hero.title}`;
 
   return `${head({
     title: `${site.name}: ${site.role}`,
@@ -132,46 +151,47 @@ ${header('', true)}
 <main id="top">
   <section class="hero">
     <div class="hero__copy">
-      <h1 class="hero__title" data-lines>
-        <span class="line line--soft"><span>${esc(hero.greeting)}</span></span>
-        <span class="line"><span>${esc(hero.name)}</span></span>
-        <span class="line"><span>${esc(hero.title)}</span></span>
+      <h1 class="hero__title" data-lines aria-label="${esc(heroLabel)}">
+        <span class="line line--soft" aria-hidden="true"><span>${chars(hero.greeting)}</span></span>
+        <span class="line" aria-hidden="true"><span>${chars(hero.name)}</span></span>
+        <span class="line" aria-hidden="true"><span>${chars(hero.title)}</span></span>
       </h1>
       <p class="hero__lede">${esc(hero.lede)}</p>
       <a class="btn" href="#work">${label(hero.cta)}</a>
     </div>
-    <figure class="hero__photo"><img src="assets/photos/maria-hero.jpg" alt="Black-and-white portrait of María Berrocal, smiling and looking to her left" width="454" height="650" fetchpriority="high"></figure>
+    <figure class="hero__photo"><img src="assets/photos/maria-hero.webp" alt="Black-and-white portrait of María Berrocal, smiling and looking to her left" width="1122" height="1262" fetchpriority="high"></figure>
     <span class="hero__rule" aria-hidden="true"></span>
   </section>
 
-  <ul class="strengths wrap">${strengths}</ul>
-
   <section class="work-section" id="work" aria-labelledby="work-h">
-    <div class="wrap">
-      <header class="sec-head">
-        <h2 id="work-h" class="h2">Selected work.</h2>
-        <p class="sec-head__lede">From early questions and messy problems to products that made it into shipped experiences.</p>
-      </header>
-      <div class="work-grid">
+    <div class="bridge" data-bridge>
+      <div class="bridge__stage">
+        <ul class="strengths wrap">${strengths}</ul>
+        <header class="sec-head wrap bridge__head">
+          <h2 id="work-h" class="h2">Selected work.</h2>
+          <p class="sec-head__lede">From early questions and messy problems to products that made it into shipped experiences.</p>
+        </header>
+        <div class="tiles" aria-hidden="true">${tiles}</div>
+      </div>
+    </div>
+    <div class="wrap work-wrap">
+      <div class="work-grid" data-grid>
         ${projects.map(workCard).join('\n')}
       </div>
     </div>
   </section>
 
   <section class="journey" id="journey" aria-labelledby="journey-h">
-    <div class="wrap">
-      <header class="sec-head sec-head--split">
+    <div class="wrap journey__grid">
+      <div class="journey__intro">
         <h2 id="journey-h" class="h2">${esc(journey.title)}</h2>
-        <p class="sec-head__lede">${esc(journey.lede)}</p>
-      </header>
+        <p class="journey__lede">${esc(journey.lede)}</p>
+        <div class="toolkit">
+          <h3 class="toolkit__h">${esc(toolkit.title)}</h3>
+          <dl class="tools">${tools}</dl>
+        </div>
+      </div>
       <ol class="timeline" data-timeline>${steps}</ol>
-    </div>
-  </section>
-
-  <section class="toolkit" aria-labelledby="tools-h">
-    <div class="wrap toolkit__grid">
-      <h2 id="tools-h" class="h3">${esc(toolkit.title)}</h2>
-      <dl class="tools">${tools}</dl>
     </div>
   </section>
 
