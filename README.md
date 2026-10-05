@@ -2,6 +2,8 @@
 
 Static site, no framework. Source of truth for copy and drawings is `src/`; `npm run build` regenerates `index.html` and `work/*.html`.
 
+**Mac, one click:** double-click `Preview.command`. It pulls the latest from GitHub and opens the site.
+
 ```
 npm run build   # regenerate HTML from src/
 npm start       # serve on http://localhost:4173
