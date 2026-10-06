@@ -111,8 +111,8 @@ function workCard(proj, i, all) {
   return `<a class="work" href="${href}" data-cursor="View case study" style="--i:${i}">
     <div class="work__text">
       <p class="work__n"><span>${n}</span> / ${String(all.length).padStart(2, '0')}</p>
-      <p class="work__name">${esc(proj.short)}</p>
       <h3 class="work__title">${esc(proj.title)}</h3>
+      <p class="work__desc">${esc(proj.blurb)}</p>
       <ul class="tags" aria-label="Disciplines">${proj.tags.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
       <span class="work__go">View case study${arrow}</span>
     </div>

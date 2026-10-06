@@ -32,6 +32,7 @@
   --pad: clamp(20px, 3.4vw, 48px);
   --gap: clamp(16px, 2vw, 28px);
   --max: 1440px;
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85 .6' numOctaves='3' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .1 0 0 0 0 .1 0 0 0 0 .1 .95 0 0 0 -.22'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E");
 
   --fs-body: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
   --fs-small: 0.875rem;
@@ -57,7 +58,8 @@ html.lenis, html.lenis body { height: auto; }
 
 body {
   margin: 0;
-  background: var(--paper);
+  background-color: var(--paper);
+  background-image: var(--grain);
   color: var(--ink);
   font-family: var(--sans);
   font-size: var(--fs-body);
@@ -68,17 +70,6 @@ body {
   overflow-x: clip;
 }
 
-/* paper grain */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 90;
-  pointer-events: none;
-  opacity: 0.2;
-  mix-blend-mode: multiply;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85 .6' numOctaves='3' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .1 0 0 0 0 .1 0 0 0 0 .1 .95 0 0 0 -.22'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
 
 ::selection { background: var(--ink); color: var(--paper); }
 :focus-visible { outline: 2px solid var(--sage); outline-offset: 3px; border-radius: 4px; }
@@ -287,15 +278,25 @@ button { font: inherit; color: inherit; }
 @keyframes strike { from { stroke-dashoffset: 100; } to { stroke-dashoffset: 0; } }
 .lcard.is-active .m-real { animation: pop 0.8s var(--ease) 0.6s both; transform-box: fill-box; transform-origin: center; }
 @keyframes pop { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: none; } }
-.lcard.is-active .m-ch { animation: ch-in 0.01s linear both; animation-delay: calc(0.15s + var(--k) * 0.0577s); }
+.lcard.is-active .m-ch { animation: ch-in 0.01s linear both; animation-delay: calc(0.2s + var(--k) * 0.034s); }
 @keyframes ch-in { from { opacity: 0; } to { opacity: 1; } }
-.m-caret { animation: blink 1s steps(1) infinite; }
-.lcard.is-active .m-caret { animation: caret-move 1.5s steps(26, end) 0.15s both, blink 0.9s steps(1) 1.7s infinite; }
-@keyframes caret-move { from { transform: translateX(0); } to { transform: translateX(138px); } }
 @keyframes blink { 50% { opacity: 0; } }
+.m-caret { opacity: 0; }
+.lcard.is-active .m-caret { animation: blink 0.9s steps(1) 2.2s infinite; }
 .m-gen { transform-box: fill-box; transform-origin: center; }
 .lcard:not(.is-active) .m-gen { opacity: 1; }
-.lcard.is-active .m-gen { animation: pop 0.6s var(--ease) both; animation-delay: calc(1.75s + var(--i) * 0.16s); }
+.lcard.is-active .m-gen { animation: pop 0.55s var(--ease) both; animation-delay: calc(2.1s + var(--i) * 0.16s); }
+.m-streak { opacity: 0; }
+.lcard.is-active .m-streak { animation: streak 0.95s cubic-bezier(.3,.1,.2,1) infinite; animation-delay: calc(var(--i) * 0.13s); }
+@keyframes streak { 0% { opacity: 0; transform: translateX(-70px); } 25% { opacity: 1; } 100% { opacity: 0; transform: translateX(210px); } }
+.m-iter { transform-box: fill-box; }
+.lcard.is-active .m-iter { animation: iter-in 0.5s var(--ease) both; animation-delay: calc(0.1s + var(--i) * 0.32s); }
+@keyframes iter-in { from { opacity: 0; translate: -26px 0; } to { opacity: 1; translate: 0 0; } }
+.lcard:not(.is-active) .m-streak { opacity: 0.35; }
+.lcard.is-active .m-chev { animation: chev 0.8s ease-in-out infinite; animation-delay: calc(var(--i) * 0.14s); }
+@keyframes chev { 0%,100% { opacity: .25; translate: 0 0; } 50% { opacity: 1; translate: 4px 0; } }
+.m-shipped { transform-box: fill-box; transform-origin: center; }
+.lcard.is-active .m-shipped { animation: pop 0.6s var(--ease) 1.15s both; }
 .m-bar { transform-box: fill-box; transform-origin: bottom; }
 .lcard.is-active .m-bar { animation: grow-y 0.7s var(--ease) both; animation-delay: calc(var(--i) * 0.08s); }
 @keyframes grow-y { from { transform: scaleY(0); } to { transform: none; } }
@@ -352,7 +353,7 @@ button { font: inherit; color: inherit; }
 .work__text { display: grid; gap: 14px; justify-items: start; margin-top: 22px; }
 .work__n { font-size: 0.8125rem; font-weight: 500; color: var(--ink-2); font-feature-settings: 'tnum' 1; letter-spacing: 0.02em; }
 .work__n span { color: var(--ink); }
-.work__name { font-size: 0.9375rem; font-weight: 600; letter-spacing: -0.01em; color: var(--sage); }
+.work__desc-unused { font-size: 0.9375rem; font-weight: 600; letter-spacing: -0.01em; color: var(--sage); }
 .work__title { font-size: clamp(1.5rem, 1.05rem + 1.3vw, 2.25rem); line-height: 1.06; font-weight: 650; letter-spacing: -0.04em; text-wrap: balance; }
 .work__go { display: inline-flex; align-items: center; gap: 6px; margin-top: 6px; font-size: 0.9375rem; font-weight: 500; border-bottom: 1px solid var(--ink); padding-bottom: 3px; }
 .tags { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -402,7 +403,7 @@ button { font: inherit; color: inherit; }
   background: var(--paper); border: 1px solid var(--ink-3); transition: background 0.5s, border-color 0.5s, transform 0.5s var(--ease); z-index: 1;
 }
 .step.is-on .step__dot { background: var(--sage); border-color: var(--sage); transform: scale(1.2); }
-.step__card { background: rgba(255, 255, 255, 0.7); border: 1px solid var(--line); border-radius: 20px; padding: clamp(22px, 2.4vw, 34px); }
+.step__card { background: #fff; border: 1px solid var(--line); border-radius: 20px; padding: clamp(22px, 2.4vw, 34px); }
 .step__top { display: flex; justify-content: space-between; align-items: center; gap: 16px; min-height: 28px; }
 .org-logo { height: 28px; width: auto; max-width: 160px; object-fit: contain; object-position: right center; flex: none; color: var(--ink); }
 img.org-logo--waterplan { height: 30px; max-width: 190px; }
@@ -611,3 +612,5 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
   .nav__links a { padding: 10px 11px; }
   .contact__nav a { font-size: 1rem; }
 }
+
+.work__desc { max-width: 26rem; color: var(--ink-2); font-size: 1rem; line-height: 1.5; text-wrap: pretty; }

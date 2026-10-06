@@ -128,7 +128,7 @@
   const layoutLoop = () => {
     if (!fly) return;
     const vw = innerWidth, vh = innerHeight;
-    const cw = clamp(vw * 0.21, 250, 330), ch = cw * 0.78;
+    const cw = clamp(vw * 0.21, 250, 330), ch = cw * 0.88;
     G = { vw, vh, cw, ch };
     loop.style.setProperty('--cw', `${cw}px`);
     loop.style.setProperty('--ch', `${ch}px`);

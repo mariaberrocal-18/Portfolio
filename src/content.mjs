@@ -17,7 +17,7 @@ export const hero = {
   name: 'María Berrocal',
   title: 'a Product Designer.',
   lede: '8 years of experience designing digital products where understanding the system, questioning assumptions, and figuring out the real problem is half the work.',
-  cta: 'View selected work',
+  cta: 'View my work',
   loop: {
     say: ['Frame it.', 'Craft it.', 'Ship it.', 'On repeat.'],
     lede: 'A loop that never stops.',
@@ -99,6 +99,7 @@ export const contact = {
 export const projects = [
   {
     slug: 'target-tracking',
+    blurb: 'Targets lived in spreadsheets, so nobody knew if they were still reachable. I designed a view that shows the trajectory, the gap and the next action.',
     visual: 'targetTracking',
     tone: 'dark',
     card: 'a',
@@ -159,6 +160,7 @@ export const projects = [
   },
   {
     slug: 'site-selection',
+    blurb: 'Hundreds of signals, dozens of candidate sites. I designed a ranked shortlist with adjustable weights, so every choice comes with its reasoning.',
     visual: 'siteSelection',
     tone: 'light',
     card: 'b',
@@ -218,6 +220,7 @@ export const projects = [
   },
   {
     slug: 'digital-banking',
+    blurb: 'An app that had grown one feature at a time. I rebuilt it around the few tasks people open it to do, with a component system to hold it together.',
     visual: 'banking',
     tone: 'dark',
     card: 'c',
@@ -276,6 +279,7 @@ export const projects = [
   },
   {
     slug: 'platform-navigation',
+    blurb: 'A platform organised around how it was built. I redesigned the navigation around what people are trying to do, and rolled it out in steps.',
     visual: 'navigation',
     tone: 'light',
     card: 'd',
