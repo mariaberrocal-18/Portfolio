@@ -172,18 +172,35 @@
     }
     updateStack();
   };
-  // stacked work panels: each one settles back as the next slides over it
+  // work: drawings stay pinned and settle back as the next one slides over; the story text hands over with them
   const stack = [...document.querySelectorAll('.work')];
+  const grid = document.querySelector('.work-grid');
   const updateStack = () => {
     if (!stack.length) return;
+    const on = wide.matches && !reduce;
+    grid.classList.toggle('is-stack', on);
     stack.forEach((el, i) => {
-      const panel = el.firstElementChild;
-      if (!wide.matches || reduce || i === stack.length - 1) { panel.style.transform = ''; panel.style.removeProperty('--dim'); return; }
-      const nxt = stack[i + 1].getBoundingClientRect().top;
-      const bar = parseFloat(getComputedStyle(el.parentElement).getPropertyValue('--bar')) || 72;
-      const stuck = parseFloat(getComputedStyle(el).top) + bar; // where the next card ends up
-      const q = clamp((innerHeight - nxt) / (innerHeight - stuck));
-      panel.style.transform = `scale(${(1 - 0.045 * easeOut(q)).toFixed(4)})`;
+      const media = el.querySelector('.work__media');
+      const text = el.querySelector('.work__text');
+      if (!on) {
+        media.style.transform = ''; media.style.removeProperty('--py');
+        text.style.removeProperty('--tv'); text.style.removeProperty('--tt');
+        return;
+      }
+      const top = parseFloat(getComputedStyle(media).top) || 96;
+      // parallax: the drawing drifts a little inside its frame
+      const r = media.getBoundingClientRect();
+      const mid = (r.top + r.height / 2 - innerHeight / 2) / innerHeight;
+      media.style.setProperty('--py', `${(clamp(mid, -1, 1) * -2.2).toFixed(2)}%`);
+      // settle back when the next project covers this one
+      const nxt = stack[i + 1] ? stack[i + 1].querySelector('.work__media').getBoundingClientRect().top : Infinity;
+      const q = nxt === Infinity ? 0 : clamp((innerHeight - nxt) / (innerHeight - top));
+      media.style.transform = `scale(${(1 - 0.05 * easeOut(q)).toFixed(4)})`;
+      // text: fade in as its drawing arrives, out as the next one covers it
+      const arrive = clamp((innerHeight * 0.92 - r.top) / (innerHeight * 0.4));
+      const out = clamp((q - 0.35) / 0.4);
+      text.style.setProperty('--tv', (arrive * (1 - out)).toFixed(3));
+      text.style.setProperty('--tt', `${((1 - arrive) * 24 - out * 18).toFixed(1)}px`);
     });
   };
   const orbitLoop = (t) => {

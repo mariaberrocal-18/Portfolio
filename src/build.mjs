@@ -90,17 +90,18 @@ const media = (proj, stage = 3, extra = '', fit = 'slice') =>
 
 // Home -----------------------------------------------------------------------
 
-function workCard(proj, i) {
+function workCard(proj, i, all) {
   const href = `work/${proj.slug}.html`;
+  const n = String(i + 1).padStart(2, '0');
   return `<a class="work" href="${href}" data-cursor="View case study" style="--i:${i}">
-    <div class="work__panel v v--${proj.tone}" data-reveal="stack">
-      <div class="work__bar">
-        <h3 class="work__title">${esc(proj.title)}</h3>
-        <ul class="tags" aria-label="Disciplines">${proj.tags.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
-        <span class="work__go" aria-label="${esc(proj.short)}">${esc(proj.short)}${arrow}</span>
-      </div>
-      <div class="work__media">${render(proj.visual, 3).replace('xMidYMid slice', 'xMidYMid meet')}</div>
+    <div class="work__text">
+      <p class="work__n"><span>${n}</span> / ${String(all.length).padStart(2, '0')}</p>
+      <p class="work__name">${esc(proj.short)}</p>
+      <h3 class="work__title">${esc(proj.title)}</h3>
+      <ul class="tags" aria-label="Disciplines">${proj.tags.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
+      <span class="work__go">View case study${arrow}</span>
     </div>
+    <div class="work__media v v--${proj.tone}" data-reveal="stack">${render(proj.visual, 3).replace('xMidYMid slice', 'xMidYMid meet')}</div>
   </a>`;
 }
 
