@@ -42,9 +42,9 @@ function head({ title, desc, p, noindex }) {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
-<meta name="theme-color" content="#fbfbfa">
+<meta name="theme-color" content="#fefefe">
 ${noindex ? '<meta name="robots" content="noindex">\n' : ''}<link rel="preload" href="${p}assets/fonts/inter-tight-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230c0c0c'/%3E%3Ctext x='16' y='22.5' font-family='Helvetica,Arial,sans-serif' font-weight='700' font-size='19' text-anchor='middle' fill='%23fbfbfa'%3Em%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230c0c0c'/%3E%3Ctext x='16' y='22.5' font-family='Helvetica,Arial,sans-serif' font-weight='700' font-size='19' text-anchor='middle' fill='%23fefefe'%3Em%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="${p}assets/css/site.css?v=${V.css}">
 <script>document.documentElement.classList.add('js');setTimeout(function(){window.__ok||document.documentElement.classList.add('failsafe')},3500)</script>
 </head>`;
@@ -65,30 +65,30 @@ function header(p, home) {
 
 function footer(p) {
   return `<footer class="contact" id="contact">
-  <div class="wrap contact__grid">
-    <figure class="contact__photo"><img src="${p}assets/photos/maria-contact.jpg" alt="Black-and-white portrait of María Berrocal holding a laptop" width="296" height="424" loading="lazy"></figure>
-    <div class="contact__main">
+  <div class="contact__stage">
+    <div class="contact__copy">
       <h2 class="contact__title" data-lines><span class="line"><span>Let’s work</span></span><span class="line"><span>together.</span></span></h2>
       <p class="contact__lede">${esc(contact.lede)}</p>
       <a class="contact__mail" href="mailto:${site.email}">${esc(site.email)}</a>
+      <nav class="contact__nav" aria-label="Footer">
+        <div>
+          <p class="contact__h">Site</p>
+          <a href="${p}index.html#work">Work</a>
+          <a href="${p}index.html#journey">Journey</a>
+          <a href="${p}index.html#about">About me</a>
+        </div>
+        <div>
+          <p class="contact__h">Elsewhere</p>
+          <a href="${site.linkedin}" rel="noopener">LinkedIn</a>
+          <a href="mailto:${site.email}">Email</a>
+        </div>
+      </nav>
     </div>
-    <nav class="contact__nav" aria-label="Footer">
-      <div>
-        <p class="contact__h">Site</p>
-        <a href="${p}index.html#work">Work</a>
-        <a href="${p}index.html#journey">Journey</a>
-        <a href="${p}index.html#about">About me</a>
-      </div>
-      <div>
-        <p class="contact__h">Elsewhere</p>
-        <a href="${site.linkedin}" rel="noopener">LinkedIn</a>
-        <a href="mailto:${site.email}">Email</a>
-      </div>
-    </nav>
-  </div>
-  <div class="wrap contact__base">
-    <p>© ${site.year} ${site.name}</p>
-    <a href="#top" data-top>Back to top</a>
+    <figure class="contact__photo"><img src="${p}assets/photos/maria-contact.webp" alt="Black-and-white portrait of María Berrocal, smiling and looking to her left" width="1500" height="2000" loading="lazy"></figure>
+    <div class="contact__base">
+      <p>© ${site.year} ${site.name}</p>
+      <a href="#top" data-top>Back to top</a>
+    </div>
   </div>
 </footer>`;
 }
@@ -179,7 +179,7 @@ ${header('', true)}
       <p class="hero__lede">${esc(hero.lede)}</p>
       <a class="btn" href="#work">${label(hero.cta)}</a>
     </div>
-    <figure class="hero__photo"><img src="assets/photos/maria-hero.webp" alt="Black-and-white portrait of María Berrocal, smiling and looking to her left" width="1122" height="1262" fetchpriority="high"></figure>
+    <figure class="hero__photo"><img src="assets/photos/maria-hero.webp" alt="Black-and-white portrait of María Berrocal, smiling and looking to her left" width="1500" height="2000" fetchpriority="high"></figure>
     <span class="hero__rule" aria-hidden="true"></span>
   </section>
 
