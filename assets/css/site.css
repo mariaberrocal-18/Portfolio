@@ -240,7 +240,7 @@ button { font: inherit; color: inherit; }
 
 .is-fly .hero__copy, .is-fly .hero__photo { filter: blur(var(--hb, 0px)); }
 .is-fly .hero__photo { opacity: var(--hbo, 1); }
-.is-fly .bridge { height: calc(100vh + 450vh); margin-top: -34vh; position: relative; z-index: 3; pointer-events: none; }
+.is-fly .bridge { height: calc(100vh + 720vh); margin-top: 0; position: relative; z-index: 3; pointer-events: none; }
 .is-fly .bridge__stage { position: sticky; top: 0; height: 100vh; overflow: clip; }
 .is-fly .strengths { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); padding: 0; }
 .is-fly .loop { display: block; position: absolute; inset: 0; }
@@ -272,10 +272,10 @@ button { font: inherit; color: inherit; }
 .lcard:not(.is-active) .lcard__art, .lcard:not(.is-active) h3, .lcard:not(.is-active) p { opacity: 0.38; }
 .lcard:not(.is-active) .lcard__in { box-shadow: 0 6px 18px rgba(12, 12, 12, 0.05); }
 .lcard.is-active .lcard__in { border-color: var(--ink); box-shadow: 0 30px 80px rgba(12, 12, 12, 0.2), 0 2px 0 rgba(12, 12, 12, 0.04); }
-.lcard__art { flex: 1; min-height: 0; display: grid; place-items: center; color: var(--ink); }
-.mini { width: 100%; height: 100%; max-height: 100%; overflow: visible; }
+.lcard__art { flex: 1 1 0; min-height: 0; display: flex; align-items: center; justify-content: center; color: var(--ink); overflow: hidden; }
+.mini { display: block; width: 100%; height: 100%; max-height: 100%; }
 .mini text { font-family: var(--sans); font-feature-settings: 'tnum' 1; }
-.lcard h3 { font-family: var(--sans); font-weight: 650; font-size: clamp(1.4rem, 1.1rem + 0.8vw, 1.9rem); line-height: 1; letter-spacing: -0.04em; }
+.lcard h3 { font-family: var(--sans); font-weight: 650; font-size: clamp(1.25rem, 1rem + 0.7vw, 1.7rem); line-height: 1.02; letter-spacing: -0.04em; text-wrap: balance; }
 .lcard p { color: var(--ink-2); font-size: clamp(0.8125rem, 0.75rem + 0.2vw, 0.9375rem); line-height: 1.3; }
 :root { --sage-hi: var(--sage); }
 
@@ -303,6 +303,7 @@ button { font: inherit; color: inherit; }
 .work-wrap { padding-top: clamp(56px, 8vw, 120px); }
 .work-head { margin-bottom: clamp(40px, 6vw, 80px); text-align: center; justify-items: center; }
 .work-head .sec-head__lede { max-width: 34rem; }
+.work-head .h2 { max-width: 15ch; }
 .is-fly .work-wrap { --lead: clamp(150px, 28vh, 280px); position: relative; padding-top: var(--lead); }
 .is-fly .work-wrap::before { content: ''; position: absolute; left: 50%; top: 0; width: 1px; margin-left: -0.5px; height: var(--wl, 0px); background: var(--sage); z-index: 2; pointer-events: none; }
 .is-fly .work-wrap::after { content: ''; position: absolute; left: 50%; top: var(--wl, 0px); width: 9px; height: 9px; margin: -4px 0 0 -4.5px; border-radius: 50%; background: var(--sage); box-shadow: 0 0 0 6px rgba(52, 105, 79, 0.14); z-index: 2; pointer-events: none; opacity: var(--wd, 0); }
@@ -375,13 +376,17 @@ button { font: inherit; color: inherit; }
 .journey__intro { grid-column: 1 / span 5; position: sticky; top: 96px; display: grid; gap: 22px; }
 .journey__intro .h2 { max-width: 8ch; }
 .journey__lede { max-width: 26rem; color: var(--ink-2); font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem); line-height: 1.4; text-wrap: pretty; }
-.toolkit { margin-top: clamp(16px, 4vh, 48px); max-width: 27rem; }
-.toolkit__h { font-size: 1.0625rem; font-weight: 600; letter-spacing: -0.015em; margin-bottom: 10px; }
+.toolkit { margin-top: clamp(16px, 4vh, 48px); max-width: 30rem; }
+.toolkit__h { font-size: 1.0625rem; font-weight: 600; letter-spacing: -0.015em; margin-bottom: 12px; }
 .tools { display: grid; }
-.tool { display: grid; grid-template-columns: 11rem 1fr; gap: var(--gap); padding: 10px 0; border-top: 1px solid var(--line); align-items: baseline; }
+.tool { display: grid; gap: 10px; padding: 14px 0 16px; border-top: 1px solid var(--line); }
 .tool:last-child { border-bottom: 1px solid var(--line); }
 .tool dt { color: var(--ink-3); font-size: var(--fs-small); }
-.tool dd { display: flex; flex-wrap: wrap; gap: 2px 16px; font-size: 1.0625rem; font-weight: 550; letter-spacing: -0.015em; }
+.tool dd { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { display: inline-flex; align-items: center; gap: 9px; height: 40px; padding: 0 15px 0 11px; border-radius: 999px; background: #fff; border: 1px solid var(--line); font-size: 0.9375rem; font-weight: 550; letter-spacing: -0.015em; transition: border-color 0.3s ease, transform 0.5s var(--ease); }
+.chip:hover { border-color: rgba(12, 12, 12, 0.35); transform: translateY(-1px); }
+.mark { flex: none; width: 20px; height: 20px; color: var(--ink); object-fit: contain; }
+.mark--mono { display: grid; place-items: center; border-radius: 6px; background: var(--ink); color: #fff; font-size: 0.75rem; font-weight: 700; letter-spacing: 0; }
 
 .timeline { --tl: 0; grid-column: 7 / span 6; position: relative; display: grid; gap: clamp(20px, 3vw, 36px); padding-block: 4px; }
 .timeline::before, .timeline::after { content: ''; position: absolute; left: 118px; top: 0; bottom: 0; width: 1px; }
@@ -396,6 +401,11 @@ button { font: inherit; color: inherit; }
 }
 .step.is-on .step__dot { background: var(--sage); border-color: var(--sage); transform: scale(1.2); }
 .step__card { background: rgba(255, 255, 255, 0.7); border: 1px solid var(--line); border-radius: 20px; padding: clamp(22px, 2.4vw, 34px); }
+.step__top { display: flex; justify-content: space-between; align-items: center; gap: 16px; min-height: 28px; }
+.org-logo { height: 28px; width: auto; max-width: 140px; object-fit: contain; flex: none; color: var(--ink); }
+.org-logo--text { display: inline-flex; align-items: center; font-weight: 750; letter-spacing: -0.05em; font-size: 1.375rem; line-height: 1; white-space: nowrap; }
+.org-logo--text i { font-style: normal; font-weight: 500; font-size: 0.8125rem; letter-spacing: -0.01em; margin-left: 6px; color: var(--ink-2); }
+.org-logo--waterplan { font-size: 1.3rem; letter-spacing: -0.04em; font-weight: 600; }
 .step__dates { font-size: var(--fs-small); color: var(--ink-3); font-variant-numeric: tabular-nums; }
 .step--current .step__dates { color: var(--sage); font-weight: 600; }
 .step__org { margin-top: 8px; font-size: var(--fs-h3); line-height: 1.05; letter-spacing: -0.03em; font-weight: 600; }

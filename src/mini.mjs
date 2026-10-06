@@ -1,6 +1,6 @@
 // Tiny drawings for the three loop cards on the home page (240 x 120).
 const wrap = (inner, label) =>
-  `<svg class="mini" viewBox="0 0 240 120" role="img" aria-label="${label}" xmlns="http://www.w3.org/2000/svg">${inner}</svg>`;
+  `<svg class="mini" viewBox="0 -10 240 130" role="img" aria-label="${label}" xmlns="http://www.w3.org/2000/svg">${inner}</svg>`;
 
 // Product thinking: strike the noise, land on the real problem
 const thinking = () =>

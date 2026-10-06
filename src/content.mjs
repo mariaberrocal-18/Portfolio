@@ -19,14 +19,15 @@ export const hero = {
   lede: '8 years of experience designing digital products where understanding the system, questioning assumptions, and figuring out the real problem is half the work.',
   cta: 'View selected work',
   loop: {
-    say: ['Frame it.', 'Craft it.', 'Ship it.', 'Repeat.'],
-    lede: 'A loop I run every day. It never stops.',
-    bridge: 'That same loop, applied to real products: from a messy first question to what shipped.',
+    say: ['Frame it.', 'Craft it.', 'Ship it.', 'On repeat.'],
+    lede: 'A loop that never stops.',
+    bridge: 'Take a look at how I apply the loop: from the messy first question to what was shipped.',
+    title: 'Translated into something tangible',
   },
   strengths: [
     ['Product thinking', 'Framing the right problem before drawing the first screen.'],
-    ['Visual craft', 'Interfaces held to a level of detail you can feel.'],
-    ['Pace', 'Shipping inside fast-moving teams, next to Product and Engineering.'],
+    ['Visual Design', 'Interfaces held to a level of detail you can feel.'],
+    ['High-pressure, fast-paced', 'Shipping inside fast-moving teams, next to Product and Engineering.'],
   ],
 };
 
@@ -37,6 +38,7 @@ export const journey = {
     {
       n: '01',
       org: 'Waterplan',
+      logo: 'waterplan',
       role: 'Senior Product Designer',
       dates: '2022 – Present',
       current: true,
@@ -46,6 +48,7 @@ export const journey = {
     {
       n: '02',
       org: 'EY Design Studio',
+      logo: 'ey-design-studio',
       role: 'UX/UI Senior Designer',
       dates: '2021 – 2022',
       focus: 'Digital products & experiences for financial clients',
@@ -54,6 +57,7 @@ export const journey = {
     {
       n: '03',
       org: 'EY Consulting',
+      logo: 'ey',
       unit: 'Financial Services',
       role: 'Senior Consultant',
       dates: '2018 – 2021',
@@ -66,9 +70,9 @@ export const journey = {
 export const toolkit = {
   title: 'What I use in my workflow.',
   groups: [
-    ['Design', ['Figma']],
-    ['Prototype and publish', ['Framer', 'GitHub']],
-    ['Think and explore with AI', ['Claude', 'ChatGPT']],
+    ['Design and prototypes', [['Claude', 'claude'], ['Figma', 'figma'], ['ChatGPT', 'chatgpt'], ['Builder.io', 'builder']]],
+    ['Handoff and delivery', [['GitHub', 'github'], ['Vercel', 'vercel'], ['Supabase', 'supabase']]],
+    ['Product marketing', [['Framer', 'framer'], ['Arcade', 'arcade'], ['Veed.io', 'veed'], ['Canva', 'canva']]],
   ],
 };
 

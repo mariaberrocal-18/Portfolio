@@ -8,6 +8,7 @@
   const lerp = (a, b, t) => a + (b - a) * t;
   const easeInOut = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
   const easeOut = (t) => 1 - Math.pow(1 - t, 3);
+  const easeSine = (t) => -(Math.cos(Math.PI * t) - 1) / 2;
   window.__ok = true;
 
   // smooth scroll ---------------------------------------------------------
@@ -96,18 +97,18 @@
   const row = { c: [{ x: 0.2, y: 0.26, s: 0.62, o: 0.6 }, { x: 0.5, y: 0.26, s: 0.62, o: 0.6 }, { x: 0.8, y: 0.26, s: 0.62, o: 0.6 }], t: { x: 0.2, y: 0.62 }, b: 0, po: 0, ta: 0, la: 0 };
   const K = [
     { p: 0.0, ...row },
-    { p: 0.1, c: [{ x: 0.2, y: 0.32, s: 1.12, o: 1 }, { x: 0.5, y: 0.75, s: 0.7, o: 1 }, { x: 0.8, y: 0.73, s: 0.7, o: 1 }], t: { x: 0.2, y: 0.66 }, b: 1, po: 1, ta: 1, la: 0 },
-    { p: 0.19, c: [{ x: 0.2, y: 0.32, s: 1.12, o: 1 }, { x: 0.5, y: 0.75, s: 0.7, o: 1 }, { x: 0.8, y: 0.73, s: 0.7, o: 1 }], t: { x: 0.2, y: 0.66 }, b: 1, po: 1, ta: 1, la: 0 },
-    { p: 0.29, c: [{ x: 0.2, y: 0.74, s: 0.7, o: 1 }, { x: 0.5, y: 0.31, s: 1.12, o: 1 }, { x: 0.8, y: 0.74, s: 0.7, o: 1 }], t: { x: 0.5, y: 0.64 }, b: 2, po: 1, ta: 1, la: 0 },
-    { p: 0.38, c: [{ x: 0.2, y: 0.74, s: 0.7, o: 1 }, { x: 0.5, y: 0.31, s: 1.12, o: 1 }, { x: 0.8, y: 0.74, s: 0.7, o: 1 }], t: { x: 0.5, y: 0.64 }, b: 2, po: 1, ta: 1, la: 0 },
-    { p: 0.48, c: [{ x: 0.2, y: 0.75, s: 0.7, o: 1 }, { x: 0.5, y: 0.75, s: 0.7, o: 1 }, { x: 0.8, y: 0.32, s: 1.12, o: 1 }], t: { x: 0.8, y: 0.66 }, b: 3, po: 1, ta: 1, la: 0 },
-    { p: 0.57, c: [{ x: 0.2, y: 0.75, s: 0.7, o: 1 }, { x: 0.5, y: 0.75, s: 0.7, o: 1 }, { x: 0.8, y: 0.32, s: 1.12, o: 1 }], t: { x: 0.8, y: 0.66 }, b: 3, po: 1, ta: 1, la: 0 },
-    { p: 0.68, c: [{ x: 0.22, y: 0.33, s: 0.95, o: 1 }, { x: 0.5, y: 0.76, s: 0.95, o: 1 }, { x: 0.78, y: 0.33, s: 0.95, o: 1 }], t: { x: 0.5, y: 0.36 }, b: 4, po: 1, ta: 1, la: 1 },
-    { p: 0.77, c: [{ x: 0.22, y: 0.33, s: 0.95, o: 1 }, { x: 0.5, y: 0.76, s: 0.95, o: 1 }, { x: 0.78, y: 0.33, s: 0.95, o: 1 }], t: { x: 0.5, y: 0.36 }, b: 4, po: 1, ta: 1, la: 1 },
-    { p: 0.8, c: [{ x: 0.22, y: 0.33, s: 0.95, o: 1 }, { x: 0.5, y: 0.76, s: 0.95, o: 1 }, { x: 0.78, y: 0.33, s: 0.95, o: 1 }], t: { x: 0.5, y: 0.36 }, b: 4, po: 1, ta: 0, la: 0 },
-    { p: 0.86, c: [{ x: 0.5, y: 0.3, s: 0.6, o: 1 }, { x: 0.5, y: 0.405, s: 0.6, o: 1 }, { x: 0.5, y: 0.51, s: 0.6, o: 1 }], t: { x: 0.5, y: 0.36 }, b: 4, po: 0, ta: 0, la: 0 },
-    { p: 0.92, c: [{ x: 0.5, y: 0.38, s: 0.1, o: 0 }, { x: 0.5, y: 0.38, s: 0.1, o: 0 }, { x: 0.5, y: 0.38, s: 0.1, o: 0 }], t: { x: 0.5, y: 0.36 }, b: 4, po: 0, ta: 0, la: 0 },
-    { p: 1.0, c: [{ x: 0.5, y: 0.38, s: 0.1, o: 0 }, { x: 0.5, y: 0.38, s: 0.1, o: 0 }, { x: 0.5, y: 0.38, s: 0.1, o: 0 }], t: { x: 0.5, y: 0.36 }, b: 4, po: 0, ta: 0, la: 0 },
+    { p: 0.11, c: [{ x: 0.2, y: 0.32, s: 1.12, o: 1 }, { x: 0.5, y: 0.75, s: 0.7, o: 1 }, { x: 0.8, y: 0.73, s: 0.7, o: 1 }], t: { x: 0.2, y: 0.66 }, b: 1, po: 1, ta: 1, la: 0 },
+    { p: 0.2, c: [{ x: 0.2, y: 0.32, s: 1.12, o: 1 }, { x: 0.5, y: 0.75, s: 0.7, o: 1 }, { x: 0.8, y: 0.73, s: 0.7, o: 1 }], t: { x: 0.2, y: 0.66 }, b: 1, po: 1, ta: 1, la: 0 },
+    { p: 0.3, c: [{ x: 0.2, y: 0.74, s: 0.7, o: 1 }, { x: 0.5, y: 0.31, s: 1.12, o: 1 }, { x: 0.8, y: 0.74, s: 0.7, o: 1 }], t: { x: 0.5, y: 0.64 }, b: 2, po: 1, ta: 1, la: 0 },
+    { p: 0.39, c: [{ x: 0.2, y: 0.74, s: 0.7, o: 1 }, { x: 0.5, y: 0.31, s: 1.12, o: 1 }, { x: 0.8, y: 0.74, s: 0.7, o: 1 }], t: { x: 0.5, y: 0.64 }, b: 2, po: 1, ta: 1, la: 0 },
+    { p: 0.49, c: [{ x: 0.2, y: 0.75, s: 0.7, o: 1 }, { x: 0.5, y: 0.75, s: 0.7, o: 1 }, { x: 0.8, y: 0.32, s: 1.12, o: 1 }], t: { x: 0.8, y: 0.66 }, b: 3, po: 1, ta: 1, la: 0 },
+    { p: 0.58, c: [{ x: 0.2, y: 0.75, s: 0.7, o: 1 }, { x: 0.5, y: 0.75, s: 0.7, o: 1 }, { x: 0.8, y: 0.32, s: 1.12, o: 1 }], t: { x: 0.8, y: 0.66 }, b: 3, po: 1, ta: 1, la: 0 },
+    { p: 0.69, c: [{ x: 0.22, y: 0.33, s: 0.95, o: 1 }, { x: 0.5, y: 0.76, s: 0.95, o: 1 }, { x: 0.78, y: 0.33, s: 0.95, o: 1 }], t: { x: 0.5, y: 0.36 }, b: 4, po: 1, ta: 1, la: 1 },
+    { p: 0.78, c: [{ x: 0.22, y: 0.33, s: 0.95, o: 1 }, { x: 0.5, y: 0.76, s: 0.95, o: 1 }, { x: 0.78, y: 0.33, s: 0.95, o: 1 }], t: { x: 0.5, y: 0.36 }, b: 4, po: 1, ta: 1, la: 1 },
+    { p: 0.81, c: [{ x: 0.22, y: 0.33, s: 0.95, o: 1 }, { x: 0.5, y: 0.76, s: 0.95, o: 1 }, { x: 0.78, y: 0.33, s: 0.95, o: 1 }], t: { x: 0.5, y: 0.36 }, b: 4, po: 1, ta: 0, la: 0 },
+    { p: 0.865, c: [{ x: 0.5, y: 0.3, s: 0.6, o: 1 }, { x: 0.5, y: 0.405, s: 0.6, o: 1 }, { x: 0.5, y: 0.51, s: 0.6, o: 1 }], t: { x: 0.5, y: 0.36 }, b: 4, po: 0, ta: 0, la: 0 },
+    { p: 0.93, c: [{ x: 0.5, y: 0.405, s: 0.08, o: 0 }, { x: 0.5, y: 0.405, s: 0.08, o: 0 }, { x: 0.5, y: 0.405, s: 0.08, o: 0 }], t: { x: 0.5, y: 0.36 }, b: 4, po: 0, ta: 0, la: 0 },
+    { p: 1.0, c: [{ x: 0.5, y: 0.405, s: 0.08, o: 0 }, { x: 0.5, y: 0.405, s: 0.08, o: 0 }, { x: 0.5, y: 0.405, s: 0.08, o: 0 }], t: { x: 0.5, y: 0.36 }, b: 4, po: 0, ta: 0, la: 0 },
   ];
   const mix = (A, B, k) => ({
     c: A.c.map((a, i) => ({ x: lerp(a.x, B.c[i].x, k), y: lerp(a.y, B.c[i].y, k), s: lerp(a.s, B.c[i].s, k), o: lerp(a.o, B.c[i].o, k) })),
@@ -118,7 +119,7 @@
     let i = 0;
     while (i < K.length - 2 && p > K[i + 1].p) i++;
     const A = K[i], B = K[i + 1];
-    return mix(A, B, easeInOut(clamp((p - A.p) / (B.p - A.p))));
+    return mix(A, B, easeSine(clamp((p - A.p) / (B.p - A.p))));
   };
 
   let fly = false, G = null;
@@ -149,11 +150,22 @@
   };
   const setDraw = (el, prog) => { el.style.strokeDasharray = '1 1'; el.style.strokeDashoffset = (1 - clamp(prog)).toFixed(4); };
 
-  let cometOn = false, cometT = 0;
+  let cometOn = false, tp = 0, ps = 0, psInit = false;
   const updateBridge = () => {
     if (!fly || !G) return;
     const rect = bridge.getBoundingClientRect();
-    const p = clamp(-rect.top / (rect.height - G.vh));
+    tp = clamp(-rect.top / (rect.height - G.vh));
+    if (!psInit) { ps = tp; psInit = true; renderBridge(ps); }
+    follow();
+    updateWork();
+  };
+  // the storyboard follows the scroll with a little inertia, so every move eases in and out
+  const follow = () => {
+    if (Math.abs(tp - ps) < 0.00015) { if (ps !== tp) { ps = tp; renderBridge(ps); } return; }
+    ps += (tp - ps) * 0.085;
+    renderBridge(ps);
+  };
+  const renderBridge = (p) => {
     const S = stateAt(p);
     const { vw, vh, cw, ch } = G;
 
@@ -199,13 +211,14 @@
     dot.style.opacity = cometOn ? '1' : '0';
     cometPath = closedGreen;
 
-    // the point the stack collapses into drops a line to the bottom of the stage
-    const u = easeInOut(clamp((p - 0.915) / 0.085));
-    const y1 = 0.38 * vh + 8;
+    // the stack collapses into a point and, from that very moment, drops a line down the page
+    const u = easeSine(clamp((p - 0.865) / 0.135));
+    const y1 = 0.405 * vh;
     drop.setAttribute('x1', vw / 2); drop.setAttribute('x2', vw / 2);
     drop.setAttribute('y1', y1); drop.setAttribute('y2', y1 + (vh - y1) * u);
     drop.style.opacity = u > 0 ? 1 : 0;
-
+  };
+  const updateWork = () => {
     // continuation: the same line keeps falling until it lands on the section title
     if (workSection) {
       const wr = workSection.getBoundingClientRect();
@@ -250,6 +263,7 @@
   };
   let cometPath = null;
   const orbitLoop = (t) => {
+    if (fly && G && psInit) follow();
     if (fly && G && cometOn && cometPath) {
       const len = cometPath.getTotalLength();
       const frac = ((t / 1000) * 0.14) % 1, tail = 0.12;

@@ -7,6 +7,8 @@ import { fileURLToPath } from 'node:url';
 import { site, hero, journey, toolkit, about, contact, projects } from './content.mjs';
 import { render } from './visuals.mjs';
 import { mini } from './mini.mjs';
+import { marks } from './logos.mjs';
+import { existsSync } from 'node:fs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 // cache-busting: asset URLs change whenever their content does
@@ -17,6 +19,19 @@ const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, 
 const arrow = `<svg class="ico" width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M4.5 13.5l9-9M6 4.5h7.5V12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 const back = `<svg class="ico" width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M14 9H4m4.5-4.5L4 9l4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
+// logos: an official file in assets/logos/<slug>.svg|png wins; otherwise a brand mark, otherwise a monogram
+const logoFile = (slug) => ['svg', 'png', 'webp'].map((e) => `assets/logos/${slug}.${e}`).find((f) => existsSync(join(root, f)));
+const toolMark = (name, slug) => {
+  const f = logoFile(slug);
+  if (f) return `<img class="mark" src="${f}" alt="" width="20" height="20" loading="lazy">`;
+  if (marks[slug]) return `<svg class="mark" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="${marks[slug]}"/></svg>`;
+  return `<span class="mark mark--mono" aria-hidden="true">${esc(name[0])}</span>`;
+};
+const orgLogo = (slug, org) => {
+  const f = logoFile(`logos-${slug}`.replace('logos-', ''));
+  if (f) return `<img class="org-logo" src="${f}" alt="${esc(org)} logo" height="28" loading="lazy">`;
+  return `<span class="org-logo org-logo--text org-logo--${slug}" aria-label="${esc(org)}">${slug === 'ey' ? 'EY' : slug === 'ey-design-studio' ? 'EY <i>Design Studio</i>' : 'waterplan'}</span>`;
+};
 const label = (t) => `<span class="roll" data-text="${esc(t)}"><span>${esc(t)}</span></span>`;
 
 function head({ title, desc, p, noindex }) {
@@ -131,7 +146,7 @@ function home() {
         <span class="step__n">${s.n}</span>
         <span class="step__dot" aria-hidden="true"></span>
         <div class="step__card">
-          <p class="step__dates">${esc(s.dates)}</p>
+          <div class="step__top"><p class="step__dates">${esc(s.dates)}</p>${orgLogo(s.logo, s.org)}</div>
           <h3 class="step__org">${esc(s.org)}</h3>
           <p class="step__role">${esc(s.role)}${s.unit ? ` · ${esc(s.unit)}` : ''}</p>
           <p class="step__focus">${esc(s.focus)}</p>
@@ -141,7 +156,7 @@ function home() {
     )
     .join('');
   const tools = toolkit.groups
-    .map(([g, list]) => `<div class="tool"><dt>${esc(g)}</dt><dd>${list.map((t) => `<span>${esc(t)}</span>`).join('')}</dd></div>`)
+    .map(([g, list]) => `<div class="tool"><dt>${esc(g)}</dt><dd>${list.map(([n, slug]) => `<span class="chip">${toolMark(n, slug)}${esc(n)}</span>`).join('')}</dd></div>`)
     .join('');
   const heroLabel = `${hero.greeting} ${hero.name} ${hero.title}`;
 
@@ -181,7 +196,7 @@ ${header('', true)}
     </div>
     <div class="wrap work-wrap">
       <header class="sec-head work-head">
-        <h2 id="work-h" class="h2">Selected work.</h2>
+        <h2 id="work-h" class="h2">${esc(hero.loop.title)}</h2>
         <p class="sec-head__lede">${esc(hero.loop.bridge)}</p>
       </header>
       <div class="work-grid" data-grid>
