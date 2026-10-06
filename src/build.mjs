@@ -29,8 +29,7 @@ function head({ title, desc, p, noindex }) {
 <meta name="description" content="${esc(desc)}">
 <meta name="theme-color" content="#f7f7f5">
 ${noindex ? '<meta name="robots" content="noindex">\n' : ''}<link rel="preload" href="${p}assets/fonts/inter-tight-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="${p}assets/fonts/instrument-serif-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230c0c0c'/%3E%3Ctext x='16' y='22.5' font-family='Georgia,serif' font-size='20' font-style='italic' text-anchor='middle' fill='%23f7f7f5'%3Em%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230c0c0c'/%3E%3Ctext x='16' y='22.5' font-family='Helvetica,Arial,sans-serif' font-weight='700' font-size='19' text-anchor='middle' fill='%23f7f7f5'%3Em%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="${p}assets/css/site.css?v=${V.css}">
 <script>document.documentElement.classList.add('js');setTimeout(function(){window.__ok||document.documentElement.classList.add('failsafe')},3500)</script>
 </head>`;

@@ -112,11 +112,11 @@
 
     lcards.forEach((el, i) => {
       const [x, y] = onRing(ANG[i]);
-      const focus = beat === i ? 1.08 : beat === 3 ? 1 : beat < 0 ? 0.96 : 0.9;
+      const focus = beat === i ? 1.16 : beat === 3 ? 1 : beat < 0 ? 0.94 : 0.84;
       const tx = lerp(x, G.cx, u), ty = lerp(y, G.cy + G.ry + 10, u);
       const sc = lerp(focus, 0.18, u);
       el.style.transform = `translate3d(${tx - G.cw / 2}px, ${ty - G.ch / 2}px, 0) scale(${sc.toFixed(3)})`;
-      el.style.opacity = (beat === i || beat === 3 || beat < 0 ? 1 : 0.55) * (1 - u * u);
+      el.style.opacity = (1 - clamp((u - 0.55) / 0.45)).toFixed(3);
       el.style.zIndex = beat === i ? 3 : 1;
       el.classList.toggle('is-active', beat === i || beat === 3);
     });

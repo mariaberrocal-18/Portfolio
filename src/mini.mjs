@@ -26,19 +26,19 @@ const thinking = () =>
     'Three noisy starting points struck through, leading to one highlighted real problem',
   );
 
-// Visual craft: a button held to measurements
+// Visual craft: a prompt is typed, components appear
 const craft = () =>
   wrap(
-    `<g stroke="currentColor" stroke-opacity=".12">${[20, 40, 60, 80, 100].map((y) => `<line x1="0" y1="${y}" x2="240" y2="${y}"/>`).join('')}</g>
-    <rect class="m-btn" x="60" y="40" width="120" height="40" rx="20" fill="currentColor"/>
-    <text x="120" y="65" font-size="14" font-weight="600" text-anchor="middle" fill="var(--paper)">Save changes</text>
-    <g class="m-guides" stroke="var(--sage-hi)" stroke-width="1" fill="none">
-      <path d="M60 28 V22 H180 V28"/><path d="M190 40 H196 V80 H190"/><path d="M60 92 V98 H80 V92"/>
-    </g>
-    <g class="m-guides" font-size="10" font-weight="600" fill="var(--sage-hi)">
-      <text x="120" y="17" text-anchor="middle">120</text><text x="203" y="63">40</text><text x="70" y="111" text-anchor="middle">20</text>
-    </g>`,
-    'A rounded button with measurement guides showing its exact dimensions',
+    `<defs><clipPath id="m-typeclip"><rect class="m-typerect" x="32" y="6" width="190" height="30"/></clipPath></defs>
+    <rect x="8" y="6" width="224" height="30" rx="15" fill="none" stroke="currentColor" stroke-opacity=".3"/>
+    <path d="M22 15.5l1.6 4 4 1.6-4 1.6-1.6 4-1.6-4-4-1.6 4-1.6z" fill="var(--sage-hi)"/>
+    <g clip-path="url(#m-typeclip)"><text x="34" y="25" font-size="10.5" font-weight="500" fill="currentColor">Pill button, 40px, primary</text></g>
+    <rect class="m-caret" x="34" y="14" width="1.4" height="14" fill="var(--sage-hi)"/>
+    <g class="m-gen" style="--i:0"><rect x="14" y="50" width="104" height="38" rx="19" fill="currentColor"/><text x="66" y="73.5" font-size="12" font-weight="600" text-anchor="middle" fill="var(--paper)">Save changes</text></g>
+    <g class="m-gen" style="--i:1"><rect x="132" y="56" width="42" height="26" rx="13" fill="var(--sage-hi)"/><circle cx="161" cy="69" r="9.5" fill="var(--paper)"/></g>
+    <g class="m-gen" style="--i:2"><rect x="186" y="56" width="40" height="26" rx="8" fill="none" stroke="currentColor" stroke-opacity=".45"/><rect x="194" y="66" width="18" height="4" rx="2" fill="currentColor" fill-opacity=".35"/></g>
+    <g class="m-gen" style="--i:3"><rect x="14" y="98" width="212" height="8" rx="4" fill="currentColor" fill-opacity=".1"/><rect x="14" y="98" width="140" height="8" rx="4" fill="currentColor" fill-opacity=".55"/></g>`,
+    'An AI prompt typing out a button description, with the generated button, toggle, input and progress bar appearing below',
   );
 
 // Pace: a steady cadence of shipping
