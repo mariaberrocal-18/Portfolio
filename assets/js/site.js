@@ -72,10 +72,38 @@
   const says = loop ? [...loop.querySelectorAll('.say__w')] : [];
   const ring = loop && loop.querySelector('.loop__ring');
   const dot = loop && loop.querySelector('.loop__dot');
+  const comet = loop && loop.querySelector('.loop__comet');
   const drop = loop && loop.querySelector('.loop__drop');
   const svg = loop && loop.querySelector('.loop__svg');
-  const ANG = [-60, 60, 180]; // clockwise from the top: Product thinking → Visual craft → Pace
-  let fly = false, G = null, orbit = 0, orbitOn = false;
+  // The line is one organic closed curve through six points. Three of them are the
+  // cards (fixed); the other three breathe slowly so the whole shape feels alive.
+  const PTS = [
+    { a: -60, r: 1, card: 0 },
+    { a: 0, r: 1.16, w: 0 },
+    { a: 60, r: 1, card: 1 },
+    { a: 120, r: 0.8, w: 1 },
+    { a: 180, r: 1, card: 2 },
+    { a: 240, r: 0.88, w: 2 },
+  ];
+  let fly = false, G = null, orbitOn = false;
+
+  const pointAt = (pt, t = 0) => {
+    const r = pt.r * (pt.w === undefined ? 1 : 1 + 0.07 * Math.sin(t * 0.7 + pt.w * 2.1));
+    const rad = (pt.a * Math.PI) / 180;
+    return [G.cx + G.rx * r * Math.sin(rad), G.cy - G.ry * r * Math.cos(rad)];
+  };
+  const smoothPath = (t) => {
+    const P = PTS.map((pt) => pointAt(pt, t)), n = P.length;
+    let d = `M ${P[0][0].toFixed(1)} ${P[0][1].toFixed(1)}`;
+    for (let i = 0; i < n; i++) {
+      const p0 = P[(i - 1 + n) % n], p1 = P[i], p2 = P[(i + 1) % n], p3 = P[(i + 2) % n];
+      const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6];
+      const c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
+      d += ` C ${c1[0].toFixed(1)} ${c1[1].toFixed(1)} ${c2[0].toFixed(1)} ${c2[1].toFixed(1)} ${p2[0].toFixed(1)} ${p2[1].toFixed(1)}`;
+    }
+    return d + ' Z';
+  };
+  const cardAnchor = (i) => pointAt(PTS.find((pt) => pt.card === i), 0);
 
   const layoutLoop = () => {
     if (!fly) return;
@@ -87,11 +115,11 @@
     loop.style.setProperty('--cw', `${cw}px`);
     loop.style.setProperty('--ch', `${ch}px`);
     svg.setAttribute('viewBox', `0 0 ${vw} ${vh}`);
-    ring.setAttribute('d', `M ${cx} ${cy - ry} A ${rx} ${ry} 0 1 1 ${cx} ${cy + ry} A ${rx} ${ry} 0 1 1 ${cx} ${cy - ry}`);
+    const d = smoothPath(0);
+    ring.setAttribute('d', d); comet.setAttribute('d', d);
     drop.setAttribute('x1', cx); drop.setAttribute('x2', cx);
     drop.setAttribute('y1', cy + ry);
   };
-  const onRing = (deg) => { const r = (deg * Math.PI) / 180; return [G.cx + G.rx * Math.sin(r), G.cy - G.ry * Math.cos(r)]; };
 
   const setFly = () => {
     const on = !!bridge && !reduce && wide.matches;
@@ -111,7 +139,7 @@
     const drift = Math.sin(p * Math.PI * 2) * 0; // keep the loop calm; motion comes from the beats
 
     lcards.forEach((el, i) => {
-      const [x, y] = onRing(ANG[i]);
+      const [x, y] = cardAnchor(i);
       const focus = beat === i ? 1.16 : beat === 3 ? 1 : beat < 0 ? 0.94 : 0.84;
       const tx = lerp(x, G.cx, u), ty = lerp(y, G.cy + G.ry + 10, u);
       const sc = lerp(focus, 0.18, u);
@@ -126,22 +154,49 @@
     });
     loop.querySelector('.loop__say').style.opacity = (1 - clamp(u * 2.5)).toFixed(3);
     ring.style.opacity = (1 - u).toFixed(3);
+    comet.style.opacity = (1 - clamp(u * 2.5)).toFixed(3);
     dot.style.opacity = (1 - clamp(u * 3)).toFixed(3);
     // the line runs from the bottom of the loop to the bottom of the stage
     drop.setAttribute('y2', G.cy + G.ry + (G.vh - (G.cy + G.ry)) * u);
     drop.style.opacity = u > 0 ? 1 : 0;
     orbitOn = rect.bottom > 0 && rect.top < G.vh;
 
-    // continuation: the same line, in the work section's gutter
+    // continuation: the same line keeps falling until it lands on the section title
     if (workSection) {
       const wr = workSection.getBoundingClientRect();
-      workSection.style.setProperty('--wl', `${clamp(G.vh - wr.top + 40, 0, wr.height).toFixed(0)}px`);
+      const lead = parseFloat(getComputedStyle(workSection).paddingTop) || 200;
+      const end = Math.max(0, lead - 22);
+      const wl = clamp(G.vh - wr.top + 40, 0, end);
+      workSection.style.setProperty('--wl', `${wl.toFixed(0)}px`);
+      workSection.style.setProperty('--wd', wl >= end - 1 ? '1' : '0');
     }
+    updateStack();
+  };
+  // stacked work panels: each one settles back as the next slides over it
+  const stack = [...document.querySelectorAll('.work')];
+  const updateStack = () => {
+    if (!stack.length) return;
+    stack.forEach((el, i) => {
+      const panel = el.firstElementChild;
+      if (!wide.matches || reduce || i === stack.length - 1) { panel.style.transform = ''; panel.style.removeProperty('--dim'); return; }
+      const nxt = stack[i + 1].getBoundingClientRect().top;
+      const bar = parseFloat(getComputedStyle(el.parentElement).getPropertyValue('--bar')) || 72;
+      const stuck = parseFloat(getComputedStyle(el).top) + bar; // where the next card ends up
+      const q = clamp((innerHeight - nxt) / (innerHeight - stuck));
+      panel.style.transform = `scale(${(1 - 0.045 * easeOut(q)).toFixed(4)})`;
+    });
   };
   const orbitLoop = (t) => {
     if (fly && G && orbitOn) {
-      const [x, y] = onRing(((t / 1000) * 38) % 360);
+      const sec = t / 1000;
+      const d = smoothPath(sec);
+      ring.setAttribute('d', d); comet.setAttribute('d', d);
+      const len = ring.getTotalLength();
+      const frac = (sec * 0.055) % 1, tail = 0.13;
+      const [x, y] = [ring.getPointAtLength(frac * len)].map((q) => [q.x, q.y])[0];
       dot.setAttribute('cx', x); dot.setAttribute('cy', y);
+      comet.style.strokeDasharray = `${tail} ${1 - tail}`;
+      comet.style.strokeDashoffset = (((tail - frac) % 1) + 1) % 1;
     }
     requestAnimationFrame(orbitLoop);
   };

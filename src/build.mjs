@@ -36,14 +36,14 @@ ${noindex ? '<meta name="robots" content="noindex">\n' : ''}<link rel="preload" 
 }
 
 function header(p, home) {
-  const h = home ? '' : p || './';
-  return `<header class="nav">
-  <a class="nav__brand" href="${home ? '#top' : p + 'index.html'}" aria-label="${site.name}, home">${site.name}</a>
+  const h = home ? '' : `${p}index.html`;
+  return `<header class="nav" id="nav">
+  <a class="nav__avatar" href="${home ? '#top' : p + 'index.html'}" aria-label="${site.name}, home"><img src="${p}assets/photos/maria-avatar.jpg" alt="" width="44" height="44"></a>
   <nav class="nav__links" aria-label="Primary">
-    <a href="${h}${home ? '' : 'index.html'}#work">Work</a>
-    <a href="${h}${home ? '' : 'index.html'}#journey">Journey</a>
-    <a href="${h}${home ? '' : 'index.html'}#about">About</a>
-    <a href="${h}${home ? '' : 'index.html'}#contact">Contact</a>
+    <a href="${h}#work">Work</a>
+    <a href="${h}#journey">Journey</a>
+    <a class="nav__more" href="${h}#about">About me</a>
+    <a class="nav__cta" href="${h}#contact">Get in touch</a>
   </nav>
 </header>`;
 }
@@ -62,7 +62,7 @@ function footer(p) {
         <p class="contact__h">Site</p>
         <a href="${p}index.html#work">Work</a>
         <a href="${p}index.html#journey">Journey</a>
-        <a href="${p}index.html#about">About</a>
+        <a href="${p}index.html#about">About me</a>
       </div>
       <div>
         <p class="contact__h">Elsewhere</p>
@@ -90,14 +90,16 @@ const media = (proj, stage = 3, extra = '', fit = 'slice') =>
 
 // Home -----------------------------------------------------------------------
 
-function workCard(proj) {
+function workCard(proj, i) {
   const href = `work/${proj.slug}.html`;
-  return `<a class="work work--${proj.card}" href="${href}" data-cursor="View case study">
-    ${media(proj, 3, 'work__media')}
-    <div class="work__meta">
-      <ul class="tags" aria-label="Disciplines">${proj.tags.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
-      <h3 class="work__title">${esc(proj.title)}</h3>
-      <p class="work__sub"><span>${esc(proj.short)}</span>${arrow}</p>
+  return `<a class="work" href="${href}" data-cursor="View case study" style="--i:${i}">
+    <div class="work__panel v v--${proj.tone}" data-reveal="stack">
+      <div class="work__bar">
+        <h3 class="work__title">${esc(proj.title)}</h3>
+        <ul class="tags" aria-label="Disciplines">${proj.tags.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
+        <span class="work__go" aria-label="${esc(proj.short)}">${esc(proj.short)}${arrow}</span>
+      </div>
+      <div class="work__media">${render(proj.visual, 3).replace('xMidYMid slice', 'xMidYMid meet')}</div>
     </div>
   </a>`;
 }
@@ -170,7 +172,7 @@ ${header('', true)}
       <div class="bridge__stage">
         <ul class="strengths wrap">${strengths}</ul>
         <div class="loop" aria-hidden="true">
-          <svg class="loop__svg"><path class="loop__ring"/><circle class="loop__dot" r="5"/><line class="loop__drop"/></svg>
+          <svg class="loop__svg"><path class="loop__ring"/><path class="loop__comet" pathLength="1"/><circle class="loop__dot" r="5"/><line class="loop__drop"/></svg>
           <div class="loop__say"><p class="say">${say}</p><p class="loop__lede">${esc(hero.loop.lede)}</p></div>
           ${lcards}
         </div>
@@ -179,7 +181,7 @@ ${header('', true)}
     <div class="wrap work-wrap">
       <header class="sec-head work-head">
         <h2 id="work-h" class="h2">Selected work.</h2>
-        <p class="sec-head__lede">From early questions and messy problems to products that made it into shipped experiences.</p>
+        <p class="sec-head__lede">${esc(hero.loop.bridge)}</p>
       </header>
       <div class="work-grid" data-grid>
         ${projects.map(workCard).join('\n')}

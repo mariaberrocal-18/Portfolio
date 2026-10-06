@@ -21,6 +21,7 @@ export const hero = {
   loop: {
     say: ['Frame it.', 'Craft it.', 'Ship it.', 'Repeat.'],
     lede: 'A loop I run every day. It never stops.',
+    bridge: 'That same loop, applied to real products: from a messy first question to what shipped.',
   },
   strengths: [
     ['Product thinking', 'Framing the right problem before drawing the first screen.'],
@@ -214,7 +215,7 @@ export const projects = [
   {
     slug: 'digital-banking',
     visual: 'banking',
-    tone: 'light',
+    tone: 'dark',
     card: 'c',
     draft: true,
     title: 'Redesigning a digital banking experience from the ground up',
@@ -272,7 +273,7 @@ export const projects = [
   {
     slug: 'platform-navigation',
     visual: 'navigation',
-    tone: 'dark',
+    tone: 'light',
     card: 'd',
     draft: true,
     title: 'Making a growing platform easier to navigate',
