@@ -28,8 +28,8 @@ const toolMark = (name, slug) => {
   return `<span class="mark mark--mono" aria-hidden="true">${esc(name[0])}</span>`;
 };
 const orgLogo = (slug, org) => {
-  const f = logoFile(`logos-${slug}`.replace('logos-', ''));
-  if (f) return `<img class="org-logo" src="${f}" alt="${esc(org)} logo" height="28" loading="lazy">`;
+  const f = logoFile(slug);
+  if (f) return `<img class="org-logo org-logo--${slug}" src="${f}" alt="${esc(org)} logo" loading="lazy">`;
   return `<span class="org-logo org-logo--text org-logo--${slug}" aria-label="${esc(org)}">${slug === 'ey' ? 'EY' : slug === 'ey-design-studio' ? 'EY <i>Design Studio</i>' : 'waterplan'}</span>`;
 };
 const label = (t) => `<span class="roll" data-text="${esc(t)}"><span>${esc(t)}</span></span>`;
@@ -42,9 +42,9 @@ function head({ title, desc, p, noindex }) {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
-<meta name="theme-color" content="#f7f7f5">
+<meta name="theme-color" content="#fbfbfa">
 ${noindex ? '<meta name="robots" content="noindex">\n' : ''}<link rel="preload" href="${p}assets/fonts/inter-tight-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230c0c0c'/%3E%3Ctext x='16' y='22.5' font-family='Helvetica,Arial,sans-serif' font-weight='700' font-size='19' text-anchor='middle' fill='%23f7f7f5'%3Em%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230c0c0c'/%3E%3Ctext x='16' y='22.5' font-family='Helvetica,Arial,sans-serif' font-weight='700' font-size='19' text-anchor='middle' fill='%23fbfbfa'%3Em%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="${p}assets/css/site.css?v=${V.css}">
 <script>document.documentElement.classList.add('js');setTimeout(function(){window.__ok||document.documentElement.classList.add('failsafe')},3500)</script>
 </head>`;

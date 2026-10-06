@@ -80,7 +80,7 @@
   const svg = loop && loop.querySelector('.loop__svg');
   const NS = 'http://www.w3.org/2000/svg';
   const mk = (cls, parent) => { const el = document.createElementNS(NS, 'path'); el.setAttribute('class', cls); el.setAttribute('pathLength', '1'); parent.appendChild(el); return el; };
-  let openBase = [], openGreen = [], closedBase, closedGreen, comet, dot, drop, openG, closedG;
+  let openBase = [], openGreen = [], closedBase, closedGreen, comet, dot, drop, dropDot, dropHalo, openG, closedG;
   if (loop) {
     svg.innerHTML = '';
     openG = document.createElementNS(NS, 'g'); closedG = document.createElementNS(NS, 'g');
@@ -90,6 +90,8 @@
     closedBase = mk('loop__ring', closedG); closedGreen = mk('loop__green', closedG); comet = mk('loop__comet', closedG);
     dot = document.createElementNS(NS, 'circle'); dot.setAttribute('class', 'loop__dot'); dot.setAttribute('r', '5'); svg.appendChild(dot);
     drop = document.createElementNS(NS, 'line'); drop.setAttribute('class', 'loop__drop'); svg.appendChild(drop);
+    dropHalo = document.createElementNS(NS, 'circle'); dropHalo.setAttribute('class', 'loop__halo'); dropHalo.setAttribute('r', '10.5'); svg.appendChild(dropHalo);
+    dropDot = document.createElementNS(NS, 'circle'); dropDot.setAttribute('class', 'loop__start'); dropDot.setAttribute('r', '4.5'); svg.appendChild(dropDot);
   }
 
   // Layout keys, as fractions of the viewport. i = card index (0 Product thinking,
@@ -217,6 +219,11 @@
     drop.setAttribute('x1', vw / 2); drop.setAttribute('x2', vw / 2);
     drop.setAttribute('y1', y1); drop.setAttribute('y2', y1 + (vh - y1) * u);
     drop.style.opacity = u > 0 ? 1 : 0;
+    // a dot marks where the line begins, like the one where it ends
+    const sd = clamp((p - 0.84) / 0.04);
+    [dropDot, dropHalo].forEach((el) => { el.setAttribute('cx', vw / 2); el.setAttribute('cy', y1); });
+    dropDot.style.opacity = sd.toFixed(3);
+    dropHalo.style.opacity = (sd * 0.14 / 0.14).toFixed(3);
   };
   const updateWork = () => {
     // continuation: the same line keeps falling until it lands on the section title
