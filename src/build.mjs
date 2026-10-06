@@ -5,6 +5,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { site, hero, journey, toolkit, about, contact, projects } from './content.mjs';
 import { render } from './visuals.mjs';
+import { mini } from './mini.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -111,15 +112,13 @@ function home() {
   const strengths = hero.strengths
     .map(([t, d]) => `<li><h3>${esc(t)}</h3><p>${esc(d)}</p></li>`)
     .join('');
-  const tiles = hero.strengths
-    .map(([t, d], i) => {
-      const proj = projects[i];
-      return `<div class="tile" data-tile="${i}"><div class="tile__bob"><div class="tile__in">
-        <div class="tile__face tile__front"><h3>${esc(t)}</h3><p>${esc(d)}</p></div>
-        <div class="tile__face tile__back"><div class="v v--${proj.tone} is-in">${render(proj.visual, 3)}</div></div>
-      </div></div></div>`;
-    })
+  const lcards = hero.strengths
+    .map(([t, d], i) => `<div class="lcard" data-lcard="${i}"><div class="lcard__bob"><div class="lcard__in">
+        <div class="lcard__art">${mini[i]()}</div>
+        <h3>${esc(t)}</h3><p>${esc(d)}</p>
+      </div></div></div>`)
     .join('');
+  const say = hero.loop.say.map((w, i) => `<span class="say__w" data-say="${i}">${esc(w)}</span>`).join('');
   const steps = journey.steps
     .map(
       (s) => `<li class="step${s.current ? ' step--current' : ''}">
@@ -167,14 +166,18 @@ ${header('', true)}
     <div class="bridge" data-bridge>
       <div class="bridge__stage">
         <ul class="strengths wrap">${strengths}</ul>
-        <header class="sec-head wrap bridge__head">
-          <h2 id="work-h" class="h2">Selected work.</h2>
-          <p class="sec-head__lede">From early questions and messy problems to products that made it into shipped experiences.</p>
-        </header>
-        <div class="tiles" aria-hidden="true">${tiles}</div>
+        <div class="loop" aria-hidden="true">
+          <svg class="loop__svg"><path class="loop__ring"/><circle class="loop__dot" r="5"/><line class="loop__drop"/></svg>
+          <div class="loop__say"><p class="say">${say}</p><p class="loop__lede">${esc(hero.loop.lede)}</p></div>
+          ${lcards}
+        </div>
       </div>
     </div>
     <div class="wrap work-wrap">
+      <header class="sec-head work-head">
+        <h2 id="work-h" class="h2">Selected work.</h2>
+        <p class="sec-head__lede">From early questions and messy problems to products that made it into shipped experiences.</p>
+      </header>
       <div class="work-grid" data-grid>
         ${projects.map(workCard).join('\n')}
       </div>

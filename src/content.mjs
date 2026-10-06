@@ -18,11 +18,14 @@ export const hero = {
   title: 'a Product Designer.',
   lede: '8 years of experience designing digital products where understanding the system, questioning assumptions, and figuring out the real problem is half the work.',
   cta: 'View selected work',
+  loop: {
+    say: ['Frame it.', 'Craft it.', 'Ship it.', 'Repeat.'],
+    lede: 'A loop I run every day. It never stops.',
+  },
   strengths: [
     ['Product thinking', 'Framing the right problem before drawing the first screen.'],
     ['Visual craft', 'Interfaces held to a level of detail you can feel.'],
     ['Pace', 'Shipping inside fast-moving teams, next to Product and Engineering.'],
-    ['Range', 'Eight years across consulting, UX/UI and product design.'],
   ],
 };
 

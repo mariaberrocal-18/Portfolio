@@ -64,81 +64,93 @@
     }, { passive: true });
   }
 
-  // bridge: floating tiles that become the selected work ----------------------
+  // loop story: three disciplines orbit, then unwind into a line down the work ---
   const bridge = document.querySelector('[data-bridge]');
-  const grid = document.querySelector('[data-grid]');
-  const tiles = bridge ? [...bridge.querySelectorAll('.tile')] : [];
-  const reals = grid ? [...grid.querySelectorAll('.work__media')] : [];
-  const starts = [
-    { x: 0.17, y: 0.62, r: -7, dx: -40 },
-    { x: 0.4, y: 0.3, r: 5, dx: 20 },
-    { x: 0.63, y: 0.68, r: -4, dx: -10 },
-    { x: 0.84, y: 0.34, r: 8, dx: 40 },
-  ];
-  let fly = false, geo = [], tw = 0, th = 0, bTop = 0, bH = 0;
+  const loop = bridge && bridge.querySelector('.loop');
+  const workSection = document.querySelector('.work-wrap');
+  const lcards = loop ? [...loop.querySelectorAll('.lcard')] : [];
+  const says = loop ? [...loop.querySelectorAll('.say__w')] : [];
+  const ring = loop && loop.querySelector('.loop__ring');
+  const dot = loop && loop.querySelector('.loop__dot');
+  const drop = loop && loop.querySelector('.loop__drop');
+  const svg = loop && loop.querySelector('.loop__svg');
+  const ANG = [-60, 60, 180]; // clockwise from the top: Product thinking → Visual craft → Pace
+  let fly = false, G = null, orbit = 0, orbitOn = false;
 
-  const measure = () => {
+  const layoutLoop = () => {
     if (!fly) return;
-    const vh = innerHeight, vw = innerWidth, sy = scrollY;
-    const br = bridge.getBoundingClientRect();
-    bTop = br.top + sy; bH = br.height;
-    const endScroll = bTop + bH - vh;
-    geo = reals.map((m) => {
-      const r = m.getBoundingClientRect();
-      return { cx: r.left + r.width / 2, cy: r.top + sy - endScroll + r.height / 2, w: r.width, h: r.height };
-    });
-    tw = geo[0].w; th = geo[0].h;
-    bridge.style.setProperty('--tw', `${tw}px`);
-    bridge.style.setProperty('--th', `${th}px`);
-    tiles.forEach((t, i) => { t.dataset.s0 = clamp(vw * 0.2, 200, 300) / tw; });
+    const vw = innerWidth, vh = innerHeight;
+    const cw = clamp(vw * 0.21, 250, 330), ch = cw * 0.78;
+    const cx = vw / 2, cy = vh * 0.5;
+    const rx = Math.min(vw * 0.34, 520), ry = Math.min(vh * 0.27, 240);
+    G = { vw, vh, cw, ch, cx, cy, rx, ry };
+    loop.style.setProperty('--cw', `${cw}px`);
+    loop.style.setProperty('--ch', `${ch}px`);
+    svg.setAttribute('viewBox', `0 0 ${vw} ${vh}`);
+    ring.setAttribute('d', `M ${cx} ${cy - ry} A ${rx} ${ry} 0 1 1 ${cx} ${cy + ry} A ${rx} ${ry} 0 1 1 ${cx} ${cy - ry}`);
+    drop.setAttribute('x1', cx); drop.setAttribute('x2', cx);
+    drop.setAttribute('y1', cy + ry);
   };
+  const onRing = (deg) => { const r = (deg * Math.PI) / 180; return [G.cx + G.rx * Math.sin(r), G.cy - G.ry * Math.cos(r)]; };
 
   const setFly = () => {
     const on = !!bridge && !reduce && wide.matches;
     if (on === fly) return;
     fly = on;
     root.classList.toggle('is-fly', fly);
-    if (fly) {
-      // real cards are already revealed: they simply take over from the tiles
-      grid.querySelectorAll('.v[data-reveal]').forEach((v) => v.classList.add('is-in'));
-      measure();
-    } else {
-      grid.classList.remove('is-landed');
-      bridge.style.removeProperty('--hp');
-    }
+    if (fly) layoutLoop();
   };
 
   const updateBridge = () => {
-    if (!fly || !geo.length) return;
-    const vh = innerHeight, vw = innerWidth;
+    if (!fly || !G) return;
     const rect = bridge.getBoundingClientRect();
-    const p = clamp(-rect.top / (rect.height - vh));
-    const t = easeInOut(clamp((p - 0.2) / 0.62)); // travel 0..1
-    const f = easeInOut(clamp((t - 0.35) / 0.4)); // flip 0..1
-    tiles.forEach((el, i) => {
-      const s = starts[i], g = geo[i];
-      const s0 = parseFloat(el.dataset.s0);
-      const sx = s.x * vw + s.dx * p;
-      const sy = s.y * vh - p * 70 * (i % 2 ? 1 : -1);
-      const x = lerp(sx, g.cx, t);
-      const y = lerp(sy, g.cy, t);
-      const rot = lerp(s.r + p * 6, 0, t);
-      const sc = lerp(s0, 1, easeOut(t));
-      el.style.transform = `translate3d(${x - tw / 2}px, ${y - th / 2}px, 0) rotate(${rot}deg) scale(${sc})`;
-      el.style.setProperty('--sx', Math.max(0.001, Math.abs(Math.cos(f * Math.PI))).toFixed(3));
-      el.classList.toggle('is-back', f >= 0.5);
-      el.style.setProperty('--b', (1 - t).toFixed(3));
-      el.classList.toggle('is-hidden', p >= 0.985);
+    const p = clamp(-rect.top / (rect.height - G.vh));
+    // story beats: Frame it → Craft it → Ship it → Repeat → unwind
+    const beat = p < 0.07 ? -1 : p < 0.25 ? 0 : p < 0.43 ? 1 : p < 0.61 ? 2 : 3;
+    const u = easeInOut(clamp((p - 0.7) / 0.26)); // unwind 0..1
+    const drift = Math.sin(p * Math.PI * 2) * 0; // keep the loop calm; motion comes from the beats
+
+    lcards.forEach((el, i) => {
+      const [x, y] = onRing(ANG[i]);
+      const focus = beat === i ? 1.08 : beat === 3 ? 1 : beat < 0 ? 0.96 : 0.9;
+      const tx = lerp(x, G.cx, u), ty = lerp(y, G.cy + G.ry + 10, u);
+      const sc = lerp(focus, 0.18, u);
+      el.style.transform = `translate3d(${tx - G.cw / 2}px, ${ty - G.ch / 2}px, 0) scale(${sc.toFixed(3)})`;
+      el.style.opacity = (beat === i || beat === 3 || beat < 0 ? 1 : 0.55) * (1 - u * u);
+      el.style.zIndex = beat === i ? 3 : 1;
+      el.classList.toggle('is-active', beat === i || beat === 3);
     });
-    bridge.style.setProperty('--hp', clamp((p - 0.45) / 0.3).toFixed(3));
-    grid.classList.toggle('is-landed', p >= 0.985);
+    says.forEach((w, i) => {
+      w.classList.toggle('is-on', i === beat);
+      w.classList.toggle('is-past', i < beat);
+    });
+    loop.querySelector('.loop__say').style.opacity = (1 - clamp(u * 2.5)).toFixed(3);
+    ring.style.opacity = (1 - u).toFixed(3);
+    dot.style.opacity = (1 - clamp(u * 3)).toFixed(3);
+    // the line runs from the bottom of the loop to the bottom of the stage
+    drop.setAttribute('y2', G.cy + G.ry + (G.vh - (G.cy + G.ry)) * u);
+    drop.style.opacity = u > 0 ? 1 : 0;
+    orbitOn = rect.bottom > 0 && rect.top < G.vh;
+
+    // continuation: the same line, in the work section's gutter
+    if (workSection) {
+      const wr = workSection.getBoundingClientRect();
+      workSection.style.setProperty('--wl', `${clamp(G.vh - wr.top + 40, 0, wr.height).toFixed(0)}px`);
+    }
   };
+  const orbitLoop = (t) => {
+    if (fly && G && orbitOn) {
+      const [x, y] = onRing(((t / 1000) * 38) % 360);
+      dot.setAttribute('cx', x); dot.setAttribute('cy', y);
+    }
+    requestAnimationFrame(orbitLoop);
+  };
+  if (bridge && !reduce) requestAnimationFrame(orbitLoop);
 
   setFly();
-  wide.addEventListener('change', () => { setFly(); measure(); update(); });
-  addEventListener('resize', () => { measure(); update(); });
-  addEventListener('load', () => { measure(); update(); });
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { measure(); update(); });
+  wide.addEventListener('change', () => { setFly(); layoutLoop(); update(); });
+  addEventListener('resize', () => { layoutLoop(); update(); });
+  addEventListener('load', () => { layoutLoop(); update(); });
 
   // timeline (vertical) + evolve (case studies) -------------------------------
   const tl = document.querySelector('[data-timeline]');
