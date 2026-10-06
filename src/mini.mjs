@@ -29,10 +29,9 @@ const thinking = () =>
 // Visual craft: a prompt is typed, components appear
 const craft = () =>
   wrap(
-    `<defs><clipPath id="m-typeclip"><rect class="m-typerect" x="32" y="6" width="190" height="30"/></clipPath></defs>
-    <rect x="8" y="6" width="224" height="30" rx="15" fill="none" stroke="currentColor" stroke-opacity=".3"/>
+    `<rect x="8" y="6" width="224" height="30" rx="15" fill="none" stroke="currentColor" stroke-opacity=".3"/>
     <path d="M22 15.5l1.6 4 4 1.6-4 1.6-1.6 4-1.6-4-4-1.6 4-1.6z" fill="var(--sage-hi)"/>
-    <g clip-path="url(#m-typeclip)"><text x="34" y="25" font-size="10.5" font-weight="500" fill="currentColor">Pill button, 40px, primary</text></g>
+    <text x="34" y="25" font-size="10.5" font-weight="500" fill="currentColor" xml:space="preserve"><tspan class="m-ch" style="--k:0">P</tspan><tspan class="m-ch" style="--k:1">i</tspan><tspan class="m-ch" style="--k:2">l</tspan><tspan class="m-ch" style="--k:3">l</tspan><tspan class="m-ch" style="--k:4"> </tspan><tspan class="m-ch" style="--k:5">b</tspan><tspan class="m-ch" style="--k:6">u</tspan><tspan class="m-ch" style="--k:7">t</tspan><tspan class="m-ch" style="--k:8">t</tspan><tspan class="m-ch" style="--k:9">o</tspan><tspan class="m-ch" style="--k:10">n</tspan><tspan class="m-ch" style="--k:11">,</tspan><tspan class="m-ch" style="--k:12"> </tspan><tspan class="m-ch" style="--k:13">4</tspan><tspan class="m-ch" style="--k:14">0</tspan><tspan class="m-ch" style="--k:15">p</tspan><tspan class="m-ch" style="--k:16">x</tspan><tspan class="m-ch" style="--k:17">,</tspan><tspan class="m-ch" style="--k:18"> </tspan><tspan class="m-ch" style="--k:19">p</tspan><tspan class="m-ch" style="--k:20">r</tspan><tspan class="m-ch" style="--k:21">i</tspan><tspan class="m-ch" style="--k:22">m</tspan><tspan class="m-ch" style="--k:23">a</tspan><tspan class="m-ch" style="--k:24">r</tspan><tspan class="m-ch" style="--k:25">y</tspan></text>
     <rect class="m-caret" x="34" y="14" width="1.4" height="14" fill="var(--sage-hi)"/>
     <g class="m-gen" style="--i:0"><rect x="14" y="50" width="104" height="38" rx="19" fill="currentColor"/><text x="66" y="73.5" font-size="12" font-weight="600" text-anchor="middle" fill="var(--paper)">Save changes</text></g>
     <g class="m-gen" style="--i:1"><rect x="132" y="56" width="42" height="26" rx="13" fill="var(--sage-hi)"/><circle cx="161" cy="69" r="9.5" fill="var(--paper)"/></g>

@@ -238,25 +238,27 @@ button { font: inherit; color: inherit; }
 .strengths p { margin-top: 6px; max-width: 22rem; color: var(--ink-2); font-size: 1rem; line-height: 1.45; text-wrap: pretty; }
 .loop { display: none; }
 
-.is-fly .bridge { height: calc(100vh + 400vh); }
+.is-fly .hero__copy, .is-fly .hero__photo { filter: blur(var(--hb, 0px)); }
+.is-fly .hero__photo { opacity: var(--hbo, 1); }
+.is-fly .bridge { height: calc(100vh + 450vh); margin-top: -34vh; position: relative; z-index: 3; pointer-events: none; }
 .is-fly .bridge__stage { position: sticky; top: 0; height: 100vh; overflow: clip; }
 .is-fly .strengths { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); padding: 0; }
 .is-fly .loop { display: block; position: absolute; inset: 0; }
 .loop__svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 /* a single flowing line with a comet of light travelling along it */
-.loop__ring { fill: none; stroke: rgba(12, 12, 12, 0.22); stroke-width: 1.25; stroke-linecap: round; stroke-linejoin: round; }
+.loop__ring { fill: none; stroke: rgba(12, 12, 12, 0.3); stroke-width: 1.25; stroke-linecap: round; stroke-linejoin: round; }
 .loop__comet { fill: none; stroke: var(--sage); stroke-width: 2.4; stroke-linecap: round; filter: drop-shadow(0 0 7px rgba(52, 105, 79, 0.55)); }
+.loop__green { fill: none; stroke: var(--sage); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 0 6px rgba(52, 105, 79, 0.35)); }
 .loop__dot { fill: var(--sage); filter: drop-shadow(0 0 8px rgba(52, 105, 79, 0.7)); }
 .loop__drop { stroke: var(--sage); stroke-width: 1; }
 
-.loop__say { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); text-align: center; width: min(46vw, 560px); pointer-events: none; }
+/* position is driven by the storyboard in JS */
+.loop__say { position: absolute; left: 0; top: 0; text-align: center; width: min(46vw, 560px); pointer-events: none; will-change: transform, opacity; }
 .say { position: relative; height: clamp(3rem, 2rem + 4.4vw, 5.5rem); font-family: var(--sans); font-weight: 650; font-size: clamp(2.6rem, 1.4rem + 4.4vw, 5rem); line-height: 1; letter-spacing: -0.04em; }
-.say__w { position: absolute; inset: 0; display: grid; place-items: center; opacity: 0; filter: blur(12px); transform: translateY(0.35em); transition: opacity 0.6s ease, filter 0.7s ease, transform 0.9s var(--ease); }
-.say__w.is-on { opacity: 1; filter: blur(0); transform: none; }
-.say__w.is-past { opacity: 0; filter: blur(8px); transform: translateY(-0.3em); }
+.say__w { position: absolute; inset: 0; display: grid; place-items: center; opacity: var(--wa, 0); filter: blur(calc((1 - var(--wa, 0)) * 12px)); transform: translateY(calc((1 - var(--wa, 0)) * 0.4em)); }
 .loop__lede { margin-top: 14px; color: var(--ink-2); font-size: clamp(0.9375rem, 0.85rem + 0.3vw, 1.125rem); letter-spacing: -0.01em; }
 
-.lcard { position: absolute; left: 0; top: 0; width: var(--cw, 300px); height: var(--ch, 220px); transform-origin: 50% 50%; }
+.lcard { position: absolute; will-change: transform; left: 0; top: 0; width: var(--cw, 300px); height: var(--ch, 220px); transform-origin: 50% 50%; }
 .lcard__bob { width: 100%; height: 100%; animation: bob 6.5s ease-in-out infinite alternate; }
 .lcard:nth-child(3) .lcard__bob { animation-duration: 7.6s; animation-delay: -2s; }
 .lcard:nth-child(4) .lcard__bob { animation-duration: 5.9s; animation-delay: -4s; }
@@ -283,9 +285,8 @@ button { font: inherit; color: inherit; }
 @keyframes strike { from { stroke-dashoffset: 100; } to { stroke-dashoffset: 0; } }
 .lcard.is-active .m-real { animation: pop 0.8s var(--ease) 0.6s both; transform-box: fill-box; transform-origin: center; }
 @keyframes pop { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: none; } }
-.m-typerect { transform-box: fill-box; transform-origin: left center; }
-.lcard.is-active .m-typerect { animation: typing 1.5s steps(26, end) 0.15s both; }
-@keyframes typing { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.lcard.is-active .m-ch { animation: ch-in 0.01s linear both; animation-delay: calc(0.15s + var(--k) * 0.0577s); }
+@keyframes ch-in { from { opacity: 0; } to { opacity: 1; } }
 .m-caret { animation: blink 1s steps(1) infinite; }
 .lcard.is-active .m-caret { animation: caret-move 1.5s steps(26, end) 0.15s both, blink 0.9s steps(1) 1.7s infinite; }
 @keyframes caret-move { from { transform: translateX(0); } to { transform: translateX(138px); } }

@@ -173,7 +173,7 @@ ${header('', true)}
       <div class="bridge__stage">
         <ul class="strengths wrap">${strengths}</ul>
         <div class="loop" aria-hidden="true">
-          <svg class="loop__svg"><path class="loop__ring"/><path class="loop__comet" pathLength="1"/><circle class="loop__dot" r="5"/><line class="loop__drop"/></svg>
+          <svg class="loop__svg"></svg>
           <div class="loop__say"><p class="say">${say}</p><p class="loop__lede">${esc(hero.loop.lede)}</p></div>
           ${lcards}
         </div>
