@@ -1,6 +1,7 @@
 // Static site generator: `node src/build.mjs` writes index.html and work/*.html.
 // No dependencies. Copy lives in content.mjs, drawings in visuals.mjs.
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, writeFileSync, readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { site, hero, journey, toolkit, about, contact, projects } from './content.mjs';
@@ -8,6 +9,9 @@ import { render } from './visuals.mjs';
 import { mini } from './mini.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
+// cache-busting: asset URLs change whenever their content does
+const hash = (f) => createHash('md5').update(readFileSync(join(root, f))).digest('hex').slice(0, 8);
+const V = { css: hash('assets/css/site.css'), js: hash('assets/js/site.js') };
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 const arrow = `<svg class="ico" width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M4.5 13.5l9-9M6 4.5h7.5V12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
@@ -27,7 +31,7 @@ function head({ title, desc, p, noindex }) {
 ${noindex ? '<meta name="robots" content="noindex">\n' : ''}<link rel="preload" href="${p}assets/fonts/inter-tight-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="${p}assets/fonts/instrument-serif-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230c0c0c'/%3E%3Ctext x='16' y='22.5' font-family='Georgia,serif' font-size='20' font-style='italic' text-anchor='middle' fill='%23f7f7f5'%3Em%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" href="${p}assets/css/site.css">
+<link rel="stylesheet" href="${p}assets/css/site.css?v=${V.css}">
 <script>document.documentElement.classList.add('js');setTimeout(function(){window.__ok||document.documentElement.classList.add('failsafe')},3500)</script>
 </head>`;
 }
@@ -77,7 +81,7 @@ function footer(p) {
 
 function scripts(p) {
   return `<script src="${p}assets/vendor/lenis.min.js"></script>
-<script src="${p}assets/js/site.js" defer></script>
+<script src="${p}assets/js/site.js?v=${V.js}" defer></script>
 </body>
 </html>`;
 }
