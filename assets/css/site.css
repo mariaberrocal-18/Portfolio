@@ -537,7 +537,7 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
 .evolve__track {
   --ink: #f4faf6; --ink-2: #a9a8a3; --ink-3: #7c7b76; --line: rgba(255, 255, 255, 0.16);
   background-color: var(--night); background-image: var(--grain-light); color: #f4faf6;
-  border-radius: clamp(28px, 4vw, 56px) clamp(28px, 4vw, 56px) 0 0; padding-top: clamp(72px, 8vw, 120px); box-sizing: border-box;
+  border-radius: clamp(28px, 4vw, 56px) clamp(28px, 4vw, 56px) 0 0; padding-top: clamp(72px, 8vw, 120px); padding-bottom: clamp(88px, 11vw, 170px); box-sizing: border-box;
 }
 /* bottom half: green, with noise. What came out of it. */
 .evolve__after {
@@ -566,7 +566,7 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
 .evolve__after .prose p:not(:first-child) { color: rgba(244, 250, 246, 0.7); }
 
 @media (min-width: 960px) {
-  .evolve--pinned .evolve__track { height: 340vh; }
+  .evolve--pinned .evolve__track { height: calc(340vh + clamp(88px, 11vw, 170px)); }
   .evolve--pinned .evolve__track > .wrap { height: 100%; }
   .evolve--pinned .evolve__h { margin-bottom: 28px; }
   .evolve--pinned .evolve__pin { position: sticky; top: 9vh; grid-template-columns: repeat(12, 1fr); gap: var(--gap); align-items: center; }

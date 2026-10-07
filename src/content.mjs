@@ -222,7 +222,7 @@ export const projects = [
         why: 'The first iteration exposed information without a clear journey. I reframed the experience around the questions users naturally ask as they evaluate a site.',
       },
       {
-        title: 'Make hundreds of signals readable',
+        title: 'Make hundreds of layers readable',
         chose: 'Use map layers to progressively reveal different types of information.',
         over: 'Showing all available data at once.',
         why: 'The challenge wasn’t access to data, but making a large amount of spatial information understandable on a single screen.',
@@ -241,10 +241,10 @@ export const projects = [
     ],
     outcome: [
       'From a collection of data to a product built around decisions.',
-      'I turned an early, fragmented interface into a structured site-evaluation experience — creating a clear navigation model, making hundreds of spatial signals easier to explore, and connecting findings to the context users need to decide what to investigate next.',
+      'I turned an early, fragmented interface into a structured site-evaluation experience — creating a clear navigation model, making hundreds of spatial layers easier to explore, and connecting findings to the context users need to decide what to investigate next.',
     ],
     lessons: [
-      ['Information hierarchy matters.', 'When everything is important, nothing feels important. Clear hierarchy became essential to making hundreds of signals usable.'],
+      ['Information hierarchy matters.', 'When everything is important, nothing feels important. Clear hierarchy became essential to making hundreds of layers usable.'],
       ['Trust needs an explanation.', 'For high-stakes decisions, showing a result isn’t enough. Users need to understand where it came from and why it matters.'],
       ['Design for the decision, not the data.', 'The goal wasn’t to expose everything the system knew. It was to surface what users needed to decide what to do next.'],
     ],

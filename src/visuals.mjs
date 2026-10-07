@@ -500,14 +500,28 @@ function siteEvolve(stage) {
   const sp = [[-26, -58], [26, -58], [26, 58], [-26, 58]].map(([x, y]) => { const a = 0.38; return `${f(500 + x * Math.cos(a) - y * Math.sin(a))} ${f(290 + x * Math.sin(a) + y * Math.cos(a))}`; }).join(' L ');
   s += `<path d="M${sp} Z" fill="rgba(214,69,61,.14)" stroke="${RED}" stroke-width="2.2"/>` + circle(500, 290, 8, { fill: '#fff', stroke: RED, sw: 3 }) + `</g>`;
   if (stage === 2) return wrap(s, 'The redesigned evaluation: a journey of five categories beside a map with toggleable layers', H, W);
-  // stage 3: a risk is selected, insight explains the "so what?"
+  // stage 3: a report pops up over the map with insights for the site evaluation
   s += circle(606, 334, 20, { fill: 'rgba(214,69,61,.18)' }) + circle(606, 334, 8, { fill: RED, stroke: '#fff', sw: 2.5 });
-  s += rect(560, 120, 190, 150, { rx: 14, fill: '#fff', stroke: 'var(--v-card-line)', cls: 'fl' });
-  s += circle(582, 148, 8, { fill: 'rgba(214,69,61,.14)' }) + text(582, 152, '!', { size: 11, weight: 700, anchor: 'middle', fill: RED }) + text(598, 152, 'Flood exposure', { size: 12, weight: 650 });
-  s += text(576, 180, 'Why it matters', { size: 9.5, weight: 650, fill: 'var(--v-mute2)' });
-  ['Part of the site sits in a 100-year', 'flood zone, which can add cost and', 'delay to permitting.'].forEach((t, i) => { s += text(576, 198 + i * 15, t, { size: 10 }); });
-  s += rect(576, 244, 158, 20, { rx: 10, fill: '#141414' }) + text(655, 258, 'Investigate next', { size: 9.5, weight: 600, anchor: 'middle', fill: '#fff' });
-  return wrap(s, 'A selected risk explains why it matters and what to investigate next', H, W);
+  s += rect(24, 24, 752, 452, { rx: 18, fill: 'rgba(20,20,20,.34)' });
+  s += rect(150, 56, 500, 392, { rx: 18, fill: '#fff', stroke: 'var(--v-card-line)', cls: 'fl' });
+  s += text(180, 92, 'Site evaluation report', { size: 15, weight: 650 }) + text(180, 110, 'Key insights · 3 to investigate', { size: 10.5, fill: 'var(--v-mute2)' });
+  s += rect(580, 74, 50, 24, { rx: 12, fill: 'rgba(47,138,91,.14)' }) + text(605, 90, '86', { size: 11.5, weight: 700, anchor: 'middle', fill: GREEN });
+  s += line(180, 124, 620, 124, { stroke: 'rgba(0,0,0,.08)' });
+  [
+    ['High', RED, 'Flood exposure', 'Part of the site sits in a 100-year flood zone, which can add cost and delay to permitting.'],
+    ['Medium', '#c98a1b', 'Grid capacity', 'The nearest substation is close, but available capacity may limit the first phase.'],
+    ['Low', GREEN, 'Protected habitat', 'A habitat area borders the site. Worth confirming setbacks early.'],
+  ].forEach(([sev, col, h, d], i) => {
+    const y = 142 + i * 92;
+    s += rect(180, y, 440, 80, { rx: 12, fill: i === 0 ? 'rgba(214,69,61,.06)' : '#f6f6f3' }) + circle(202, y + 24, 5, { fill: col });
+    s += text(216, y + 28, h, { size: 12.5, weight: 650 }) + text(600, y + 28, sev, { size: 10, weight: 650, anchor: 'end', fill: col });
+    s += text(196, y + 46, 'Why it matters', { size: 9, weight: 650, fill: 'var(--v-mute2)', op: 1 });
+    const words = d.split(' '); let l1 = '', l2 = '';
+    words.forEach((w) => { if ((l1 + ' ' + w).length < 62 && !l2) l1 += (l1 ? ' ' : '') + w; else l2 += (l2 ? ' ' : '') + w; });
+    s += text(196, y + 62, l1, { size: 10 }) + (l2 ? text(196, y + 75, l2, { size: 10 }) : '');
+  });
+  s += rect(180, 416, 130, 22, { rx: 11, fill: '#141414' }) + text(245, 431, 'Investigate next', { size: 10, weight: 600, anchor: 'middle', fill: '#fff' });
+  return wrap(s, 'A report pops up with insights for the site evaluation, each explaining why it matters', H, W);
 }
 
 export const visuals = { targetTracking, siteSelection, siteEvolve, banking, navigation };
