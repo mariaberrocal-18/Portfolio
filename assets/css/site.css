@@ -776,3 +776,44 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
 .meta .logos img.org-logo { height: 26px; max-width: 140px; margin: 0; }
 .meta .logos img.org-logo--civarea { height: 30px; max-width: 150px; }
 .meta .logos img.org-logo--waterplan { height: 20px; }
+
+/* Civarea map: a slow 18s loop. Each layer fades in, flags the sites it rules out, and the last site stays. */
+.sm { transition: none; }
+.sm-flag, .sm-x, .sm-ring, .sm-ring2 { opacity: 1; }
+@media (prefers-reduced-motion: no-preference) {
+  .v--loop .sm { opacity: 0; }
+  .v--loop .sm-l1 { animation: sm-l1 18s ease-in-out infinite; }
+  .v--loop .sm-l2 { animation: sm-l2 18s ease-in-out infinite; }
+  .v--loop .sm-l3 { animation: sm-l3 18s ease-in-out infinite; }
+  .v--loop .sm-l4 { animation: sm-l4 18s ease-in-out infinite; }
+  .v--loop .sm-chip { opacity: .4; }
+  .v--loop .sm-c1 { animation: sm-c1 18s ease-in-out infinite; }
+  .v--loop .sm-c2 { animation: sm-c2 18s ease-in-out infinite; }
+  .v--loop .sm-c3 { animation: sm-c3 18s ease-in-out infinite; }
+  .v--loop .sm-c4 { animation: sm-c4 18s ease-in-out infinite; }
+  .v--loop .sm-flag, .v--loop .sm-x { opacity: 0; }
+  .v--loop .sm-fl1 .sm-flag, .v--loop .sm-fl1 .sm-x { animation: sm-f1 18s ease-in-out infinite; }
+  .v--loop .sm-fl2 .sm-flag, .v--loop .sm-fl2 .sm-x { animation: sm-f2 18s ease-in-out infinite; }
+  .v--loop .sm-fl3 .sm-flag, .v--loop .sm-fl3 .sm-x { animation: sm-f3 18s ease-in-out infinite; }
+  .v--loop .sm-fl4 .sm-flag, .v--loop .sm-fl4 .sm-x { animation: sm-f4 18s ease-in-out infinite; }
+  .v--loop .sm-sel .sm-ring, .v--loop .sm-sel .sm-ring2 { opacity: 0; transform-box: fill-box; transform-origin: center; animation: sm-sel 18s ease-in-out infinite; }
+  .v--loop .sm-sel .sm-ring2 { animation-name: sm-pulse; }
+  .v--loop .sm-sel .sm-area { animation: sm-area 18s ease-in-out infinite; }
+  .v--loop .sm-card { opacity: 0; transform-box: fill-box; transform-origin: 50% 100%; animation: sm-card 18s ease-in-out infinite; }
+}
+@keyframes sm-l1 { 0%, 6% { opacity: 0 } 14%, 78% { opacity: 1 } 86% { opacity: .22 } 94% { opacity: .22 } 98%, 100% { opacity: 0 } }
+@keyframes sm-l2 { 0%, 22% { opacity: 0 } 30%, 78% { opacity: 1 } 86% { opacity: .22 } 94% { opacity: .22 } 98%, 100% { opacity: 0 } }
+@keyframes sm-l3 { 0%, 38% { opacity: 0 } 46%, 78% { opacity: 1 } 86% { opacity: .22 } 94% { opacity: .22 } 98%, 100% { opacity: 0 } }
+@keyframes sm-l4 { 0%, 54% { opacity: 0 } 62%, 78% { opacity: 1 } 86% { opacity: .22 } 94% { opacity: .22 } 98%, 100% { opacity: 0 } }
+@keyframes sm-c1 { 0%, 6% { opacity: .4 } 14%, 94% { opacity: 1 } 98%, 100% { opacity: .4 } }
+@keyframes sm-c2 { 0%, 22% { opacity: .4 } 30%, 94% { opacity: 1 } 98%, 100% { opacity: .4 } }
+@keyframes sm-c3 { 0%, 38% { opacity: .4 } 46%, 94% { opacity: 1 } 98%, 100% { opacity: .4 } }
+@keyframes sm-c4 { 0%, 54% { opacity: .4 } 62%, 94% { opacity: 1 } 98%, 100% { opacity: .4 } }
+@keyframes sm-f1 { 0%, 14% { opacity: 0 } 20%, 94% { opacity: 1 } 98%, 100% { opacity: 0 } }
+@keyframes sm-f2 { 0%, 30% { opacity: 0 } 36%, 94% { opacity: 1 } 98%, 100% { opacity: 0 } }
+@keyframes sm-f3 { 0%, 46% { opacity: 0 } 52%, 94% { opacity: 1 } 98%, 100% { opacity: 0 } }
+@keyframes sm-f4 { 0%, 62% { opacity: 0 } 68%, 94% { opacity: 1 } 98%, 100% { opacity: 0 } }
+@keyframes sm-sel { 0%, 76% { opacity: 0; transform: scale(.7) } 84%, 94% { opacity: 1; transform: scale(1) } 98%, 100% { opacity: 0; transform: scale(1) } }
+@keyframes sm-pulse { 0%, 82% { opacity: 0; transform: scale(1) } 88% { opacity: .6; transform: scale(1.05) } 96%, 100% { opacity: 0; transform: scale(1.4) } }
+@keyframes sm-area { 0%, 76% { fill: rgba(20,20,20,.07) } 84%, 94% { fill: rgba(47,138,91,.3) } 98%, 100% { fill: rgba(20,20,20,.07) } }
+@keyframes sm-card { 0%, 82% { opacity: 0; transform: translateY(10px) } 90%, 94% { opacity: 1; transform: none } 98%, 100% { opacity: 0; transform: none } }

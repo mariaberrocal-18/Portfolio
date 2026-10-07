@@ -173,104 +173,99 @@ function ttShipped(float = false) {
   return wrap(s, 'Target tracking: an evolution chart with historic data, the target and three scenarios, a list of scenarios with on-track and off-track status, and a popover with project and investment combinations that reach the target', 552, 752);
 }
 
-export const ratio = { targetTracking: '752 / 552' };
+export const ratio = { targetTracking: '752 / 552', siteSelection: '780 / 500' };
 
 // 2. Civarea site selection ---------------------------------------------------
 
-function heat(i, j, cols, rows, centers, r) {
-  let v = 0;
-  for (const [ci, cj, w, sg] of centers) v += w * Math.exp(-(((i - ci) ** 2 + (j - cj) ** 2) / (2 * sg * sg)));
-  return Math.min(1, v + r() * 0.22);
-}
+// Civarea site selection: a map that is read in layers ------------------------
+// Clean map with candidate areas → power → water → environment → permitting, each
+// layer flagging the sites it rules out → one site stays suitable and is shortlisted.
+// stage 1 = clean map, 2 = layers visible, 3 = full (animated on a loop via CSS .v--loop).
+const SITES = [
+  { id: 'A', x: 150, y: 140, flag: 'No grid capacity', layer: 1 },
+  { id: 'B', x: 340, y: 262, flag: null, layer: 0 },
+  { id: 'C', x: 450, y: 120, flag: 'Water stress', layer: 2 },
+  { id: 'D', x: 170, y: 340, flag: 'Protected wetland', layer: 3 },
+  { id: 'E', x: 470, y: 360, flag: 'Zoning restriction', layer: 4 },
+];
+const blob = (cx, cy, k = 1, seed = 1) => {
+  const r = rng(seed);
+  const pts = Array.from({ length: 7 }, (_, i) => {
+    const a = (i / 7) * Math.PI * 2 + 0.3;
+    const rr = (30 + r() * 12) * k;
+    return [cx + Math.cos(a) * rr * 1.25, cy + Math.sin(a) * rr * 0.9];
+  });
+  let d = `M ${f((pts[0][0] + pts[6][0]) / 2)} ${f((pts[0][1] + pts[6][1]) / 2)}`;
+  pts.forEach((p, i) => {
+    const n = pts[(i + 1) % 7];
+    d += ` Q ${f(p[0])} ${f(p[1])} ${f((p[0] + n[0]) / 2)} ${f((p[1] + n[1]) / 2)}`;
+  });
+  return d + ' Z';
+};
 
-function siteSelection(stage) {
-  const r = rng(11);
-  let s = '';
-  const mx = 56, my = 44, mw = 456, mh = 430;
-  s += card(mx, my, mw, mh, 18);
-
-  if (stage === 1) {
-    for (let i = 0; i < 190; i++) {
-      const x = mx + 24 + r() * (mw - 48);
-      const y = my + 24 + r() * (mh - 48);
-      if (r() > 0.55) {
-        s += `<path d="M${f(x - 3)} ${f(y)}H${f(x + 3)}M${f(x)} ${f(y - 3)}V${f(y + 3)}" stroke="var(--v-ink)" stroke-width="1.3" opacity="${f(0.25 + r() * 0.55)}"/>`;
-      } else {
-        s += circle(x, y, 2 + r() * 2.4, { fill: r() > 0.8 ? 'var(--v-accent)' : 'var(--v-ink)', op: 0.18 + r() * 0.5 });
-      }
-    }
-    s += text(mx + 24, my + 40, '412 signals', { size: 13, weight: 600 });
-    return wrap(s, 'Hundreds of unstructured location signals scattered across a region');
+function siteSelection(stage, float = false) {
+  const GREEN = '#2f8a5b', RED = '#d6453d', BLUE = '#3566d6', INK = '#141414';
+  const MX = 40, MY = 28, MW = 556, MH = 444;
+  const L = (n, inner) => `<g class="sm sm-l${n}" ${stage === 1 ? 'style="opacity:0"' : ''}>${inner}</g>`;
+  let s = `<defs><clipPath id="smclip"><rect x="${MX}" y="${MY}" width="${MW}" height="${MH}" rx="16"/></clipPath>
+    <pattern id="smhatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(40)"><line x1="0" y1="0" x2="0" y2="7" stroke="#2f8a5b" stroke-width="1.3" opacity=".55"/></pattern>
+    <pattern id="smdry" width="6" height="6" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#b3822e" opacity=".5"/></pattern></defs>`;
+  // base map
+  s += rect(MX, MY, MW, MH, { rx: 16, fill: '#f3f3ef', stroke: 'var(--v-card-line)', cls: 'fl' });
+  s += `<g clip-path="url(#smclip)">`;
+  for (let i = 0; i < 9; i++) {
+    const y0 = MY + 30 + i * 52;
+    s += `<path d="M${MX - 10} ${y0} C ${MX + 140} ${y0 - 40 + (i % 3) * 20}, ${MX + 330} ${y0 + 36 - (i % 2) * 30}, ${MX + MW + 10} ${y0 - 14 + (i % 4) * 12}" fill="none" stroke="#000" stroke-opacity=".055" stroke-width="1"/>`;
   }
-
-  const cols = 26, rows = 24, gx = (mw - 56) / (cols - 1), gy = (mh - 96) / (rows - 1);
-  const centers = [
-    [8, 9, 1, 3.4],
-    [18, 6, 0.9, 3],
-    [14, 17, 0.85, 3.6],
-    [4, 19, 0.35, 3],
-  ];
-  const cells = [];
-  for (let j = 0; j < rows; j++)
-    for (let i = 0; i < cols; i++) {
-      const v = heat(i, j, cols, rows, centers, r);
-      const x = mx + 28 + i * gx;
-      const y = my + 70 + j * gy;
-      cells.push([x, y, v]);
+  // 1. power: transmission network and substations
+  s += L(1, `<g fill="none" stroke="${INK}" stroke-width="1.4" stroke-dasharray="5 4" opacity=".8"><path d="M${MX} 232 C 180 190 260 250 340 250 S 520 222 ${MX + MW} 196"/><path d="M340 250 C 360 180 380 120 440 62"/><path d="M340 250 C 300 330 250 380 232 ${MY + MH}"/></g>`
+    + [[180, 205], [340, 250], [440, 150], [232, 440]].map(([x, y]) => `<rect x="${x - 5}" y="${y - 5}" width="10" height="10" rx="2.5" fill="#fff" stroke="${INK}" stroke-width="1.5"/>`).join('')
+    + `<path d="M${MX + 14} ${MY + MH - 24} l5 -9 l-1.4 6 h5 l-5 9 l1.4 -6 z" fill="${INK}" transform="translate(0 0)"/>`
+    + `<text x="${MX + 30}" y="${MY + MH - 17}" font-size="10" font-weight="600" fill="${INK}">Power</text>`);
+  // 2. water: river and stressed (dry) basin
+  s += L(2, `<path d="M${MX} 330 C 150 290 210 300 300 330 S 470 400 ${MX + MW} 330" fill="none" stroke="${BLUE}" stroke-opacity=".28" stroke-width="22" stroke-linecap="round"/><path d="M${MX} 330 C 150 290 210 300 300 330 S 470 400 ${MX + MW} 330" fill="none" stroke="${BLUE}" stroke-width="2.2" stroke-linecap="round"/>
+    <path d="${blob(450, 118, 1.9, 4)}" fill="url(#smdry)" stroke="#b3822e" stroke-opacity=".5" stroke-dasharray="3 3"/>
+    <path d="M${MX + 100} ${MY + MH - 24} q-6 -9 0 -16 q6 7 0 16 z" fill="${BLUE}" opacity="0"/>`
+    + `<text x="${MX + 100}" y="${MY + MH - 17}" font-size="10" font-weight="600" fill="${BLUE}">Water</text>`);
+  // 3. environment: protected wetland / habitat
+  s += L(3, `<path d="${blob(176, 346, 2.1, 9)}" fill="url(#smhatch)" stroke="${GREEN}" stroke-opacity=".7"/><path d="${blob(540, 90, 1.1, 12)}" fill="url(#smhatch)" stroke="${GREEN}" stroke-opacity=".5"/>`
+    + `<text x="${MX + 176}" y="${MY + MH - 17}" font-size="10" font-weight="600" fill="${GREEN}">Environment</text>`);
+  // 4. permitting: parcel grid and zoning boundary
+  s += L(4, `<g fill="none" stroke="${INK}" stroke-opacity=".3" stroke-width="1" stroke-dasharray="2 3">${[0, 1, 2, 3, 4, 5].map((i) => `<path d="M${MX + 70 + i * 90} ${MY} V${MY + MH}"/>`).join('')}${[0, 1, 2, 3].map((i) => `<path d="M${MX} ${MY + 80 + i * 100} H${MX + MW}"/>`).join('')}</g>
+    <path d="${blob(470, 360, 1.8, 15)}" fill="rgba(214,69,61,.07)" stroke="${RED}" stroke-width="1.4" stroke-dasharray="6 4"/>`
+    + `<text x="${MX + 280}" y="${MY + MH - 17}" font-size="10" font-weight="600" fill="${INK}">Permitting</text>`);
+  s += `</g>`;
+  // candidate areas (always visible), flags as layers reveal
+  SITES.forEach((st, i) => {
+    const sel = st.flag === null;
+    s += `<g class="${sel ? 'sm-site sm-sel' : `sm-site sm-fl${st.layer}`}">`;
+    s += `<path class="sm-area" d="${blob(st.x, st.y, 0.85, i + 3)}" fill="${sel ? 'rgba(47,138,91,.18)' : 'rgba(20,20,20,.07)'}" stroke="${INK}" stroke-width="1.6"/>`;
+    s += circle(st.x, st.y, 11, { fill: '#fff', stroke: INK, sw: 1.6 }) + text(st.x, st.y + 4, st.id, { size: 11, weight: 700, anchor: 'middle' });
+    if (!sel) {
+      const w = st.flag.length * 5.9 + 32;
+      s += `<g class="sm-flag"><rect x="${st.x - w / 2}" y="${st.y + 26}" width="${w}" height="22" rx="11" fill="#fff" stroke="${RED}" stroke-opacity=".5"/><circle cx="${st.x - w / 2 + 12}" cy="${st.y + 37}" r="3.5" fill="${RED}"/><text x="${st.x - w / 2 + 22}" y="${st.y + 40.5}" font-size="10" font-weight="600" fill="${RED}">${st.flag}</text></g>`;
+      s += `<path class="sm-x" d="M${st.x - 18} ${st.y - 18} l36 36 M${st.x + 18} ${st.y - 18} l-36 36" stroke="${RED}" stroke-opacity=".5" stroke-width="1.4"/>`;
+    } else {
+      s += `<circle class="sm-ring" cx="${st.x}" cy="${st.y}" r="40" fill="none" stroke="${GREEN}" stroke-width="2"/><circle class="sm-ring2" cx="${st.x}" cy="${st.y}" r="40" fill="none" stroke="${GREEN}" stroke-width="1.2"/>`;
     }
-  s += text(mx + 28, my + 40, 'Overall suitability', { size: 13, weight: 600 });
-  cells.forEach(([x, y, v]) => {
-    const hi = v > 0.55;
-    s += circle(x, y, hi ? 2.2 + v * 2.2 : 1.8, { fill: hi ? 'var(--v-accent)' : 'var(--v-ink)', op: hi ? 0.4 + v * 0.6 : 0.12 + v * 0.3 });
+    s += `</g>`;
   });
-
-  if (stage === 2) {
-    return wrap(s, 'The same signals rolled into criteria: a heat grid showing where conditions are strong');
-  }
-
-  const pts = [
-    [mx + 28 + 8 * gx, my + 70 + 9 * gy, '1'],
-    [mx + 28 + 18 * gx, my + 70 + 6 * gy, '2'],
-    [mx + 28 + 14 * gx, my + 70 + 17 * gy, '3'],
-  ];
-  pts.forEach(([x, y, n], i) => {
-    s += circle(x, y, 17, { stroke: 'var(--v-ink)', sw: 1.5, op: 0.9 });
-    s += circle(x, y, 9, { fill: 'var(--v-ink)' });
-    s += text(x, y + 3.7, n, { size: 10.5, weight: 700, fill: 'var(--v-card)', anchor: 'middle' });
+  // layer legend
+  s += rect(616, 60, 140, 160, { rx: 14, fill: '#fff', stroke: 'var(--v-card-line)', cls: 'fl' });
+  s += text(634, 88, 'Assessment layers', { size: 11.5, weight: 650 });
+  [['Power', INK, 1], ['Water', BLUE, 2], ['Environment', GREEN, 3], ['Permitting', RED, 4]].forEach(([n, col, k], i) => {
+    const y = 114 + i * 26;
+    s += `<g class="sm-chip sm-c${k}">` + rect(634, y - 10, 104, 22, { rx: 11, fill: '#f3f3ef' }) + circle(646, y + 1, 4, { fill: col }) + text(657, y + 5, n, { size: 10.5, weight: 600 }) + `</g>`;
   });
-
-  // shortlist
-  const lx = 540, ly = 70, lw = 214;
-  s += card(lx, ly, lw, 372, 18);
-  s += text(lx + 22, ly + 38, 'Shortlist', { size: 14, weight: 600 });
-  const rowsList = [
-    ['Site 14', 86],
-    ['Site 07', 81],
-    ['Site 22', 77],
-  ];
-  rowsList.forEach(([n, v], i) => {
-    const y = ly + 76 + i * 52;
-    s += circle(lx + 30, y + 2, 9, { fill: i === 0 ? 'var(--v-ink)' : 'none', stroke: 'var(--v-ink)', sw: 1.2 });
-    s += text(lx + 30, y + 5.5, String(i + 1), { size: 10.5, weight: 700, fill: i === 0 ? 'var(--v-card)' : 'var(--v-ink)', anchor: 'middle' });
-    s += text(lx + 52, y + 6, n, { size: 13.5, weight: 600 });
-    s += text(lx + lw - 22, y + 6, String(v), { size: 13.5, weight: 600, anchor: 'end' });
-    s += rect(lx + 52, y + 16, lw - 74, 4, { rx: 2, fill: 'var(--v-line)' });
-    s += rect(lx + 52, y + 16, (lw - 74) * (v / 100), 4, { rx: 2, fill: i === 0 ? 'var(--v-accent)' : 'var(--v-ink)', op: i === 0 ? 1 : 0.7, cls: 'grow' });
-  });
-  s += line(lx + 22, ly + 238, lx + lw - 22, ly + 238);
-  s += text(lx + 22, ly + 264, 'Weights', { size: 12, weight: 600 });
-  [
-    ['Grid access', 0.7],
-    ['Water', 0.45],
-    ['Permitting', 0.6],
-  ].forEach(([n, v], i) => {
-    const y = ly + 292 + i * 26;
-    s += text(lx + 22, y + 4, n, { size: 11.5, fill: 'var(--v-mute2)' });
-    s += line(lx + 104, y, lx + lw - 22, y, { stroke: 'var(--v-line)', sw: 3 });
-    s += line(lx + 104, y, lx + 104 + (lw - 126) * v, y, { stroke: 'var(--v-ink)', sw: 3 });
-    s += circle(lx + 104 + (lw - 126) * v, y, 5.5, { fill: 'var(--v-card)', stroke: 'var(--v-ink)', sw: 1.6 });
-  });
-  return wrap(s, 'Site selection: a heat map with three ringed candidates beside a ranked shortlist and adjustable weights');
+  // shortlisted card
+  s += `<g class="sm-card">` + rect(616, 262, 140, 150, { rx: 14, fill: '#fff', stroke: GREEN, cls: 'fl' })
+    + circle(640, 292, 12, { fill: 'rgba(47,138,91,.14)' }) + `<path d="M634 292 l4 4 l8 -9" fill="none" stroke="${GREEN}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`
+    + text(660, 296, 'Site B', { size: 12.5, weight: 650 })
+    + text(634, 330, 'Site shortlisted', { size: 11.5, weight: 650 })
+    + text(634, 350, 'Suitability', { size: 10, fill: 'var(--v-mute2)' }) + text(738, 350, '86', { size: 12, weight: 700, anchor: 'end', fill: GREEN })
+    + rect(634, 360, 104, 6, { rx: 3, fill: 'rgba(0,0,0,.08)' }) + rect(634, 360, 90, 6, { rx: 3, fill: GREEN })
+    + text(634, 390, '4 layers cleared', { size: 10, fill: 'var(--v-mute2)' }) + `</g>`;
+  return wrap(s, 'A site-selection map revealed in layers: power, water, environment and permitting each flag locations as higher risk until one site, B, is shortlisted as suitable', 500, 780);
 }
 
 // 3. EY digital banking -------------------------------------------------------
