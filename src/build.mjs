@@ -55,7 +55,7 @@ function header(p, home) {
   return `<header class="nav" id="nav">
   <a class="nav__avatar" href="${home ? '#top' : p + 'index.html'}" aria-label="${site.name}, home"><img src="${p}assets/photos/maria-avatar.jpg" alt="" width="44" height="44"></a>
   <nav class="nav__links" aria-label="Primary">
-    <a href="${h}#work">Work</a>
+    <a href="${h}#projects">Work</a>
     <a href="${h}#journey">Journey</a>
     <a class="nav__more" href="${h}#about">About me</a>
     <a class="nav__cta" href="${h}#contact">Get in touch</a>
@@ -74,7 +74,7 @@ function footer(p) {
       <nav class="contact__nav" aria-label="Footer">
         <div>
           <p class="contact__h">Site</p>
-          <a href="${p}index.html#work">Work</a>
+          <a href="${p}index.html#projects">Work</a>
           <a href="${p}index.html#journey">Journey</a>
           <a href="${p}index.html#about">About me</a>
         </div>
@@ -200,7 +200,7 @@ ${header('', true)}
         <h2 id="work-h" class="h2">${esc(hero.loop.title)}</h2>
         <p class="sec-head__lede">${esc(hero.loop.bridge)}</p>
       </header>
-      <div class="work-grid" data-grid>
+      <div class="work-grid" id="projects" data-grid>
         ${projects.map(workCard).join('\n')}
       </div>
     </div>
@@ -270,7 +270,7 @@ function caseStudy(proj, i) {
 ${header(p, false)}
 <main>
   <article>
-    <header class="case-hero wrap">
+    <header class="case-top"><div class="case-hero wrap">
       <div class="case-hero__copy">
         <p class="case-hero__kicker">Case study</p>
         <h1 class="case-hero__title">${esc(proj.title)}</h1>
@@ -285,7 +285,7 @@ ${header(p, false)}
       <div class="case-hero__media">${media(proj, 3, 'case-media', 'meet')}
         <p class="case-note">Interfaces are reconstructed to respect client confidentiality.</p>
       </div>
-    </header>
+    </div></header>
 
     <div id="story" class="story wrap">
       <section class="blk"><h2 class="blk__h">The problem</h2><div class="prose">${para(proj.problem)}</div></section>

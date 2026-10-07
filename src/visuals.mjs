@@ -92,7 +92,7 @@ function targetTracking(stage) {
 // Shipped state, inspired by how the real tool is organised: KPI strip, one evolution
 // chart with Baseline / Last reported / Target markers, and per-target status rows.
 function ttShipped() {
-  const BLUE = '#3566d6', INK = '#141414', GREEN = '#2f8a5b', RED = '#d6453d', ORANGE = '#e8892b';
+  const BLUE = '#3566d6', INK = '#141414', GREEN = '#2f8a5b', RED = '#d6453d', SLATE = '#7b8794', SKY = '#79a6e8';
   let s = `<defs><linearGradient id="ttg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#dfeaff"/><stop offset=".6" stop-color="#eaf2ff"/><stop offset="1" stop-color="#f4f8ff"/></linearGradient></defs>`;
   s += `<g transform="translate(-24 -14)">`;
   s += card(36, 26, 728, 528, 10);
@@ -122,13 +122,13 @@ function ttShipped() {
   s += draw(`M${X(0.25)} ${Y(0.82)} C${X(0.4)} ${Y(0.6)} ${X(0.5)} ${Y(0.5)} ${X(0.62)} ${Y(0.44)} S${X(0.86)} ${Y(0.3)} ${X(1)} ${Y(0.25)}`, { stroke: INK, sw: 2.6, delay: 450 });
   s += draw(`M${X(0)} ${Y(0.79)} L${X(0.125)} ${Y(0.82)} L${X(0.25)} ${Y(0.82)} L${sx} ${sy}`, { stroke: BLUE, sw: 2.6, delay: 100 });
   // three scenarios from the last reported value
-  s += draw(`M${sx} ${sy} C${X(0.5)} ${Y(0.74)} ${X(0.75)} ${Y(0.55)} ${X(1)} ${Y(0.42)}`, { stroke: RED, sw: 2.3, delay: 1250 });
+  s += draw(`M${sx} ${sy} C${X(0.5)} ${Y(0.74)} ${X(0.75)} ${Y(0.55)} ${X(1)} ${Y(0.42)}`, { stroke: SLATE, sw: 2.3, delay: 1250 });
   s += draw(`M${sx} ${sy} C${X(0.5)} ${Y(0.66)} ${X(0.72)} ${Y(0.3)} ${X(1)} ${Y(0.16)}`, { stroke: GREEN, sw: 2.3, delay: 1500 });
-  s += draw(`M${sx} ${sy} C${X(0.52)} ${Y(0.72)} ${X(0.78)} ${Y(0.46)} ${X(1)} ${Y(0.34)}`, { stroke: ORANGE, sw: 2.3, delay: 1750 });
+  s += draw(`M${sx} ${sy} C${X(0.52)} ${Y(0.72)} ${X(0.78)} ${Y(0.46)} ${X(1)} ${Y(0.34)}`, { stroke: SKY, sw: 2.3, delay: 1750 });
   [0, 0.125, 0.25, 0.375].forEach((t, i) => (s += circle(X(t), Y([0.79, 0.82, 0.82, 0.81][i]), 3.8, { fill: '#fff', stroke: BLUE, sw: 1.8 })));
   [[0.25, 0.82], [0.5, 0.5], [0.75, 0.33], [1, 0.25]].forEach(([t, val]) => (s += circle(X(t), Y(val), 3.8, { fill: '#fff', stroke: INK, sw: 1.8 })));
   // legend
-  const leg = [['Historic data', BLUE], ['Target', INK], ['Scenario 1', RED], ['Scenario 2', GREEN], ['Scenario 3', ORANGE]];
+  const leg = [['Historic data', BLUE], ['Target', INK], ['Scenario 1', SLATE], ['Scenario 2', GREEN], ['Scenario 3', SKY]];
   let lx = cx + 16;
   leg.forEach(([l, col]) => {
     s += rect(lx, cy + ch - 24, 18, 3, { rx: 1.5, fill: col });
@@ -136,7 +136,7 @@ function ttShipped() {
     lx += 25 + l.length * 5.4 + 22;
   });
   // scenarios
-  const rows = [['Scenario 1', 'Low investment', RED, 0, 'Short by 2.6M m³'], ['Scenario 2', 'Full programme', GREEN, 1, 'Reaches the target in FY2029'], ['Scenario 3', 'Phased rollout', ORANGE, 0, 'Short by 1.1M m³']];
+  const rows = [['Scenario 1', 'Low investment', SLATE, 0, 'Short by 2.6M m³'], ['Scenario 2', 'Full programme', GREEN, 1, 'Reaches the target in FY2029'], ['Scenario 3', 'Phased rollout', SKY, 0, 'Short by 1.1M m³']];
   rows.forEach(([n, sub, col, ok, note], i) => {
     const y = 392 + i * 50;
     s += rect(56, y, 688, 42, { rx: 10, fill: '#fff', stroke: 'var(--v-card-line)' });
