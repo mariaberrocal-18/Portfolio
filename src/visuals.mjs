@@ -306,50 +306,75 @@ function banking(stage) {
   }
 
   // stage 3
-  s += text(px, y + 52, 'Total balance', { size: 12, fill: 'var(--v-mute)' });
-  s += text(px, y + 92, '$12,480.20', { size: 32, weight: 600 });
-  ['Send', 'Pay', 'Move'].forEach((a, i) => {
-    const bx = px + i * 70;
-    s += rect(bx, y + 114, 64, 36, { rx: 18, fill: i === 0 ? 'var(--v-ink)' : 'none', stroke: i === 0 ? 'none' : 'var(--v-ink)', sw: 1.2 });
-    s += text(bx + 32, y + 137, a, { size: 12.5, weight: 600, fill: i === 0 ? 'var(--v-card)' : 'var(--v-ink)', anchor: 'middle' });
+  const iw = w - 48;
+  s += text(px, y + 40, 'Hi, María', { size: 11.5, fill: 'var(--v-mute)' });
+  s += circle(px + iw - 11, y + 35, 11, { fill: 'var(--v-ink)', op: 0.1 }) + text(px + iw - 11, y + 39, 'M', { size: 10, weight: 700, anchor: 'middle' });
+  s += text(px, y + 74, '$12,480.20', { size: 28, weight: 600 });
+  // cards: one behind, one in front
+  s += rect(px + 12, y + 92, iw - 12, 92, { rx: 14, fill: 'var(--v-accent)', op: 0.55 });
+  s += rect(px, y + 100, iw - 12, 92, { rx: 14, fill: 'var(--v-ink)', cls: 'fl' });
+  s += rect(px + 14, y + 114, 22, 16, { rx: 4, fill: 'none', stroke: 'var(--v-card)', sw: 1.2, op: 0.7 }) + line(px + 14, y + 122, px + 36, y + 122, { stroke: 'var(--v-card)', op: 0.5 });
+  s += text(px + 14, y + 168, '•••• •••• •••• 4821', { size: 11, weight: 500, fill: 'var(--v-card)' }) + text(px + 14, y + 183, 'MARÍA BERROCAL', { size: 7.5, fill: 'var(--v-card)', op: 0.6 });
+  s += text(px + iw - 24, y + 125, 'VISA', { size: 12, weight: 700, anchor: 'end', fill: 'var(--v-card)' });
+  // primary actions
+  [['Send', 'M7 17 L17 7 M9 7 h8 v8'], ['Pay', 'M6 12 h12 M12 6 v12'], ['Move', 'M7 9 h10 l-3 -3 M17 15 H7 l3 3'], ['Cards', 'M5 9 h14 M5 14 h14 M6 7 h12 v10 H6 z']].forEach(([n, d], i) => {
+    const cx = px + 22 + i * 54;
+    s += circle(cx, y + 222, 17, { fill: i === 0 ? 'var(--v-ink)' : 'none', stroke: i === 0 ? 'none' : 'var(--v-ink)', sw: 1.2 });
+    s += `<path d="${d}" transform="translate(${cx - 12} ${y + 210})" fill="none" stroke="${i === 0 ? 'var(--v-card)' : 'var(--v-ink)'}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>`;
+    s += text(cx, y + 255, n, { size: 9.5, weight: 600, anchor: 'middle', fill: 'var(--v-mute2)' });
   });
-  s += text(px, y + 192, 'Today', { size: 12, weight: 600 });
+  s += text(px, y + 284, 'Movements', { size: 11.5, weight: 600 }) + text(px + iw, y + 284, 'See all', { size: 10, anchor: 'end', fill: 'var(--v-accent)', weight: 600 });
   [
-    ['Coffee Lab', '−4.80', 0],
-    ['Salary', '+3,200.00', 1],
-    ['Rent', '−1,150.00', 0],
-    ['Transit pass', '−32.00', 0],
-  ].forEach(([n, v, pos], i) => {
-    const ry = y + 214 + i * 50;
-    s += line(px, ry, px + w - 48, ry);
-    s += circle(px + 14, ry + 27, 14, { fill: 'var(--v-ink)', op: pos ? 1 : 0.08 });
-    s += text(px + 14, ry + 31, n[0], { size: 11, weight: 700, fill: pos ? 'var(--v-card)' : 'var(--v-ink)', anchor: 'middle' });
-    s += text(px + 38, ry + 31, n, { size: 13, weight: 500 });
-    s += text(px + w - 48, ry + 31, v, { size: 13, weight: 600, anchor: 'end', fill: pos ? 'var(--v-accent)' : 'var(--v-ink)' });
+    ['Coffee Lab', 'Food · 9:14', '−4.80', 0],
+    ['Salary · Acme', 'Deposit · 8:00', '+3,200.00', 1],
+    ['Rent', 'Autopay · Mon', '−1,150.00', 0],
+  ].forEach(([n, sub, v, pos], i) => {
+    const ry = y + 294 + i * 36;
+    s += circle(px + 13, ry + 17, 12, { fill: 'var(--v-ink)', op: pos ? 1 : 0.08 });
+    s += text(px + 13, ry + 21, n[0], { size: 10, weight: 700, fill: pos ? 'var(--v-card)' : 'var(--v-ink)', anchor: 'middle' });
+    s += text(px + 34, ry + 14, n, { size: 11.5, weight: 500 }) + text(px + 34, ry + 27, sub, { size: 8.5, fill: 'var(--v-mute)' });
+    s += text(px + iw, ry + 19, v, { size: 11.5, weight: 600, anchor: 'end', fill: pos ? 'var(--v-accent)' : 'var(--v-ink)' });
+  });
+  s += line(x + 16, y + 404, x + w - 16, y + 404);
+  ['Home', 'Cards', 'Pay', 'More'].forEach((n, i) => {
+    const tx = px + 22 + i * 54;
+    s += circle(tx, y + 416, 3.5, { fill: i === 0 ? 'var(--v-ink)' : 'var(--v-mute)', op: i === 0 ? 1 : 0.5 }) + text(tx, y + 430, n, { size: 7.5, anchor: 'middle', fill: i === 0 ? 'var(--v-ink)' : 'var(--v-mute)', weight: i === 0 ? 650 : 500 });
   });
 
-  // send-money step
-  s += card(52, 250, 196, 160, 18);
-  s += text(72, 280, 'Send money', { size: 13, weight: 600 });
-  s += rect(72, 294, 156, 30, { rx: 8, fill: 'none', stroke: 'var(--v-card-line)' });
-  s += text(82, 313, 'To: Ana Pérez', { size: 11.5, fill: 'var(--v-mute2)' });
-  s += text(72, 354, '$250.00', { size: 20, weight: 600 });
-  s += rect(72, 366, 156, 30, { rx: 15, fill: 'var(--v-ink)' });
-  s += text(150, 385.5, 'Continue', { size: 12, weight: 600, fill: 'var(--v-card)', anchor: 'middle' });
+  // accounts (left)
+  s += card(40, 80, 208, 150, 18);
+  s += text(60, 108, 'Accounts', { size: 13, weight: 600 });
+  [['Checking', '•••• 2207', '$8,270.20'], ['Savings', '•••• 9910', '$4,210.00']].forEach(([n, m, v], i) => {
+    const ay = 124 + i * 48;
+    s += line(60, ay, 228, ay) + rect(60, ay + 10, 26, 26, { rx: 8, fill: 'var(--v-ink)', op: i ? 0.1 : 0.9 });
+    s += text(96, ay + 24, n, { size: 12, weight: 500 }) + text(96, ay + 37, m, { size: 8.5, fill: 'var(--v-mute)' }) + text(228, ay + 29, v, { size: 12, weight: 600, anchor: 'end' });
+  });
 
-  // month summary
-  s += card(552, 92, 200, 174, 18);
-  s += text(572, 122, 'This month', { size: 13, weight: 600 });
-  [
-    ['Housing', 0.78],
-    ['Food', 0.46],
-    ['Transport', 0.22],
-  ].forEach(([n, v], i) => {
-    const by = 154 + i * 36;
+  // send-money step (left)
+  s += card(40, 250, 208, 176, 18);
+  s += text(60, 280, 'Send money', { size: 13, weight: 600 });
+  s += rect(60, 294, 168, 30, { rx: 8, fill: 'none', stroke: 'var(--v-card-line)' });
+  s += circle(76, 309, 8, { fill: 'var(--v-ink)', op: 0.12 }) + text(92, 313, 'Ana Pérez', { size: 11.5, fill: 'var(--v-mute2)' });
+  s += text(60, 356, '$250.00', { size: 22, weight: 600 }) + text(228, 356, 'USD', { size: 10, anchor: 'end', fill: 'var(--v-mute)' });
+  s += rect(60, 380, 168, 30, { rx: 15, fill: 'var(--v-ink)' });
+  s += text(144, 399.5, 'Continue', { size: 12, weight: 600, fill: 'var(--v-card)', anchor: 'middle' });
+
+  // month summary (right)
+  s += card(552, 60, 208, 170, 18);
+  s += text(572, 90, 'This month', { size: 13, weight: 600 }) + text(740, 90, '$2,430', { size: 12, weight: 600, anchor: 'end' });
+  [['Housing', 0.78], ['Food', 0.46], ['Transport', 0.22]].forEach(([n, v], i) => {
+    const by = 122 + i * 34;
     s += text(572, by, n, { size: 11.5, fill: 'var(--v-mute2)' });
-    s += rect(572, by + 9, 160, 6, { rx: 3, fill: 'var(--v-line)' });
-    s += rect(572, by + 9, 160 * v, 6, { rx: 3, fill: i === 0 ? 'var(--v-accent)' : 'var(--v-ink)', op: i === 0 ? 1 : 0.75, cls: 'grow' });
+    s += rect(572, by + 9, 168, 6, { rx: 3, fill: 'var(--v-line)' });
+    s += rect(572, by + 9, 168 * v, 6, { rx: 3, fill: i === 0 ? 'var(--v-accent)' : 'var(--v-ink)', op: i === 0 ? 1 : 0.75, cls: 'grow' });
   });
+  // credit card payment (right)
+  s += card(552, 250, 208, 176, 18);
+  s += text(572, 280, 'Credit card', { size: 13, weight: 600 }) + text(740, 280, 'Due Jul 12', { size: 10, anchor: 'end', fill: 'var(--v-mute)' });
+  s += rect(572, 294, 168, 52, { rx: 10, fill: 'var(--v-ink)' }) + text(584, 316, 'VISA', { size: 10, weight: 700, fill: 'var(--v-card)' }) + text(584, 336, '•••• 4821', { size: 10.5, fill: 'var(--v-card)', op: 0.8 }) + text(728, 336, '$340.00', { size: 11, weight: 600, anchor: 'end', fill: 'var(--v-card)' });
+  s += text(572, 368, 'Limit used', { size: 10, fill: 'var(--v-mute)' }) + text(740, 368, '34%', { size: 10, weight: 600, anchor: 'end' });
+  s += rect(572, 376, 168, 6, { rx: 3, fill: 'var(--v-line)' }) + rect(572, 376, 57, 6, { rx: 3, fill: 'var(--v-accent)', cls: 'grow' });
+  s += rect(572, 394, 168, 22, { rx: 11, fill: 'none', stroke: 'var(--v-ink)', sw: 1.2 }) + text(656, 409, 'Pay now', { size: 10.5, weight: 600, anchor: 'middle' });
   return wrap(s, 'A task-first banking home with balance, three primary actions and recent activity, beside a send-money step');
 }
 
@@ -552,16 +577,21 @@ function bankEvolve(stage) {
       if (i === 0) {
         s += text(x + 22, 76, 'Total balance', { size: 10.5, fill: 'var(--v-mute)' }) + text(x + 22, 110, '$12,480.20', { size: 24, weight: 600 });
         ['Send', 'Pay', 'Move'].forEach((a, k) => { s += rect(x + 22 + k * 56, 132, 50, 30, { rx: 15, fill: k === 0 ? INK : 'none', stroke: k === 0 ? 'none' : INK }) + text(x + 47 + k * 56, 152, a, { size: 10.5, weight: 600, anchor: 'middle', fill: k === 0 ? 'var(--v-card)' : INK }); });
-        s += text(x + 22, 200, 'Today', { size: 11, weight: 600 });
-        [['Coffee Lab', '−4.80'], ['Salary', '+3,200.00'], ['Rent', '−1,150.00']].forEach(([n, v], k) => { s += line(x + 22, 216 + k * 52, x + 178, 216 + k * 52) + circle(x + 36, 244 + k * 52, 12, { fill: INK, op: 0.1 }) + text(x + 56, 248 + k * 52, n, { size: 11.5, weight: 500 }) + text(x + 178, 248 + k * 52, v, { size: 11.5, weight: 600, anchor: 'end' }); });
+        s += rect(x + 22, 176, 156, 70, { rx: 12, fill: INK, cls: 'fl' }) + text(x + 34, 198, 'VISA', { size: 10, weight: 700, fill: 'var(--v-card)', anchor: 'start' }) + text(x + 34, 232, '•••• 4821', { size: 11, fill: 'var(--v-card)', op: 0.85 }) + text(x + 166, 232, '$340', { size: 11, weight: 600, anchor: 'end', fill: 'var(--v-card)' });
+        s += text(x + 22, 272, 'Movements', { size: 11, weight: 600 });
+        [['Coffee Lab', '−4.80'], ['Salary', '+3,200.00'], ['Rent', '−1,150.00'], ['Transit pass', '−32.00']].forEach(([n, val], k) => { s += line(x + 22, 284 + k * 38, x + 178, 284 + k * 38) + circle(x + 36, 303 + k * 38, 11, { fill: INK, op: 0.1 }) + text(x + 56, 307 + k * 38, n, { size: 11, weight: 500 }) + text(x + 178, 307 + k * 38, val, { size: 11, weight: 600, anchor: 'end' }); });
       } else if (i === 1) {
         s += text(x + 22, 76, 'Send money', { size: 14, weight: 650 }) + text(x + 22, 108, 'To', { size: 10, fill: 'var(--v-mute)' }) + rect(x + 22, 116, 156, 36, { rx: 10, fill: 'none', stroke: 'var(--v-card-line)' }) + text(x + 34, 139, 'Ana Pérez', { size: 12 });
         s += text(x + 22, 190, 'Amount', { size: 10, fill: 'var(--v-mute)' }) + text(x + 22, 232, '$250.00', { size: 28, weight: 600 }) + text(x + 22, 262, 'From Savings · available $4,210', { size: 10, fill: 'var(--v-mute)' });
         s += rect(x + 22, 398, 156, 40, { rx: 20, fill: INK }) + text(x + 100, 423, 'Continue', { size: 12.5, weight: 600, anchor: 'middle', fill: 'var(--v-card)' });
-        s += rect(x + 22, 20 + 28, 0, 0);
+        s += text(x + 22, 296, 'Recent', { size: 10, fill: 'var(--v-mute)' });
+        ['A', 'L', 'D', 'M'].forEach((n, k) => { s += circle(x + 36 + k * 38, 322, 15, { fill: INK, op: k === 0 ? 0.9 : 0.1 }) + text(x + 36 + k * 38, 326, n, { size: 11, weight: 700, anchor: 'middle', fill: k === 0 ? 'var(--v-card)' : INK }); });
+        ['$50', '$100', '$250'].forEach((n, k) => { s += rect(x + 22 + k * 54, 352, 48, 26, { rx: 13, fill: k === 2 ? 'var(--v-accent)' : 'none', stroke: k === 2 ? 'none' : 'var(--v-card-line)' }) + text(x + 46 + k * 54, 369, n, { size: 10.5, weight: 600, anchor: 'middle', fill: k === 2 ? '#fff' : INK }); });
       } else {
         s += text(x + 22, 76, 'Review', { size: 14, weight: 650 });
         [['To', 'Ana Pérez'], ['Amount', '$250.00'], ['Fee', 'Free'], ['Arrives', 'Today']].forEach(([k, val], n) => { s += line(x + 22, 100 + n * 44, x + 178, 100 + n * 44) + text(x + 22, 128 + n * 44, k, { size: 11, fill: 'var(--v-mute)' }) + text(x + 178, 128 + n * 44, val, { size: 12, weight: 600, anchor: 'end' }); });
+        s += text(x + 22, 312, 'Pay with', { size: 10, fill: 'var(--v-mute)' }) + rect(x + 22, 322, 156, 44, { rx: 10, fill: INK }) + text(x + 34, 349, 'VISA', { size: 10, weight: 700, fill: 'var(--v-card)' }) + text(x + 168, 349, '•••• 4821', { size: 11, anchor: 'end', fill: 'var(--v-card)', op: 0.85 });
+        s += circle(x + 30, 388, 5, { fill: ACC }) + text(x + 42, 391, 'Protected by 2-step verification', { size: 9, fill: 'var(--v-mute)' });
         s += rect(x + 22, 398, 156, 40, { rx: 20, fill: ACC }) + text(x + 100, 423, 'Confirm transfer', { size: 12.5, weight: 600, anchor: 'middle', fill: '#fff' });
       }
     });
