@@ -158,8 +158,8 @@ export const projects = [
     ],
     stages: [
       ['A table of numbers', 'The first version listed each target with its starting value and its latest result. It was accurate, but it did not say whether the target was in danger.'],
-      ['A line towards the goal', 'Drawing each target as a line over time, with the real results on it, made the gap visible for the first time.'],
-      ['From a gap to a plan', 'The screen now says whether a target is on or off track, and by how much, and lets teams build scenarios to close the gap, with suggested combinations of projects and investment.'],
+      ['A line towards the goal', 'Turning the table into a timeline showed actual progress against the target, and the gap became visible for the first time.'],
+      ['From a gap to a plan', 'Scenarios appeared as lines, one by one, each a different possible outcome. Teams could compare them, and every scenario got its own card with its status.'],
     ],
     shipped: [
       'A target page showing results over time against the goal',
@@ -168,8 +168,13 @@ export const projects = [
       'AI-suggested combinations that would reach the target',
     ],
     outcome: [
-      'Teams no longer had to rebuild progress by hand in spreadsheets before every review.',
-      'The conversation moved from “where are we?” to “what should we do about it?”',
+      'Customers moved workflows previously managed through spreadsheets and Power BI into Waterplan, bringing data, calculations, targets, and project decisions into one place.',
+      'What started as a way to answer “Are we on track?” became a way to ask “What should we do next?”',
+    ],
+    lessons: [
+      ['Flexibility has a cost.', 'Supporting different customer methodologies only works when the underlying product model stays clear.'],
+      ['The first request is rarely the real problem.', 'Looking beyond what customers asked for often revealed a more scalable problem worth solving.'],
+      ['Designing for change matters.', 'After years of iterations, I learned to think beyond the feature in front of me and consider how each decision would hold up as the product evolved.'],
     ],
   },
   {

@@ -290,8 +290,10 @@
   // timeline (vertical) + evolve (case studies) -------------------------------
   const tl = document.querySelector('[data-timeline]');
   const ev = document.querySelector('[data-evolve]');
-  let layers = [], steps = [];
+  let layers = [], steps = [], stageTT = null, track = null;
   if (ev) {
+    stageTT = ev.querySelector('.evolve__stage--tt');
+    track = ev.querySelector('.evolve__track');
     layers = [...ev.querySelectorAll('.layer')];
     steps = [...ev.querySelectorAll('.evolve__steps li')];
   }
@@ -299,7 +301,11 @@
   const syncPin = () => {
     if (!ev) return;
     ev.classList.toggle('evolve--pinned', pinned());
-    if (!pinned()) { layers.forEach((l) => l.style.removeProperty('--r')); steps.forEach((s) => s.classList.remove('is-active')); }
+    if (!pinned()) {
+      layers.forEach((l) => l.style.removeProperty('--r'));
+      steps.forEach((s) => s.classList.remove('is-active'));
+      if (stageTT) ['--t2', '--t2b', '--l1', '--l2', '--l3', '--c1', '--c2', '--c3'].forEach((k) => stageTT.style.removeProperty(k));
+    }
   };
   syncPin();
   wide.addEventListener('change', syncPin);
@@ -460,12 +466,20 @@
     }
 
     if (pinned()) {
-      const r = ev.getBoundingClientRect();
+      const r = (track || ev).getBoundingClientRect();
       const total = r.height - vh * 0.86;
       const p = clamp(-r.top / total) * 2; // 0..2
       layers.forEach((l, i) => { if (i > 0) l.style.setProperty('--r', clamp(p - (i - 1)).toFixed(3)); });
-      const active = Math.min(2, Math.round(p));
+      const active = p < 0.55 ? 0 : p < 1.25 ? 1 : 2;
       steps.forEach((s, i) => s.classList.toggle('is-active', i === active));
+      if (stageTT) {
+        // the product evolves: table → timeline → scenario lines one by one → scenario cards
+        const seg = (a, len) => easeInOut(clamp((p - a) / len)).toFixed(3);
+        const set = (k, v) => stageTT.style.setProperty(k, v);
+        set('--t2', seg(0.5, 0.55)); set('--t2b', seg(0.85, 0.4));
+        set('--l1', seg(1.25, 0.2)); set('--l2', seg(1.42, 0.2)); set('--l3', seg(1.59, 0.2));
+        set('--c1', seg(1.72, 0.14)); set('--c2', seg(1.8, 0.14)); set('--c3', seg(1.88, 0.12));
+      }
     }
   }
   if (lenis) lenis.on('scroll', update);

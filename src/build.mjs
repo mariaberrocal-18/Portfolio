@@ -5,7 +5,7 @@ import { createHash } from 'node:crypto';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { site, hero, journey, toolkit, about, contact, projects } from './content.mjs';
-import { render, ratio } from './visuals.mjs';
+import { render, ratio, ttEvolve } from './visuals.mjs';
 import { mini } from './mini.mjs';
 import { marks } from './logos.mjs';
 import { existsSync } from 'node:fs';
@@ -248,7 +248,7 @@ function caseStudy(proj, i) {
       (d, n) => `<li class="decision">
         <h3 class="decision__title">${esc(d.title)}</h3>
         <dl class="decision__pair">
-          <div><dt>Chose</dt><dd>${esc(d.chose)}</dd></div>
+          <div class="pair__a"><dt>Decision</dt><dd>${esc(d.chose)}</dd></div>
           <div><dt>Over</dt><dd>${esc(d.over)}</dd></div>
         </dl>
         <p class="decision__why">${esc(d.why)}</p>
@@ -299,21 +299,27 @@ ${header(p, false)}
     </div>
 
     <section class="evolve" data-evolve aria-labelledby="evolve-h">
-      <div class="wrap">
-        <h2 id="evolve-h" class="h3 evolve__h">How it evolved</h2>
-        <div class="evolve__pin">
-          <div class="evolve__stage v v--${proj.tone}">
-            ${[1, 2, 3].map((s) => `<div class="layer" data-layer="${s - 1}">${render(proj.visual, s)}</div>`).join('')}
+      <div class="evolve__track">
+        <div class="wrap">
+          <h2 id="evolve-h" class="h3 evolve__h">How it evolved</h2>
+          <div class="evolve__pin">
+            ${proj.visual === 'targetTracking'
+              ? `<div class="evolve__stage evolve__stage--tt">${ttEvolve()}</div>`
+              : `<div class="evolve__stage v v--${proj.tone}">${[1, 2, 3].map((s) => `<div class="layer" data-layer="${s - 1}">${render(proj.visual, s)}</div>`).join('')}</div>`}
+            <ol class="evolve__steps">${steps}</ol>
           </div>
-          <ol class="evolve__steps">${steps}</ol>
         </div>
+      </div>
+      <div class="wrap evolve__after">
+        <section class="blk"><h2 class="blk__h">Outcome</h2><div class="prose">${para(proj.outcome)}</div></section>
       </div>
     </section>
 
-    <div class="story story--end wrap">
-      <section class="blk"><h2 class="blk__h">What shipped</h2><ul class="ticks">${proj.shipped.map((t) => `<li>${esc(t)}</li>`).join('')}</ul></section>
-      <section class="blk"><h2 class="blk__h">Outcome</h2><div class="prose prose--serif">${para(proj.outcome)}</div></section>
-    </div>
+    ${proj.lessons ? `<section class="lessons wrap" aria-labelledby="lessons-h">
+      <div class="blk"><h2 id="lessons-h" class="blk__h">Lessons learned</h2>
+        <ol class="lesson-list">${proj.lessons.map(([h, t]) => `<li><h3>${esc(h)}</h3><p>${esc(t)}</p></li>`).join('')}</ol>
+      </div>
+    </section>` : ''}
     </div>
   </article>
 

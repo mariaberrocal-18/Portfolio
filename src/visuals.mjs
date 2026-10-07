@@ -469,3 +469,74 @@ function navigation(stage) {
 
 export const visuals = { targetTracking, siteSelection, banking, navigation };
 export const render = (name, stage = 3, float = false) => visuals[name](stage, float);
+
+
+// Target Tracking, "How it evolved": one product screen that transforms as the page scrolls.
+// CSS custom properties on the stage (set by site.js) drive every piece: --t2 table → chart,
+// --t2b target line, --l1..3 scenario lines, --c1..3 scenario cards. Defaults = final state.
+export function ttEvolve() {
+  const BLUE = '#3566d6', INK = '#141414', GREEN = '#2f8a5b', RED = '#d6453d', SLATE = '#7b8794', SKY = '#79a6e8';
+  const g = (style, inner, cls = '') => `<g class="${cls}" style="${style}">${inner}</g>`;
+  const tl = (d, stroke, sw, varName) => `<path d="${d}" pathLength="1" fill="none" stroke="${stroke}" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round" style="stroke-dasharray:1;stroke-dashoffset:calc(1 - var(${varName}, 1));opacity:min(calc(var(${varName}, 1) * 40), 1)"/>`;
+  let s = '';
+  s += rect(6, 6, 740, 548, { rx: 16, fill: '#fff', stroke: 'rgba(0,0,0,.08)' });
+  s += text(34, 44, 'Water use efficiency', { size: 15, weight: 650 });
+  s += text(34, 64, 'Baseline 2019 · 12 facilities · updated today', { size: 11, fill: 'var(--v-mute)' });
+
+  // step 1: a table of numbers
+  let t = '';
+  [['Target', 34], ['Baseline', 330], ['Current', 450], ['Progress', 570]].forEach(([h, x]) => (t += text(x, 106, h, { size: 11, fill: 'var(--v-mute)' })));
+  [['Water use efficiency', '0.31', '0.27', '48%'], ['Total withdrawals', '4.2 Mm³', '3.6 Mm³', '42%'], ['Total discharges', '3.1 Mm³', '2.8 Mm³', '39%'], ['Reuse rate', '8%', '12%', '40%'], ['Leak reduction', '19%', '16%', '40%'], ['Basin protection', '3 sites', '5 sites', '50%']].forEach((r, i) => {
+    const y = 124 + i * 40;
+    t += line(34, y, 718, y);
+    r.forEach((c, j) => (t += text([34, 330, 450, 570][j], y + 25, c, { size: 13, weight: j === 0 ? 600 : 500, fill: j === 0 ? 'var(--v-ink)' : 'var(--v-mute2)' })));
+  });
+  s += g('opacity: calc(1 - var(--t2, 1)); translate: 0 calc(var(--t2, 1) * -10px)', t);
+
+  // step 2: the same data as a timeline against the target
+  const px = 70, pw = 630, py = 118, ph = 178;
+  const X = (u) => px + pw * u, Y = (w) => py + ph * (1 - w);
+  let c = '';
+  for (let i = 0; i < 4; i++) c += line(px, py + (ph / 3) * i, px + pw, py + (ph / 3) * i, { op: 0.7, dash: '2 4' });
+  ['FY22', 'FY24', 'FY26', 'FY28', 'FY30'].forEach((l, i) => (c += text(px + (pw / 4) * i, py + ph + 18, l, { size: 10, fill: 'var(--v-mute)', anchor: 'middle' })));
+  [[0.25, 'Baseline'], [0.375, 'Last reported'], [1, 'Target']].forEach(([u, l]) => {
+    c += line(X(u), py - 10, X(u), py + ph, { stroke: 'var(--v-mute)', op: 0.8 });
+    c += rect(X(u) - (l.length * 2.9 + 8), 80, l.length * 5.8 + 16, 17, { rx: 5, fill: '#fff', stroke: 'var(--v-card-line)' });
+    c += text(X(u), 92, l, { size: 9.5, fill: 'var(--v-mute2)', anchor: 'middle', weight: 500 });
+  });
+  s += g('opacity: var(--t2, 1)', c);
+  const sx = X(0.375), sy = Y(0.81);
+  s += tl(`M${X(0)} ${Y(0.79)} L${X(0.125)} ${Y(0.82)} L${X(0.25)} ${Y(0.82)} L${sx} ${sy}`, BLUE, 2.6, '--t2');
+  s += tl(`M${X(0.25)} ${Y(0.82)} C${X(0.4)} ${Y(0.6)} ${X(0.5)} ${Y(0.5)} ${X(0.62)} ${Y(0.44)} S${X(0.86)} ${Y(0.3)} ${X(1)} ${Y(0.25)}`, INK, 2.6, '--t2b');
+  let d = '';
+  [0, 0.125, 0.25, 0.375].forEach((u, i) => (d += circle(X(u), Y([0.79, 0.82, 0.82, 0.81][i]), 3.8, { fill: '#fff', stroke: BLUE, sw: 1.8 })));
+  s += g('opacity: var(--t2, 1)', d);
+  let d2 = '';
+  [[0.25, 0.82], [0.5, 0.5], [0.75, 0.33], [1, 0.25]].forEach(([u, w]) => (d2 += circle(X(u), Y(w), 3.8, { fill: '#fff', stroke: INK, sw: 1.8 })));
+  s += g('opacity: var(--t2b, 1)', d2);
+
+  // step 3: scenario lines, one by one
+  s += tl(`M${sx} ${sy} C${X(0.5)} ${Y(0.74)} ${X(0.75)} ${Y(0.55)} ${X(1)} ${Y(0.42)}`, SLATE, 2.3, '--l1');
+  s += tl(`M${sx} ${sy} C${X(0.5)} ${Y(0.66)} ${X(0.72)} ${Y(0.3)} ${X(1)} ${Y(0.16)}`, GREEN, 2.3, '--l2');
+  s += tl(`M${sx} ${sy} C${X(0.52)} ${Y(0.72)} ${X(0.78)} ${Y(0.46)} ${X(1)} ${Y(0.34)}`, SKY, 2.3, '--l3');
+  // legend
+  const leg = [['Historic data', BLUE, '--t2'], ['Target', INK, '--t2b'], ['Scenario 1', SLATE, '--l1'], ['Scenario 2', GREEN, '--l2'], ['Scenario 3', SKY, '--l3']];
+  let lx = 34, lg = '';
+  leg.forEach(([l, col, vn]) => {
+    lg += g(`opacity: var(${vn}, 1)`, rect(lx, 342, 18, 3, { rx: 1.5, fill: col }) + text(lx + 25, 346.5, l, { size: 10, fill: 'var(--v-mute2)', weight: 500 }));
+    lx += 25 + l.length * 5.4 + 22;
+  });
+  s += lg;
+
+  // scenario cards
+  [['Scenario 1', 'Low investment', SLATE, 0, 'Short by 2.6M m³', '--c1'], ['Scenario 2', 'Full programme', GREEN, 1, 'Reaches the target in FY2029', '--c2'], ['Scenario 3', 'Phased rollout', SKY, 0, 'Short by 1.1M m³', '--c3']].forEach(([n, sub, col, ok, note, vn], i) => {
+    const y = 372 + i * 58;
+    let r = rect(34, y, 684, 46, { rx: 10, fill: '#fff', stroke: 'var(--v-card-line)' }) + rect(34, y, 5, 46, { rx: 2.5, fill: col }) + circle(60, y + 23, 5, { fill: col });
+    r += text(74, y + 21, n, { size: 12.5, weight: 650 }) + text(74, y + 36, sub, { size: 10.5, fill: 'var(--v-mute2)' });
+    r += text(ok ? 436 : 410, y + 27, note, { size: 10.5, fill: ok ? GREEN : RED, anchor: 'end' });
+    r += rect(ok ? 448 : 422, y + 13, 68, 20, { rx: 10, fill: ok ? '#e4f6ec' : '#fde9e7' }) + circle(ok ? 460 : 434, y + 23, 3, { fill: ok ? GREEN : RED }) + text(ok ? 468 : 442, y + 27, ok ? 'On track' : 'Off track', { size: 10.5, weight: 600, fill: ok ? GREEN : RED });
+    r += ok ? rect(560, y + 10, 146, 26, { rx: 7, fill: '#fff', stroke: '#c9c9c4' }) + text(633, y + 27, 'View scenario', { size: 10.5, weight: 600, anchor: 'middle' }) : rect(560, y + 10, 146, 26, { rx: 7, fill: INK }) + text(633, y + 27, 'How to reach the target?', { size: 10.5, weight: 600, fill: '#fff', anchor: 'middle' });
+    s += g(`opacity: var(${vn}, 1); translate: 0 calc((1 - var(${vn}, 1)) * 14px)`, r);
+  });
+  return wrap(s, 'Target tracking evolving from a plain table of values into a timeline of actual progress against the target, with three scenario lines and three scenario cards', 560, 752);
+}
