@@ -406,13 +406,28 @@
     if (!thread || !storyEl || !evolveH || !wide.matches) return;
     const sheetTop = thread.parentElement.getBoundingClientRect().top + scrollY;
     const st = storyEl.getBoundingClientRect().top + scrollY + parseFloat(getComputedStyle(storyEl).paddingTop);
-    const en = evolveH.getBoundingClientRect().top + scrollY + 6;
+    const tr = document.querySelector('.evolve__track');
+    const en = tr.getBoundingClientRect().top + scrollY + parseFloat(getComputedStyle(tr).paddingTop) + 6;
     thTop = st; thLen = Math.max(0, en - st);
     thread.style.top = `${st - sheetTop}px`;
     thread.style.height = `${thLen}px`;
     thread.style.setProperty('--th', `${thLen}px`);
   };
+  // lessons sheet rises over the outcome; cards stagger in
+  const lessonsEl = document.querySelector('.lessons');
+  const afterEl = document.querySelector('.evolve__after');
+  if (lessonsEl) {
+    lessonsEl.querySelectorAll('.lesson-list li').forEach((li, i) => li.style.setProperty('--i', i));
+    if (reduce || !('IntersectionObserver' in window)) lessonsEl.classList.add('is-in');
+    else new IntersectionObserver((es, o) => { if (es.some((e) => e.isIntersecting)) { lessonsEl.classList.add('is-in'); o.disconnect(); } }, { threshold: 0.15 }).observe(lessonsEl);
+  }
+  const updateLessons = () => {
+    if (!lessonsEl || !afterEl || reduce || !wide.matches) return;
+    const t = lessonsEl.getBoundingClientRect().top;
+    afterEl.style.setProperty('--lp', clamp(1 - t / (innerHeight * 0.85)).toFixed(3));
+  };
   const updateThread = () => {
+    updateLessons();
     if (!thread) return;
     if (!wide.matches || reduce) { thread.style.setProperty('--tp', reduce ? 1 : 0); return; }
     const p = clamp((scrollY + innerHeight * 0.55 - thTop) / Math.max(1, thLen));
