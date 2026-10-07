@@ -169,8 +169,6 @@
   };
   const renderBridge = (p) => {
     const S = stateAt(p);
-    bridge.style.setProperty('--mp', p.toFixed(4));
-    bridge.style.setProperty('--mo', (clamp(p / 0.08) * (1 - clamp((p - 0.78) / 0.12))).toFixed(3));
     const { vw, vh, cw, ch } = G;
 
     // cards: positions come from the storyboard, the current beat takes the spotlight

@@ -711,17 +711,3 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8 .65' numOctaves='3' seed='11' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 1.1 0 0 0 -.42'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
 .case-top .case-note { position: relative; z-index: 4; color: rgba(255, 255, 255, 0.78); text-shadow: 0 1px 12px rgba(0, 0, 0, 0.6); }
 
-/* soft mesh gradient behind the loop story; it drifts with the scroll and shifts colour per beat */
-.loop-mesh { display: none; }
-.is-fly .loop-mesh { display: block; position: absolute; inset: -12% -8%; z-index: 0; pointer-events: none; filter: blur(90px) saturate(0.8); opacity: calc(var(--mo, 0) * 0.26); will-change: opacity; }
-.is-fly .loop > *, .is-fly .strengths { z-index: 1; }
-.loop-mesh i { position: absolute; width: 52%; height: 62%; border-radius: 50%; will-change: transform; }
-.loop-mesh i:nth-child(1) { left: -4%; top: -6%; background: radial-gradient(circle, #5b9cff 0%, rgba(91, 156, 255, 0) 66%); transform: translate(calc(var(--mp, 0) * 70vw), calc(var(--mp, 0) * 30vh)) scale(1.05); animation: lm-a 16s ease-in-out infinite alternate; }
-.loop-mesh i:nth-child(2) { right: -6%; top: 4%; background: radial-gradient(circle, #3f7a5c 0%, rgba(63, 122, 92, 0) 66%); transform: translate(calc(var(--mp, 0) * -60vw), calc(var(--mp, 0) * 36vh)) scale(1); animation: lm-b 19s ease-in-out infinite alternate; }
-.loop-mesh i:nth-child(3) { left: 18%; bottom: -16%; background: radial-gradient(circle, #cfe2ff 0%, rgba(207, 226, 255, 0) 66%); transform: translate(calc(var(--mp, 0) * 50vw), calc(var(--mp, 0) * -34vh)) scale(1.1); animation: lm-c 21s ease-in-out infinite alternate; }
-.loop-mesh i:nth-child(4) { right: 8%; bottom: -10%; background: radial-gradient(circle, #8fb8a2 0%, rgba(143, 184, 162, 0) 66%); transform: translate(calc(var(--mp, 0) * -42vw), calc(var(--mp, 0) * -22vh)); animation: lm-d 18s ease-in-out infinite alternate; }
-@keyframes lm-a { to { margin: 8% 0 0 10%; } }
-@keyframes lm-b { to { margin: 12% 8% 0 0; } }
-@keyframes lm-c { to { margin: 0 0 10% 12%; } }
-@keyframes lm-d { to { margin: 0 12% 12% 0; } }
-@media (prefers-reduced-motion: reduce) { .loop-mesh i { animation: none; } }
