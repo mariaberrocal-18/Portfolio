@@ -451,7 +451,66 @@ function navigation(stage) {
   return wrap(s, 'The shipped navigation: a persistent sidebar with a workspace switcher and contextual secondary tabs, over a faint map of the old sprawl');
 }
 
-export const visuals = { targetTracking, siteSelection, banking, navigation };
+
+// Civarea, "The evolution": messy first iteration → structured evaluation → insight (three scroll-wiped frames)
+function siteEvolve(stage) {
+  const GREEN = '#2f8a5b', RED = '#d6453d', INK = 'var(--v-ink)';
+  const r = rng(5);
+  let s = '';
+  if (stage === 1) {
+    // fragmented: overlapping panels, dense tables, mismatched type
+    s += rect(0, 0, W, H, { fill: '#e4e3de' });
+    const panels = [[18, 20, 300, 210, -1.5], [300, 44, 260, 190, 1.2], [530, 14, 250, 230, -0.8], [40, 250, 270, 220, 0.9], [290, 262, 230, 210, -1.1], [500, 252, 280, 226, 1.4]];
+    panels.forEach(([x, y, w, h, a], i) => {
+      s += `<g transform="rotate(${a} ${x + w / 2} ${y + h / 2})">` + rect(x, y, w, h, { rx: 6, fill: '#fff', stroke: 'rgba(0,0,0,.2)' }) + rect(x, y, w, 18, { rx: 6, fill: ['#c9cfd6', '#d9d2c0', '#cdd8cf'][i % 3] });
+      for (let k = 0; k < 11; k++) {
+        const yy = y + 30 + k * 15;
+        if (yy > y + h - 10) break;
+        s += rect(x + 10, yy, 38 + r() * 40, 5, { rx: 2, fill: 'rgba(0,0,0,.35)' });
+        for (let c = 0; c < 3; c++) s += rect(x + 110 + c * 52, yy, 20 + r() * 22, 5, { rx: 2, fill: 'rgba(0,0,0,.16)' });
+      }
+      s += `</g>`;
+    });
+    s += rect(210, 150, 150, 70, { rx: 6, fill: '#fff', stroke: 'rgba(0,0,0,.25)', cls: 'fl' }) + text(222, 172, 'Layer_v2_FINAL', { size: 10, weight: 600 }) + text(222, 190, 'raster: 142 / vector: 96', { size: 9, fill: 'var(--v-mute2)' }) + rect(222, 200, 90, 5, { rx: 2, fill: 'rgba(214,69,61,.5)' });
+    s += rect(420, 120, 170, 60, { rx: 6, fill: '#fff', stroke: 'rgba(0,0,0,.25)', cls: 'fl' }) + text(432, 144, 'ERR 404 – source?', { size: 10, weight: 600, fill: RED }) + text(432, 162, 'dataset_09b.geojson', { size: 9, fill: 'var(--v-mute2)' });
+    return wrap(s, 'The first iteration: overlapping tables and panels with no clear journey', H, W);
+  }
+  // structured product shell
+  s += rect(0, 0, W, H, { fill: '#ecece8' });
+  s += rect(24, 24, 752, 452, { rx: 18, fill: '#fff', stroke: 'var(--v-card-line)', cls: 'fl' });
+  s += text(48, 58, 'Site evaluation', { size: 14, weight: 650 }) + rect(640, 40, 112, 26, { rx: 13, fill: '#141414' }) + text(696, 57, 'Export', { size: 10.5, weight: 600, anchor: 'middle', fill: '#fff' });
+  // journey nav
+  ['Land & constructability', 'Zoning & permitting', 'Water', 'Natural resources', 'Natural hazards'].forEach((n, i) => {
+    const y = 96 + i * 44, on = i === 4;
+    s += rect(40, y - 14, 196, 34, { rx: 10, fill: on ? 'rgba(47,138,91,.12)' : 'none' }) + circle(58, y + 3, 6, { fill: on ? GREEN : 'none', stroke: on ? GREEN : 'rgba(0,0,0,.25)', sw: 1.6 }) + text(74, y + 7, n, { size: 11, weight: on ? 650 : 500, fill: on ? INK : 'var(--v-mute2)' });
+  });
+  s += text(48, 336, 'Map layers', { size: 10, weight: 650, fill: 'var(--v-mute2)' });
+  [['Flood maps', '#3566d6', 1], ['Wetlands', '#1f8f86', 0], ['Critical habitat', GREEN, 0]].forEach(([n, c, on], i) => {
+    const y = 360 + i * 32;
+    s += text(48, y + 4, n, { size: 10.5, weight: 500 }) + rect(180, y - 8, 36, 18, { rx: 9, fill: on ? c : 'rgba(0,0,0,.14)' }) + circle(on ? 207 : 189, y + 1, 7, { fill: '#fff' });
+  });
+  // map
+  const MX = 256, MY = 84, MW = 500, MH = 376;
+  s += `<defs><clipPath id="evclip"><rect x="${MX}" y="${MY}" width="${MW}" height="${MH}" rx="12"/></clipPath></defs>`;
+  s += rect(MX, MY, MW, MH, { rx: 12, fill: '#ebe9e3' });
+  s += `<g clip-path="url(#evclip)"><g transform="rotate(-16 500 280)">`;
+  for (let gx = 0; gx < 8; gx++) for (let gy = 0; gy < 7; gy++) { if (r() < 0.15) continue; s += rect(250 + gx * 68, 80 + gy * 58, 22 + r() * 26, 14 + r() * 18, { rx: 1.5, fill: ['#d8d5cd', '#cfccc3', '#dedbd3'][Math.floor(r() * 3)] }); }
+  s += `</g><path d="M${MX - 10} 190 C 400 230 560 200 ${MX + MW + 10} 270" fill="none" stroke="#fbfaf7" stroke-width="9"/><path d="M450 ${MY - 10} C 470 220 490 330 520 ${MY + MH + 10}" fill="none" stroke="#fbfaf7" stroke-width="7"/>`;
+  s += `<path d="M${MX} 400 C 360 350 440 430 540 380 S 700 350 ${MX + MW} 392" fill="none" stroke="#3566d6" stroke-opacity=".28" stroke-width="46" stroke-linecap="round"/><path d="M${MX} 400 C 360 350 440 430 540 380 S 700 350 ${MX + MW} 392" fill="none" stroke="#3566d6" stroke-width="2.6"/>`;
+  const sp = [[-26, -58], [26, -58], [26, 58], [-26, 58]].map(([x, y]) => { const a = 0.38; return `${f(500 + x * Math.cos(a) - y * Math.sin(a))} ${f(290 + x * Math.sin(a) + y * Math.cos(a))}`; }).join(' L ');
+  s += `<path d="M${sp} Z" fill="rgba(214,69,61,.14)" stroke="${RED}" stroke-width="2.2"/>` + circle(500, 290, 8, { fill: '#fff', stroke: RED, sw: 3 }) + `</g>`;
+  if (stage === 2) return wrap(s, 'The redesigned evaluation: a journey of five categories beside a map with toggleable layers', H, W);
+  // stage 3: a risk is selected, insight explains the "so what?"
+  s += circle(606, 334, 20, { fill: 'rgba(214,69,61,.18)' }) + circle(606, 334, 8, { fill: RED, stroke: '#fff', sw: 2.5 });
+  s += rect(560, 120, 190, 150, { rx: 14, fill: '#fff', stroke: 'var(--v-card-line)', cls: 'fl' });
+  s += circle(582, 148, 8, { fill: 'rgba(214,69,61,.14)' }) + text(582, 152, '!', { size: 11, weight: 700, anchor: 'middle', fill: RED }) + text(598, 152, 'Flood exposure', { size: 12, weight: 650 });
+  s += text(576, 180, 'Why it matters', { size: 9.5, weight: 650, fill: 'var(--v-mute2)' });
+  ['Part of the site sits in a 100-year', 'flood zone, which can add cost and', 'delay to permitting.'].forEach((t, i) => { s += text(576, 198 + i * 15, t, { size: 10 }); });
+  s += rect(576, 244, 158, 20, { rx: 10, fill: '#141414' }) + text(655, 258, 'Investigate next', { size: 9.5, weight: 600, anchor: 'middle', fill: '#fff' });
+  return wrap(s, 'A selected risk explains why it matters and what to investigate next', H, W);
+}
+
+export const visuals = { targetTracking, siteSelection, siteEvolve, banking, navigation };
 export const render = (name, stage = 3, float = false) => visuals[name](stage, float);
 
 

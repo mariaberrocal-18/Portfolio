@@ -311,7 +311,7 @@ ${header(p, false)}
           <div class="evolve__pin">
             ${proj.visual === 'targetTracking'
               ? `<div class="evolve__stage evolve__stage--tt">${ttEvolve()}</div>`
-              : `<div class="evolve__stage v v--${proj.tone}">${[1, 2, 3].map((s) => `<div class="layer" data-layer="${s - 1}">${render(proj.visual, s)}</div>`).join('')}</div>`}
+              : `<div class="evolve__stage v v--${proj.tone}">${[1, 2, 3].map((s) => `<div class="layer" data-layer="${s - 1}">${render(proj.evolveVisual || proj.visual, s)}</div>`).join('')}</div>`}
             <ol class="evolve__steps">${steps}</ol>
           </div>
         </div>
