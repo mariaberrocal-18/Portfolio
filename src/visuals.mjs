@@ -31,7 +31,7 @@ const line = (x1, y1, x2, y2, o = {}) =>
   `<line x1="${f(x1)}" y1="${f(y1)}" x2="${f(x2)}" y2="${f(y2)}" stroke="${o.stroke ?? 'var(--v-line)'}" stroke-width="${o.sw ?? 1}" ${o.dash ? `stroke-dasharray="${o.dash}"` : ''} opacity="${o.op ?? 1}"/>`;
 const circle = (x, y, r, o = {}) =>
   `<circle cx="${f(x)}" cy="${f(y)}" r="${r}" fill="${o.fill ?? 'none'}" stroke="${o.stroke ?? 'none'}" stroke-width="${o.sw ?? 1}" opacity="${o.op ?? 1}"/>`;
-const card = (x, y, w, h, rx = 16) => rect(x, y, w, h, { rx, fill: 'var(--v-card)', stroke: 'var(--v-card-line)' });
+const card = (x, y, w, h, rx = 16) => rect(x, y, w, h, { rx, fill: 'var(--v-card)', stroke: 'var(--v-card-line)', cls: 'blk' });
 const draw = (d, o = {}) =>
   `<path d="${d}" pathLength="1" class="${o.dash ? 'fade' : 'draw'}" fill="none" stroke="${o.stroke ?? 'var(--v-ink)'}" stroke-width="${o.sw ?? 2}" stroke-linecap="round" stroke-linejoin="round" ${o.dash ? `stroke-dasharray="${o.dash}"` : ''} style="--d:${o.delay ?? 0}ms"/>`;
 
@@ -40,7 +40,7 @@ const wrap = (inner, label, h = H, w = W) =>
 
 // 1. Waterplan target tracking -------------------------------------------------
 
-function targetTracking(stage) {
+function targetTracking(stage, float = false) {
   const cx = 110, cy = 46, cw = 580;
   let s = card(cx, cy, cw, 470, 18);
   s += text(cx + 30, cy + 46, 'Reduce water withdrawal 30% by 2030', { size: 17, weight: 600 });
@@ -86,28 +86,30 @@ function targetTracking(stage) {
     return wrap(s, 'A line chart of water withdrawal against its target path');
   }
 
-  return ttShipped();
+  return ttShipped(float);
 }
 
 // Shipped state, inspired by how the real tool is organised: KPI strip, one evolution
 // chart with Baseline / Last reported / Target markers, and per-target status rows.
-function ttShipped() {
+function ttShipped(float = false) {
   const BLUE = '#3566d6', INK = '#141414', GREEN = '#2f8a5b', RED = '#d6453d', SLATE = '#7b8794', SKY = '#79a6e8';
   let s = `<defs><linearGradient id="ttg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#dfeaff"/><stop offset=".6" stop-color="#eaf2ff"/><stop offset="1" stop-color="#f4f8ff"/></linearGradient></defs>`;
   s += `<g transform="translate(-24 -14)">`;
-  s += card(36, 26, 728, 528, 10);
-  s += `<path d="M36 36a10 10 0 0 1 10-10h708a10 10 0 0 1 10 10v44H36z" fill="url(#ttg)"/>`;
+  if (!float) {
+    s += card(36, 26, 728, 528, 10);
+    s += `<path d="M36 36a10 10 0 0 1 10-10h708a10 10 0 0 1 10 10v44H36z" fill="url(#ttg)"/>`;
+  }
   // KPI strip
   const kpis = [['Status to target', 'On track', 1], ['Target value', '0.246 hl/hl', 0], ['Expected impact', '5.1M hl', 0], ['Scenario cost', '$2.8M', 0]];
   kpis.forEach(([k, val, hi], i) => {
     const x = 56 + i * 172;
-    s += rect(x, 44, 160, 54, { rx: 10, fill: hi ? '#e4f6ec' : '#fff', stroke: hi ? GREEN : 'var(--v-card-line)' });
+    s += rect(x, 44, 160, 54, { rx: 10, fill: hi ? '#e4f6ec' : '#fff', stroke: hi ? GREEN : 'var(--v-card-line)', cls: 'blk' });
     s += text(x + 12, 63, k, { size: 10.5, fill: 'var(--v-mute2)' });
     s += text(x + 12, 85, val, { size: hi ? 15 : 14.5, weight: 650, fill: hi ? GREEN : 'var(--v-ink)' });
   });
   // chart
   const cx = 56, cy = 112, cw = 688, ch = 268;
-  s += rect(cx, cy, cw, ch, { rx: 12, fill: '#fff', stroke: 'var(--v-card-line)' });
+  s += rect(cx, cy, cw, ch, { rx: 12, fill: '#fff', stroke: 'var(--v-card-line)', cls: 'blk' });
   s += text(cx + 16, cy + 25, 'Target: Water Use Efficiency', { size: 13, weight: 650 });
   const px = cx + 56, pw = cw - 92, py = cy + 62, ph = 150;
   for (let i = 0; i < 4; i++) s += line(px, py + (ph / 3) * i, px + pw, py + (ph / 3) * i, { op: 0.7, dash: '2 4' });
@@ -139,7 +141,7 @@ function ttShipped() {
   const rows = [['Scenario 1', 'Low investment', SLATE, 0, 'Short by 2.6M m³'], ['Scenario 2', 'Full programme', GREEN, 1, 'Reaches the target in FY2029'], ['Scenario 3', 'Phased rollout', SKY, 0, 'Short by 1.1M m³']];
   rows.forEach(([n, sub, col, ok, note], i) => {
     const y = 392 + i * 50;
-    s += rect(56, y, 688, 42, { rx: 10, fill: '#fff', stroke: 'var(--v-card-line)' });
+    s += rect(56, y, 688, 42, { rx: 10, fill: '#fff', stroke: 'var(--v-card-line)', cls: 'blk' });
     s += rect(56, y, 5, 42, { rx: 2.5, fill: col });
     s += circle(80, y + 21, 5, { fill: col });
     s += text(94, y + 19, n, { size: 12.5, weight: 650 });
@@ -275,7 +277,7 @@ function siteSelection(stage) {
 
 function banking(stage) {
   let s = '';
-  const x = 272, y = 34, w = 256, h = 520;
+  const x = 272, y = 30, w = 256, h = 440;
   s += card(x, y, w, h, 30);
   const px = x + 24;
 
@@ -421,7 +423,7 @@ function navigation(stage) {
 
   // stage 3: before (faint) behind, after in front
   s += `<g opacity=".16" transform="translate(380 40) scale(.5)">${sprawl(0, 1, rng(5)).replace(/var\(--v-card\)/g, 'none')}</g>`;
-  s += card(56, 34, 238, 470, 20);
+  s += card(56, 30, 238, 440, 20);
   s += rect(76, 56, 28, 28, { rx: 8, fill: 'var(--v-ink)' });
   s += text(90, 75, 'A', { size: 13, weight: 700, fill: 'var(--v-card)', anchor: 'middle' });
   s += text(114, 66, 'Acme Foods', { size: 12.5, weight: 600 });
@@ -445,7 +447,7 @@ function navigation(stage) {
   });
   // content area
   const cx = 330;
-  s += card(cx, 34, 420, 470, 20);
+  s += card(cx, 30, 420, 440, 20);
   s += text(cx + 28, 80, 'Target tracking', { size: 19, weight: 600 });
   [['Tracking', 1], ['Scenarios', 0], ['Projects', 0]].forEach(([t, a], i) => {
     const tx = cx + 28 + i * 86;
@@ -466,4 +468,4 @@ function navigation(stage) {
 }
 
 export const visuals = { targetTracking, siteSelection, banking, navigation };
-export const render = (name, stage = 3) => visuals[name](stage);
+export const render = (name, stage = 3, float = false) => visuals[name](stage, float);

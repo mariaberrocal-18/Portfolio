@@ -101,8 +101,8 @@ function scripts(p) {
 </html>`;
 }
 
-const media = (proj, stage = 3, extra = '', fit = 'slice') =>
-  `<div class="v v--${proj.tone} v--loop ${extra}" style="--ar:${ratio[proj.visual] || '16 / 10'}" data-reveal>${render(proj.visual, stage).replace('xMidYMid slice', `xMidYMid ${fit}`)}</div>`;
+const media = (proj, stage = 3, extra = '', fit = 'slice', float = false) =>
+  `<div class="v v--${proj.tone} v--loop${float ? ' v--float' : ''} ${extra}" style="--ar:${ratio[proj.visual] || '16 / 10'}" data-reveal>${render(proj.visual, stage, float).replace('xMidYMid slice', `xMidYMid ${fit}`)}</div>`;
 
 // Home -----------------------------------------------------------------------
 
@@ -283,9 +283,9 @@ ${header(p, false)}
           <div class="meta__row"><dt>Scope</dt><dd>${esc(proj.scope)}</dd></div>
           <div class="meta__row"><dt>Worked with</dt><dd>${esc(proj.team)}</dd></div>
         </dl>
-      </div>
-      <div class="case-hero__media"><div class="mesh" aria-hidden="true"><i></i><i></i><i></i><i></i></div>${media(proj, 3, 'case-media', 'meet')}
         <p class="case-note">Interfaces are reconstructed to respect client confidentiality.</p>
+      </div>
+      <div class="case-hero__media"><div class="mesh" aria-hidden="true"><i></i><i></i><i></i><i></i></div>${media(proj, 3, 'case-media', 'meet', true)}
       </div>
     </div></header>
     <div class="case-sheet">
