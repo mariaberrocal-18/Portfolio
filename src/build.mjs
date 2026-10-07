@@ -291,6 +291,7 @@ ${header(p, false)}
     <div class="case-sheet">
 
     <div id="story" class="story wrap">
+      ${proj.context ? `<section class="blk"><h2 class="blk__h">The context</h2><div class="prose">${para(proj.context)}</div></section>` : ''}
       <section class="blk"><h2 class="blk__h">The problem</h2><div class="prose">${para(proj.problem)}</div></section>
       <section class="blk"><h2 class="blk__h">Why it was hard</h2><div class="prose">${para(proj.hard)}</div></section>
       <section class="blk"><h2 class="blk__h">My role</h2><div class="prose">${para(proj.role_body)}</div></section>

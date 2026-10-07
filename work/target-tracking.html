@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Waterplan Target Tracking: María Berrocal</title>
-<meta name="description" content="Companies set water targets easily. Knowing whether they were still reachable, and what to do next, was the hard part.">
+<meta name="description" content="Large companies promise to use less water. The hard part is knowing, year by year, whether they will keep that promise, and what to do if they will not.">
 <meta name="theme-color" content="#fefefe">
 <meta name="robots" content="noindex">
 <link rel="preload" href="../assets/fonts/inter-tight-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230c0c0c'/%3E%3Ctext x='16' y='22.5' font-family='Helvetica,Arial,sans-serif' font-weight='700' font-size='19' text-anchor='middle' fill='%23fefefe'%3Em%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" href="../assets/css/site.css?v=5b9f08eb">
+<link rel="stylesheet" href="../assets/css/site.css?v=55311208">
 <script>document.documentElement.classList.add('js');setTimeout(function(){window.__ok||document.documentElement.classList.add('failsafe')},3500)</script>
 </head>
 <body class="case">
@@ -31,11 +31,11 @@
         <h1 class="case-hero__title">From tracking sustainability targets to making better decisions</h1>
       </div>
       <div class="case-hero__copy">
-        <p class="case-hero__lede">Companies set water targets easily. Knowing whether they were still reachable, and what to do next, was the hard part.</p>
+        <p class="case-hero__lede">Large companies promise to use less water. The hard part is knowing, year by year, whether they will keep that promise, and what to do if they will not.</p>
         <dl class="meta">
           <div class="meta__row"><dt>Company</dt><dd><img class="org-logo org-logo--waterplan" src="../assets/logos/waterplan.png" alt="Waterplan logo" loading="lazy"></dd></div>
           <div class="meta__row"><dt>Clients</dt><dd><ul class="clients"><li>The world’s largest independent beverage bottler and a global FMCG leader.</li><li>The world’s largest brewer and a leading global beverage corporation.</li><li>A Fortune 500 consumer goods leader with omnipresent global brands.</li></ul></dd></div>
-          <div class="meta__row"><dt>Scope</dt><dd>Target tracking, status model, AI-suggested actions</dd></div>
+          <div class="meta__row"><dt>Scope</dt><dd>Target tracking, scenarios, AI-suggested projects</dd></div>
           <div class="meta__row"><dt>Worked with</dt><dd>Product, Engineering, Data</dd></div>
         </dl>
         <p class="case-note">Interfaces are reconstructed to respect client confidentiality.</p>
@@ -49,30 +49,31 @@
     <div class="case-sheet">
 
     <div id="story" class="story wrap">
-      <section class="blk"><h2 class="blk__h">The problem</h2><div class="prose"><p>Customers set water targets (use less, pollute less, protect more) and then lost sight of them. Progress lived in spreadsheets and annual reports, so teams could say whether a number had moved, but not whether the target was still within reach.</p><p>The product tracked targets. It did not help anyone decide anything.</p></div></section>
-      <section class="blk"><h2 class="blk__h">Why it was hard</h2><div class="prose"><p>Every target is different: its own metric, baseline year, unit and set of facilities. Data arrives late and incomplete. And the audience runs from analysts who want every row to executives who want one answer.</p><p>A single progress bar would have been easy to build, easy to read, and wrong.</p></div></section>
-      <section class="blk"><h2 class="blk__h">My role</h2><div class="prose"><p>I led design from problem framing to the shipped interface, working daily with Product, Engineering and Data to decide what the system should know and what it should say.</p></div></section>
+      <section class="blk"><h2 class="blk__h">The context</h2><div class="prose"><p>Waterplan is a platform that helps big companies understand and manage their water use. Its customers, such as beverage makers and brewers, commit to water targets, for example to use less water to make every litre of product by 2030.</p><p>Each target has a baseline (the starting point), the last reported results from the company’s plants, and the target itself (the goal).</p></div></section>
+      <section class="blk"><h2 class="blk__h">The problem</h2><div class="prose"><p>A target is a promise made years in advance. Teams checked it once a year, in spreadsheets, after the data was already old. By the time they saw a gap, it was too late to close it.</p><p>The product could show a target and its latest number. It could not answer the two questions that matter: will we make it? And if not, what should we do?</p></div></section>
+      <section class="blk"><h2 class="blk__h">Why it was hard</h2><div class="prose"><p>Every target is measured differently: a different metric, a different starting year, a different set of plants.</p><p>The data arrives late and is often incomplete, because each plant reports on its own schedule.</p><p>The same screen also had to work for two kinds of people: analysts who want every detail, and executives who want a simple answer.</p><p>A single progress bar would have been easy to build and easy to read. It would also have been misleading.</p></div></section>
+      <section class="blk"><h2 class="blk__h">My role</h2><div class="prose"><p>I led the design from the first question to the shipped screens, working every day with Product, Engineering and Data. My job was to decide what the product should tell people, and in what order.</p></div></section>
       <section class="blk"><h2 class="blk__h">Decisions and tradeoffs</h2><ol class="decisions"><li class="decision">
-        <h3 class="decision__title">Show the trajectory, not just the percentage</h3>
+        <h3 class="decision__title">Show where you are headed, not only how far you have come</h3>
         <dl class="decision__pair">
-          <div><dt>Chose</dt><dd>Progress against time</dd></div>
-          <div><dt>Over</dt><dd>Percent complete</dd></div>
+          <div><dt>Chose</dt><dd>A line over time</dd></div>
+          <div><dt>Over</dt><dd>A percentage</dd></div>
         </dl>
-        <p class="decision__why">A target that is 60% done with 90% of the time gone is failing. Percentage alone hides that; a line against the target path does not.</p>
+        <p class="decision__why">Being 60% of the way there sounds good, unless 90% of the time has gone. A line that shows the path to the target, next to the real results, makes that gap obvious at a glance.</p>
       </li><li class="decision">
-        <h3 class="decision__title">One status model, with its reasons visible</h3>
+        <h3 class="decision__title">One clear status: on track or off track</h3>
         <dl class="decision__pair">
-          <div><dt>Chose</dt><dd>A single status that explains itself</dd></div>
-          <div><dt>Over</dt><dd>Custom statuses per team</dd></div>
+          <div><dt>Chose</dt><dd>One status everyone shares</dd></div>
+          <div><dt>Over</dt><dd>Each team defining its own</dd></div>
         </dl>
-        <p class="decision__why">People trust a status when they can see what produced it. One model kept every team speaking the same language.</p>
+        <p class="decision__why">A status is only useful if people trust it. One definition for everyone, with the reason a target is off track in plain sight, let teams stop arguing about the numbers and start talking about what to do.</p>
       </li><li class="decision">
-        <h3 class="decision__title">Put suggested actions next to the metric</h3>
+        <h3 class="decision__title">Turn “what if?” into a scenario</h3>
         <dl class="decision__pair">
-          <div><dt>Chose</dt><dd>AI-suggested actions beside the data</dd></div>
-          <div><dt>Over</dt><dd>A separate assistant to ask</dd></div>
+          <div><dt>Chose</dt><dd>Scenarios that combine projects and investment</dd></div>
+          <div><dt>Over</dt><dd>A list of generic recommendations</dd></div>
         </dl>
-        <p class="decision__why">The suggestion makes sense because of the number beside it. Moving it elsewhere would have made it a feature instead of part of the answer.</p>
+        <p class="decision__why">When a target is off track, the next question is “what would it take?”. A scenario combines projects, like recycling wastewater, with an investment, and shows the cost and whether the target is reached. The AI suggests combinations; people make the choice.</p>
       </li></ol></section>
     </div>
 
@@ -86,14 +87,14 @@
     <text x="396" y="232" font-size="11.5" font-weight="650" fill="#141414">Combinations that reach the target</text>
     <text x="366" y="254" font-size="10" fill="var(--v-mute2)">Projects and investment, ranked by cost</text><rect x="366" y="264" width="364" height="30" rx="8" fill="#eef3ff" stroke="#3566d6"/><text x="378" y="283" font-size="10.5" font-weight="600" fill="#141414">Wastewater recycling + Condensate return</text><text x="640" y="283" font-size="10.5" font-weight="650" fill="#141414" text-anchor="end">$620K</text><text x="718" y="283" font-size="10" fill="#2f8a5b" font-weight="600" text-anchor="end">FY2029</text><rect x="366" y="300" width="364" height="30" rx="8" fill="#fff" stroke="#e2e2dd"/><text x="378" y="319" font-size="10.5" font-weight="600" fill="#141414">Rotary spray balls + CIP rinse recovery</text><text x="640" y="319" font-size="10.5" font-weight="650" fill="#141414" text-anchor="end">$480K</text><text x="718" y="319" font-size="10" fill="#2f8a5b" font-weight="600" text-anchor="end">FY2030</text><rect x="366" y="336" width="364" height="30" rx="8" fill="#fff" stroke="#e2e2dd"/><text x="378" y="355" font-size="10.5" font-weight="600" fill="#141414">Wastewater recycling + Cleaning skid</text><text x="640" y="355" font-size="10.5" font-weight="650" fill="#141414" text-anchor="end">$710K</text><text x="718" y="355" font-size="10" fill="#2f8a5b" font-weight="600" text-anchor="end">FY2028</text></g><g class="tt-cursor"><path d="M0 0l0 15 4-3.6 3 6.6 2.4-1.1-3-6.5 5.4-.3z" fill="#141414" stroke="#fff" stroke-width="1.2" stroke-linejoin="round"/></g></g></svg></div>
           </div>
-          <ol class="evolve__steps"><li data-step="0"><h3>A table of targets and numbers</h3><p>The first version listed every target with its baseline and current value. Accurate, and no help with the question people were really asking.</p></li><li data-step="1"><h3>Progress against time</h3><p>Plotting each target against its own path made the gap visible. This is where the product started to answer a question.</p></li><li data-step="2"><h3>Status, drivers and next actions</h3><p>The gap gained a name, the reasons behind it, and a suggested next step, all on the same screen.</p></li></ol>
+          <ol class="evolve__steps"><li data-step="0"><h3>A table of numbers</h3><p>The first version listed each target with its starting value and its latest result. It was accurate, but it did not say whether the target was in danger.</p></li><li data-step="1"><h3>A line towards the goal</h3><p>Drawing each target as a line over time, with the real results on it, made the gap visible for the first time.</p></li><li data-step="2"><h3>From a gap to a plan</h3><p>The screen now says whether a target is on or off track, and by how much, and lets teams build scenarios to close the gap, with suggested combinations of projects and investment.</p></li></ol>
         </div>
       </div>
     </section>
 
     <div class="story story--end wrap">
-      <section class="blk"><h2 class="blk__h">What shipped</h2><ul class="ticks"><li>Target view with trajectory, projected gap and status</li><li>Drivers by facility, ranked by their effect on the gap</li><li>AI-suggested actions linked to the metric they address</li></ul></section>
-      <section class="blk"><h2 class="blk__h">Outcome</h2><div class="prose prose--serif"><p>Teams stopped rebuilding progress by hand before every review.</p><p>Conversations moved from “where are we?” to “what do we do about it?”</p></div></section>
+      <section class="blk"><h2 class="blk__h">What shipped</h2><ul class="ticks"><li>A target page showing results over time against the goal</li><li>A clear on track or off track status, with how far off</li><li>Scenarios: combinations of projects and investment, with their cost and effect</li><li>AI-suggested combinations that would reach the target</li></ul></section>
+      <section class="blk"><h2 class="blk__h">Outcome</h2><div class="prose prose--serif"><p>Teams no longer had to rebuild progress by hand in spreadsheets before every review.</p><p>The conversation moved from “where are we?” to “what should we do about it?”</p></div></section>
     </div>
     </div>
   </article>
