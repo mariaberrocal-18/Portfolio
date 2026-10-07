@@ -485,12 +485,13 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
 
 /* ---------- case study ---------- */
 .case-hero { padding-top: clamp(84px, 8vw, 104px); padding-bottom: clamp(24px, 3vw, 40px); display: grid; grid-template-columns: repeat(12, 1fr); column-gap: var(--gap); align-items: start; }
+.case-hero__head { grid-column: 1 / -1; display: grid; justify-items: start; margin-bottom: clamp(28px, 3.4vw, 48px); }
 .case-hero__copy { grid-column: 1 / span 5; display: grid; align-content: start; }
-.case-hero__media { grid-column: 6 / -1; position: sticky; top: 84px; }
+.case-hero__media { grid-column: 6 / -1; position: relative; }
 .case-hero__kicker { justify-self: start; display: inline-flex; align-items: center; gap: 9px; height: 32px; padding: 0 14px 0 12px; margin-bottom: 18px; border-radius: 999px; background: #fff; border: 1px solid var(--line); font-size: 0.875rem; font-weight: 550; letter-spacing: -0.01em; }
 .case-hero__kicker::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--sage); }
-.case-hero__title { font-size: clamp(2rem, 1rem + 2.7vw, 3.5rem); line-height: 1; letter-spacing: -0.045em; font-weight: 650; text-wrap: balance; }
-.case-hero__lede { margin-top: clamp(14px, 1.8vw, 22px); font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem); line-height: 1.4; letter-spacing: -0.01em; color: var(--ink-2); text-wrap: pretty; }
+.case-hero__title { max-width: 30ch; font-size: clamp(2.4rem, 0.9rem + 4.7vw, 5.4rem); line-height: 0.96; letter-spacing: -0.045em; font-weight: 650; text-wrap: balance; }
+.case-hero__lede { margin-top: 0; font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem); line-height: 1.4; letter-spacing: -0.01em; color: var(--ink-2); text-wrap: pretty; }
 .meta { margin-top: clamp(24px, 3vw, 40px); display: grid; border-top: 1px solid var(--line); }
 .meta__row { display: grid; grid-template-columns: 7rem 1fr; gap: var(--gap); padding: 12px 0; border-bottom: 1px solid var(--line); align-items: center; }
 .meta dt { color: var(--ink-3); font-size: var(--fs-small); align-self: start; padding-top: 3px; }
@@ -630,7 +631,7 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
   .contact__copy { padding-bottom: 28px; }
   .contact__photo { position: relative; width: auto; height: min(118vw, 640px); margin-inline: calc(var(--pad) * -1); border-left: 0; border-top: 1px solid var(--line); }
   .contact__base { width: 100%; margin-top: 16px; }
-  .case-hero__copy, .case-hero__media { grid-column: 1 / -1; position: static; }
+  .case-hero__head, .case-hero__copy, .case-hero__media { grid-column: 1 / -1; position: static; }
   .case-hero__media { margin-top: 28px; }
   .meta__row { grid-template-columns: 6rem 1fr; }
   .blk { gap: 14px; }

@@ -271,9 +271,11 @@ ${header(p, false)}
 <main>
   <article>
     <header class="case-top"><div class="case-hero wrap">
-      <div class="case-hero__copy">
+      <div class="case-hero__head">
         <p class="case-hero__kicker">Case study</p>
         <h1 class="case-hero__title">${esc(proj.title)}</h1>
+      </div>
+      <div class="case-hero__copy">
         <p class="case-hero__lede">${esc(proj.lede)}</p>
         <dl class="meta">
           <div class="meta__row"><dt>Company</dt><dd>${proj.companyLogo ? orgLogo(proj.companyLogo, proj.company, p) : esc(proj.company)}</dd></div>
