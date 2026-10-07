@@ -305,6 +305,67 @@
   syncPin();
   wide.addEventListener('change', syncPin);
 
+  // curtains: the black arc flattens as a dark section arrives
+  const curtains = [...document.querySelectorAll('.curtain')];
+  const updateCurtains = () => {
+    curtains.forEach((el) => {
+      const top = el.getBoundingClientRect().top;
+      const jc = reduce ? 1 : clamp(1 - (top - innerHeight * 0.12) / (innerHeight * 0.8));
+      el.style.setProperty('--jc', easeOut(jc).toFixed(3));
+    });
+  };
+
+  // about: the quote starts messy and connects itself as you scroll
+  const about = document.querySelector('[data-about]');
+  const aWords = about ? [...about.querySelectorAll('.aw')] : [];
+  const aQuote = about && about.querySelector('.about__quote');
+  const aPath = about && about.querySelector('.about__path');
+  const aBel = about ? [...about.querySelectorAll('.about__beliefs li')] : [];
+  let aBase = [], aScat = [];
+  const aPinned = () => about && !reduce && wide.matches;
+  const rngA = (seed) => () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
+  const measureAbout = () => {
+    if (!about) return;
+    about.classList.toggle('about--pinned', aPinned());
+    if (!aPinned()) {
+      aWords.forEach((w) => { w.style.transform = ''; w.style.filter = ''; w.style.opacity = ''; });
+      if (aPath) aPath.style.opacity = 0;
+      about.style.removeProperty('--bo');
+      return;
+    }
+    const r = rngA(42);
+    aBase = aWords.map((w) => [w.offsetLeft + w.offsetWidth / 2, w.offsetTop + w.offsetHeight / 2]);
+    aScat = aWords.map(() => ({ dx: (r() - 0.5) * innerWidth * 0.78, dy: (r() - 0.5) * innerHeight * 0.62, rot: (r() - 0.5) * 46, s: 0.8 + r() * 0.5 }));
+    aPath.parentNode.setAttribute('viewBox', `0 0 ${aQuote.offsetWidth} ${aQuote.offsetHeight}`);
+  };
+  const updateAbout = () => {
+    if (!aPinned() || !aBase.length) return;
+    const rect = about.getBoundingClientRect();
+    const p = clamp(-rect.top / (rect.height - innerHeight));
+    const n = aWords.length;
+    let d = '';
+    aWords.forEach((w, i) => {
+      const t = clamp((p / 0.62 - (i / n) * 0.42) / 0.58);
+      const e = easeOut(t), k = 1 - e, sc = aScat[i];
+      const x = sc.dx * k, y = sc.dy * k;
+      w.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) rotate(${(sc.rot * k).toFixed(1)}deg) scale(${(1 + (sc.s - 1) * k).toFixed(3)})`;
+      w.style.opacity = (0.16 + 0.84 * easeOut(clamp(t * 1.6))).toFixed(3);
+      w.style.filter = k > 0.01 ? `blur(${(k * 6).toFixed(1)}px)` : '';
+      if (i % 3 === 0) d += `${d ? ' L' : 'M'} ${(aBase[i][0] + x).toFixed(1)} ${(aBase[i][1] + y).toFixed(1)}`;
+    });
+    aPath.setAttribute('d', d);
+    aPath.style.opacity = (Math.sin(Math.PI * clamp(p / 0.46)) * 0.7).toFixed(3);
+    about.style.setProperty('--bo', clamp((p - 0.66) / 0.14).toFixed(3));
+    aBel.forEach((li, i) => li.style.setProperty('--bo', clamp((p - 0.7 - i * 0.05) / 0.12).toFixed(3)));
+  };
+  if (about) {
+    measureAbout();
+    wide.addEventListener('change', () => { measureAbout(); update(); });
+    addEventListener('resize', () => { measureAbout(); update(); });
+    addEventListener('load', () => { measureAbout(); update(); });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { measureAbout(); update(); });
+  }
+
   const nav = document.querySelector('.nav');
   let lastY = scrollY, hx = 0;
   function update() {
@@ -329,6 +390,8 @@
     }
 
     updateBridge();
+    updateCurtains();
+    updateAbout();
 
     if (tl) {
       const r = tl.getBoundingClientRect();

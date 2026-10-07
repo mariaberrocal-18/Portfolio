@@ -64,7 +64,7 @@ function header(p, home) {
 }
 
 function footer(p) {
-  return `<footer class="contact" id="contact">
+  return `<footer class="contact curtain" id="contact">
   <div class="contact__stage">
     <div class="contact__copy">
       <h2 class="contact__title" data-lines><span class="line"><span>Let’s work</span></span><span class="line"><span>together.</span></span></h2>
@@ -205,7 +205,7 @@ ${header('', true)}
     </div>
   </section>
 
-  <section class="journey" id="journey" aria-labelledby="journey-h">
+  <section class="journey curtain" id="journey" aria-labelledby="journey-h">
     <div class="wrap journey__grid">
       <div class="journey__intro">
         <h2 id="journey-h" class="h2">${esc(journey.title)}</h2>
@@ -219,13 +219,15 @@ ${header('', true)}
     </div>
   </section>
 
-  <section class="about" id="about" aria-labelledby="about-h">
-    <div class="wrap about__grid">
-      <h2 id="about-h" class="about__statement">${esc(about.statement)}</h2>
-      <div class="about__body">
-        ${about.body.map((t) => `<p>${esc(t)}</p>`).join('')}
-        <ul class="beliefs">${about.beliefs.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
+  <section class="about" id="about" aria-labelledby="about-h" data-about>
+    <div class="about__stage">
+      <h2 id="about-h" class="about__label h3">${esc(about.title)}</h2>
+      <div class="about__center">
+        <svg class="about__web" aria-hidden="true"><path class="about__path"/></svg>
+        <blockquote class="about__quote">${about.quote.split(' ').map((w) => `<span class="aw">${esc(w)}</span>`).join(' ')}</blockquote>
+        <p class="about__by">${esc(about.by)}</p>
       </div>
+      <ul class="about__beliefs">${about.beliefs.map(([h, d]) => `<li><h3>${esc(h)}</h3><p>${esc(d)}</p></li>`).join('')}</ul>
     </div>
   </section>
 </main>

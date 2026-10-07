@@ -7,8 +7,8 @@
 export const site = {
   name: 'María Berrocal',
   role: 'Senior Product Designer',
-  email: 'hello@mariaberrocal.com', // TODO: replace with the real address
-  linkedin: 'https://www.linkedin.com/in/', // TODO: add profile URL
+  email: 'mariabeatrizber@gmail.com',
+  linkedin: 'https://www.linkedin.com/notifications/', // NOTE: this is LinkedIn's notifications page, not a profile URL. Replace with https://www.linkedin.com/in/<handle>
   year: new Date().getFullYear(),
 };
 
@@ -68,7 +68,7 @@ export const journey = {
 };
 
 export const toolkit = {
-  title: 'What I use in my workflow.',
+  title: 'What I use in my workflows.',
   groups: [
     ['Design and prototypes', [['Claude', 'claude'], ['Figma', 'figma'], ['ChatGPT', 'chatgpt'], ['Builder.io', 'builder']]],
     ['Handoff and delivery', [['GitHub', 'github'], ['Vercel', 'vercel'], ['Supabase', 'supabase']]],
@@ -77,15 +77,15 @@ export const toolkit = {
 };
 
 export const about = {
-  statement: 'Half the work is figuring out the real problem.',
-  body: [
-    'I came into product design through consulting, which is where I learned to read a system before touching it: who decides, what they trust, and what quietly slows them down.',
-    'Today I design B2B products for people who make high-stakes decisions with messy data. I like the unglamorous middle of the work, where a clear structure and the right word on a button change what a team can do.',
-  ],
+  title: 'About me',
+  quote:
+    'I’ve learned that the first problem you hear is rarely the whole problem. I actually like the messy part — when things don’t completely make sense yet. Asking questions, connecting the dots, trying things out, and moving fast until it all starts to come together.',
+  by: 'María Berrocal, Senior Product Designer',
+  // Draft principles, written from the quote and the case studies. Edit freely.
   beliefs: [
-    'Question the brief before answering it.',
-    'Make the system legible, then make it beautiful.',
-    'Stay close to Engineering. The product is what ships.',
+    ['Ask first', 'The first problem you hear is rarely the whole one.'],
+    ['Connect the dots', 'Systems, people and constraints, before screens.'],
+    ['Try it, move fast', 'Prototype early, learn out loud, ship in steps.'],
   ],
 };
 
