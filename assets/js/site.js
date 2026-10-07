@@ -21,10 +21,10 @@
       a.addEventListener('click', (e) => {
         const url = new URL(a.href, location.href);
         if (url.pathname !== location.pathname) return;
-        const target = url.hash === '#top' || url.hash === '' ? 0 : document.querySelector(url.hash);
+        const target = url.hash === '#top' || url.hash === '' ? 0 : url.hash === '#contact' ? document.documentElement.scrollHeight : document.querySelector(url.hash);
         if (target === null) return;
         e.preventDefault();
-        lenis.scrollTo(target, { offset: target === 0 ? 0 : -24, duration: 1.5 });
+        lenis.scrollTo(target, { offset: typeof target === 'number' ? 0 : -24, duration: 1.5 });
       });
     });
   }
@@ -315,6 +315,22 @@
     });
   };
 
+  // journey blurs out as the about section arrives; the footer lifts into view
+  const jGrid = document.querySelector('.journey__grid');
+  const jSec = document.querySelector('.journey');
+  const footerEl = document.querySelector('.contact');
+  const updateEdges = () => {
+    if (jGrid && jSec && !reduce) {
+      const k = easeOut(clamp((innerHeight - jSec.getBoundingClientRect().bottom) / (innerHeight * 0.75)));
+      jGrid.style.setProperty('--jb', `${(k * 14).toFixed(1)}px`);
+      jGrid.style.setProperty('--jo', (1 - k * 0.85).toFixed(3));
+    }
+    if (footerEl) {
+      const left = document.documentElement.scrollHeight - innerHeight - scrollY;
+      footerEl.style.setProperty('--fr', reduce ? 1 : clamp(1 - left / innerHeight).toFixed(3));
+    }
+  };
+
   // about: the quote starts messy and connects itself as you scroll
   const about = document.querySelector('[data-about]');
   const aWords = about ? [...about.querySelectorAll('.aw')] : [];
@@ -391,6 +407,7 @@
 
     updateBridge();
     updateCurtains();
+    updateEdges();
     updateAbout();
 
     if (tl) {

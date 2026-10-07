@@ -64,7 +64,8 @@ function header(p, home) {
 }
 
 function footer(p) {
-  return `<footer class="contact curtain" id="contact">
+  return `<div class="contact-spacer" id="contact"></div>
+<footer class="contact">
   <div class="contact__stage">
     <div class="contact__copy">
       <h2 class="contact__title" data-lines><span class="line"><span>Let’s work</span></span><span class="line"><span>together.</span></span></h2>
@@ -221,7 +222,7 @@ ${header('', true)}
 
   <section class="about" id="about" aria-labelledby="about-h" data-about>
     <div class="about__stage">
-      <h2 id="about-h" class="about__label h3">${esc(about.title)}</h2>
+      <h2 id="about-h" class="about__label">${esc(about.title)}</h2>
       <div class="about__center">
         <svg class="about__web" aria-hidden="true"><path class="about__path"/></svg>
         <blockquote class="about__quote">${about.quote.split(' ').map((w) => `<span class="aw">${esc(w)}</span>`).join(' ')}</blockquote>

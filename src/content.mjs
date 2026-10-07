@@ -80,7 +80,7 @@ export const about = {
   title: 'About me',
   quote:
     'I’ve learned that the first problem you hear is rarely the whole problem. I actually like the messy part — when things don’t completely make sense yet. Asking questions, connecting the dots, trying things out, and moving fast until it all starts to come together.',
-  by: 'María Berrocal, Senior Product Designer',
+  by: 'María Berrocal',
   // Draft principles, written from the quote and the case studies. Edit freely.
   beliefs: [
     ['Ask first', 'The first problem you hear is rarely the whole one.'],
