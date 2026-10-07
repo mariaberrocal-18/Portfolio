@@ -767,3 +767,6 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
 .case-sheet { clip-path: inset(-300px -100px 0 -100px); }
 /* the thread's end sits on the green chapter, so it turns light there */
 .thread__dot.is-end { background: #f4faf6; box-shadow: 0 0 0 9px rgba(244, 250, 246, 0.28); }
+
+/* the first paragraph of each story section leads in bold */
+.story .prose p:first-child { font-weight: 650; letter-spacing: -0.02em; }
