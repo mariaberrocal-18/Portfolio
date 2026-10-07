@@ -35,8 +35,8 @@ const card = (x, y, w, h, rx = 16) => rect(x, y, w, h, { rx, fill: 'var(--v-card
 const draw = (d, o = {}) =>
   `<path d="${d}" pathLength="1" class="${o.dash ? 'fade' : 'draw'}" fill="none" stroke="${o.stroke ?? 'var(--v-ink)'}" stroke-width="${o.sw ?? 2}" stroke-linecap="round" stroke-linejoin="round" ${o.dash ? `stroke-dasharray="${o.dash}"` : ''} style="--d:${o.delay ?? 0}ms"/>`;
 
-const wrap = (inner, label, h = H) =>
-  `<svg class="v-svg" viewBox="0 0 ${W} ${h}" preserveAspectRatio="xMidYMid slice" role="img" aria-label="${label}" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="var(--v-ink)" stroke-width="1" opacity=".28"/></pattern></defs>${inner}</svg>`;
+const wrap = (inner, label, h = H, w = W) =>
+  `<svg class="v-svg" viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid slice" role="img" aria-label="${label}" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="var(--v-ink)" stroke-width="1" opacity=".28"/></pattern></defs>${inner}</svg>`;
 
 // 1. Waterplan target tracking -------------------------------------------------
 
@@ -94,9 +94,9 @@ function targetTracking(stage) {
 function ttShipped() {
   const BLUE = '#3566d6', INK = '#141414', GREEN = '#2f8a5b', RED = '#d6453d', ORANGE = '#e8892b';
   let s = `<defs><linearGradient id="ttg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#dfeaff"/><stop offset=".6" stop-color="#eaf2ff"/><stop offset="1" stop-color="#f4f8ff"/></linearGradient></defs>`;
-  s += `<g transform="translate(-19.8 -4.5) scale(1.05)">`;
-  s += card(36, 26, 728, 528, 18);
-  s += `<path d="M36 44a18 18 0 0 1 18-18h692a18 18 0 0 1 18 18v36H36z" fill="url(#ttg)"/>`;
+  s += `<g transform="translate(-24 -14)">`;
+  s += card(36, 26, 728, 528, 10);
+  s += `<path d="M36 36a10 10 0 0 1 10-10h708a10 10 0 0 1 10 10v44H36z" fill="url(#ttg)"/>`;
   // KPI strip
   const kpis = [['Status to target', 'On track', 1], ['Target value', '0.246 hl/hl', 0], ['Expected impact', '5.1M hl', 0], ['Scenario cost', '$2.8M', 0]];
   kpis.forEach(([k, val, hi], i) => {
@@ -168,10 +168,10 @@ function ttShipped() {
   s += `</g>`;
   s += `<g class="tt-cursor"><path d="M0 0l0 15 4-3.6 3 6.6 2.4-1.1-3-6.5 5.4-.3z" fill="#141414" stroke="#fff" stroke-width="1.2" stroke-linejoin="round"/></g>`;
   s += '</g>';
-  return wrap(s, 'Target tracking: an evolution chart with historic data, the target and three scenarios, a list of scenarios with on-track and off-track status, and a popover with project and investment combinations that reach the target', 600);
+  return wrap(s, 'Target tracking: an evolution chart with historic data, the target and three scenarios, a list of scenarios with on-track and off-track status, and a popover with project and investment combinations that reach the target', 552, 752);
 }
 
-export const ratio = { targetTracking: '800 / 600' };
+export const ratio = { targetTracking: '752 / 552' };
 
 // 2. Civarea site selection ---------------------------------------------------
 
