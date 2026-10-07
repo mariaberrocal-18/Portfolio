@@ -187,6 +187,7 @@ ${header('', true)}
   <section class="work-section" id="work" aria-labelledby="work-h">
     <div class="bridge" data-bridge>
       <div class="bridge__stage">
+        <div class="loop-mesh" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
         <ul class="strengths wrap">${strengths}</ul>
         <div class="loop" aria-hidden="true">
           <svg class="loop__svg"></svg>
