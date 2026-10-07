@@ -381,6 +381,16 @@
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { measureAbout(); update(); });
   }
 
+  // case study: pin the hero's bottom so the sheet slides over it, and soften it as it is covered
+  const caseTop = document.querySelector('.case-top');
+  const updateCase = () => {
+    if (!caseTop) return;
+    if (!wide.matches || reduce) { caseTop.style.top = ''; caseTop.style.setProperty('--cp', 0); return; }
+    caseTop.style.top = `${Math.min(0, innerHeight - caseTop.offsetHeight)}px`;
+    const cover = clamp(scrollY / Math.max(1, caseTop.offsetHeight - innerHeight * 0.1));
+    caseTop.style.setProperty('--cp', easeOut(cover).toFixed(3));
+  };
+
   const nav = document.querySelector('.nav');
   let lastY = scrollY, hx = 0;
   function update() {
@@ -405,6 +415,7 @@
     }
 
     updateBridge();
+    updateCase();
     updateCurtains();
     updateEdges();
     updateAbout();

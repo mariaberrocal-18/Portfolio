@@ -677,9 +677,7 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
 @keyframes tt-pop { 0%, 48% { opacity: 0; transform: scale(.94) translateY(10px); } 56%, 80% { opacity: 1; transform: none; } 88%, 100% { opacity: 0; transform: scale(.98); } }
 
 /* case study hero on black */
-.case-top { position: relative; padding-bottom: clamp(24px, 3vw, 40px); }
-.case-top::after { content: ''; position: absolute; left: 0; right: 0; top: calc(100% - 1px); height: clamp(90px, 13vh, 150px); pointer-events: none; z-index: 1;
-  background: linear-gradient(to bottom, rgba(10,10,10,1) 0%, rgba(10,10,10,.92) 12%, rgba(10,10,10,.75) 28%, rgba(10,10,10,.52) 44%, rgba(10,10,10,.3) 60%, rgba(10,10,10,.14) 76%, rgba(10,10,10,.04) 90%, rgba(10,10,10,0) 100%); }
+.case-top { position: relative; overflow: clip; padding-bottom: calc(clamp(24px, 3vw, 40px) + var(--sheet-r)); --sheet-r: 34px; }
 .case-top .case-hero { padding-bottom: clamp(16px, 2vw, 24px); }
 .case-top .case-hero__kicker { background: rgba(255, 255, 255, 0.08); border-color: var(--line); color: var(--on-night); }
 .case-top .case-hero__kicker::before { background: #6fb08e; }
@@ -687,4 +685,23 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
 .case-top img.org-logo { filter: brightness(0) invert(1); }
 .case-top .case-media { box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.14), 0 30px 80px -30px rgba(0, 0, 0, 0.8); }
 .case-top .clients li::before { background: #6fb08e; }
-.case-top + div.wrap, .case-top ~ .story { position: relative; z-index: 2; }
+
+/* transition: the page slides up over the black hero like a sheet; the hero stays put and softens */
+.case-hero { transform-origin: 50% 0; transform: scale(calc(1 - 0.035 * var(--cp, 0))); opacity: calc(1 - 0.7 * var(--cp, 0)); filter: blur(calc(var(--cp, 0) * 5px)); will-change: transform, opacity; }
+.case-sheet { position: relative; z-index: 2; margin-top: calc(var(--sheet-r, 34px) * -1); border-radius: var(--sheet-r, 34px) var(--sheet-r, 34px) 0 0; background-color: var(--paper); background-image: var(--grain); box-shadow: 0 -2px 0 rgba(255, 255, 255, 0.06), 0 -40px 90px rgba(0, 0, 0, 0.55); }
+@media (min-width: 960px) { .case-top { position: sticky; top: 0; } }
+
+/* animated mesh gradient behind the prototype so the black frame always reads */
+.case-hero__media { isolation: isolate; }
+.mesh { position: absolute; inset: -70px -60px -70px -60px; z-index: -1; pointer-events: none; filter: blur(46px) saturate(1.15); opacity: 0.85; border-radius: 50%; }
+.mesh i { position: absolute; width: 58%; height: 58%; border-radius: 50%; mix-blend-mode: screen; }
+.mesh i:nth-child(1) { left: -6%; top: -8%; background: radial-gradient(circle at 50% 50%, #2f6bff 0%, rgba(47, 107, 255, 0) 68%); animation: mesh-a 14s ease-in-out infinite alternate; }
+.mesh i:nth-child(2) { right: -8%; top: 0; background: radial-gradient(circle at 50% 50%, #17b6a6 0%, rgba(23, 182, 166, 0) 68%); animation: mesh-b 17s ease-in-out infinite alternate; }
+.mesh i:nth-child(3) { left: 14%; bottom: -14%; background: radial-gradient(circle at 50% 50%, #7a5cff 0%, rgba(122, 92, 255, 0) 68%); animation: mesh-c 19s ease-in-out infinite alternate; }
+.mesh i:nth-child(4) { right: 6%; bottom: -10%; background: radial-gradient(circle at 50% 50%, #5fd0f2 0%, rgba(95, 208, 242, 0) 68%); animation: mesh-d 16s ease-in-out infinite alternate; }
+@keyframes mesh-a { from { transform: translate(0, 0) scale(1); } to { transform: translate(26%, 18%) scale(1.25); } }
+@keyframes mesh-b { from { transform: translate(0, 0) scale(1.1); } to { transform: translate(-22%, 24%) scale(0.9); } }
+@keyframes mesh-c { from { transform: translate(0, 0) scale(0.95); } to { transform: translate(30%, -20%) scale(1.2); } }
+@keyframes mesh-d { from { transform: translate(0, 0) scale(1); } to { transform: translate(-28%, -16%) scale(1.3); } }
+@media (prefers-reduced-motion: reduce) { .mesh i { animation: none; } .case-hero { transform: none; opacity: 1; filter: none; } }
+@media (max-width: 959px) { .case-hero { transform: none; opacity: 1; filter: none; } .mesh { inset: -40px -20px; } }

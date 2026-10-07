@@ -282,10 +282,11 @@ ${header(p, false)}
           <div class="meta__row"><dt>Worked with</dt><dd>${esc(proj.team)}</dd></div>
         </dl>
       </div>
-      <div class="case-hero__media">${media(proj, 3, 'case-media', 'meet')}
+      <div class="case-hero__media"><div class="mesh" aria-hidden="true"><i></i><i></i><i></i><i></i></div>${media(proj, 3, 'case-media', 'meet')}
         <p class="case-note">Interfaces are reconstructed to respect client confidentiality.</p>
       </div>
     </div></header>
+    <div class="case-sheet">
 
     <div id="story" class="story wrap">
       <section class="blk"><h2 class="blk__h">The problem</h2><div class="prose">${para(proj.problem)}</div></section>
@@ -309,6 +310,7 @@ ${header(p, false)}
     <div class="story story--end wrap">
       <section class="blk"><h2 class="blk__h">What shipped</h2><ul class="ticks">${proj.shipped.map((t) => `<li>${esc(t)}</li>`).join('')}</ul></section>
       <section class="blk"><h2 class="blk__h">Outcome</h2><div class="prose prose--serif">${para(proj.outcome)}</div></section>
+    </div>
     </div>
   </article>
 
