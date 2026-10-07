@@ -533,8 +533,8 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
 
 /* evolve: the closing chapter, on black. The product evolves as you scroll. */
 .evolve {
-  --ink: var(--on-night); --ink-2: #a9a8a3; --ink-3: #7c7b76; --line: rgba(255, 255, 255, 0.16);
-  background: var(--night); color: var(--on-night); border-radius: clamp(28px, 4vw, 56px); margin-top: clamp(80px, 10vw, 150px); padding-top: clamp(72px, 8vw, 120px); padding-bottom: clamp(72px, 9vw, 140px); position: relative;
+  --ink: #f4faf6; --ink-2: rgba(244, 250, 246, 0.78); --ink-3: rgba(244, 250, 246, 0.55); --line: rgba(244, 250, 246, 0.24);
+  background-color: var(--sage); background-image: var(--grain-light); color: #f4faf6; border-radius: clamp(28px, 4vw, 56px); margin-top: clamp(80px, 10vw, 150px); padding-top: clamp(72px, 8vw, 120px); padding-bottom: clamp(72px, 9vw, 140px); position: relative;
 }
 .evolve__h { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: var(--gap); margin-bottom: clamp(24px, 4vw, 56px); }
 .evolve__h span { grid-column: 6; justify-self: center; white-space: nowrap; padding-top: 22px; }
@@ -543,7 +543,7 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
 .evolve__stage:not(.evolve__stage--tt) { border: 1px solid rgba(255, 255, 255, 0.14); }
 .evolve__stage .layer { position: absolute; inset: 0; background: var(--v-bg); }
 .evolve__stage .layer[data-layer='0'], .evolve__stage .layer[data-layer='1'] { display: none; }
-.evolve__stage--tt { --v-ink: #141414; --v-mute: #8b8a85; --v-mute2: #55544f; --v-line: rgba(0, 0, 0, 0.1); --v-card-line: rgba(0, 0, 0, 0.12); --v-bg: #ecece8; --v-card: #fff; --v-accent: #2f8a5b; position: relative; aspect-ratio: 752 / 560; border-radius: 0; background: none; filter: drop-shadow(0 40px 70px rgba(0, 0, 0, 0.6)); }
+.evolve__stage--tt { --v-ink: #141414; --v-mute: #8b8a85; --v-mute2: #55544f; --v-line: rgba(0, 0, 0, 0.1); --v-card-line: rgba(0, 0, 0, 0.12); --v-bg: #ecece8; --v-card: #fff; --v-accent: #2f8a5b; position: relative; aspect-ratio: 752 / 560; border-radius: 0; background: none; filter: drop-shadow(0 40px 70px rgba(0, 0, 0, 0.35)); }
 .evolve__stage--tt .v-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 .evolve__steps { display: grid; gap: 24px; }
 .evolve__steps li { border-top: 1px solid var(--line); padding-top: 14px; }
@@ -551,11 +551,11 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
 .evolve__steps h3 { font-family: var(--sans); font-weight: 650; font-size: 1.75rem; line-height: 1.08; letter-spacing: -0.04em; }
 .evolve__steps p { margin-top: 8px; color: var(--ink-2); max-width: 30rem; text-wrap: pretty; }
 .evolve__after { padding-top: clamp(72px, 9vw, 130px); }
-.evolve__after .blk { display: block; background: var(--sage); color: #f4faf6; border-radius: clamp(24px, 3vw, 40px); padding: clamp(32px, 5vw, 76px); }
+.evolve__after .blk { display: block; }
 .evolve__after .blk__h { position: static; font-size: clamp(1.4rem, 1rem + 1.3vw, 2.15rem); color: #f4faf6; margin-bottom: clamp(20px, 3vw, 36px); }
 .evolve__after .blk > :not(.blk__h) { grid-column: auto; }
 .evolve__after .prose { max-width: 60rem; gap: clamp(18px, 2vw, 28px); font-size: clamp(1.5rem, 1.05rem + 1.8vw, 2.7rem); line-height: 1.12; letter-spacing: -0.04em; font-weight: 650; color: #f4faf6; }
-.evolve__after .prose p:not(:first-child) { color: rgba(244, 250, 246, 0.72); }
+.evolve__after .prose p:not(:first-child) { color: rgba(244, 250, 246, 0.7); }
 
 @media (min-width: 960px) {
   .evolve--pinned .evolve__track { height: 340vh; }
@@ -567,7 +567,7 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
   .evolve--pinned .evolve__stage .layer[data-layer] { display: block; }
   .evolve--pinned .evolve__stage .layer:not([data-layer='0']) { clip-path: inset(0 calc((1 - var(--r, 0)) * 100%) 0 0); }
   .evolve--pinned .evolve__stage .layer:not([data-layer='0'])::after {
-    content: ''; position: absolute; top: 0; bottom: 0; right: calc((1 - var(--r, 0)) * 100%); width: 2px; background: #6fb08e; opacity: min(var(--r, 0) * 8, (1 - var(--r, 0)) * 8, 1);
+    content: ''; position: absolute; top: 0; bottom: 0; right: calc((1 - var(--r, 0)) * 100%); width: 2px; background: #f4faf6; opacity: min(var(--r, 0) * 8, (1 - var(--r, 0)) * 8, 1);
   }
   .evolve--pinned .evolve__steps li { opacity: 0.32; transition: opacity 0.5s ease; padding: 18px 0 22px; }
   .evolve--pinned .evolve__steps li.is-active { opacity: 1; }
@@ -757,3 +757,5 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
 }
 /* the sheet's shadow only falls upward onto the hero, never down onto the next section */
 .case-sheet { clip-path: inset(-300px -100px 0 -100px); }
+/* the thread's end sits on the green chapter, so it turns light there */
+.thread__dot.is-end { background: #f4faf6; box-shadow: 0 0 0 9px rgba(244, 250, 246, 0.28); }
