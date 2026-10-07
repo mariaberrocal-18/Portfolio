@@ -769,4 +769,4 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
 .thread__dot.is-end { background: #f4faf6; box-shadow: 0 0 0 9px rgba(244, 250, 246, 0.28); }
 
 /* the first paragraph of each story section leads in bold */
-.story .prose p:first-child { font-weight: 600; letter-spacing: -0.015em; }
+.story .prose p:first-child { font-weight: 500; letter-spacing: -0.012em; }
