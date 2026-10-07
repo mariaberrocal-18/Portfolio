@@ -281,8 +281,8 @@ ${header(p, false)}
       </div>
       <div class="case-hero__copy">
         <dl class="meta">
-          <div class="meta__row"><dt>Company</dt><dd>${proj.companyLogo ? orgLogo(proj.companyLogo, proj.company, p) : esc(proj.company)}</dd></div>
-          ${proj.clients ? `<div class="meta__row"><dt>Clients</dt><dd><ul class="clients">${proj.clients.map((c) => `<li>${esc(c)}</li>`).join('')}</ul></dd></div>` : ''}
+          <div class="meta__row"><dt>Company</dt><dd>${proj.companyLogos ? `<span class="logos">${proj.companyLogos.map(([s, n]) => orgLogo(s, n, p)).join('')}</span>` : proj.companyLogo ? orgLogo(proj.companyLogo, proj.company, p) : esc(proj.company)}</dd></div>
+          ${proj.clients ? `<div class="meta__row"><dt>Built for</dt><dd><ul class="clients">${proj.clients.map((c) => `<li>${esc(c)}</li>`).join('')}</ul></dd></div>` : ''}
           <div class="meta__row"><dt>Scope</dt><dd>${esc(proj.scope)}</dd></div>
           <div class="meta__row"><dt>Worked with</dt><dd>${esc(proj.team)}</dd></div>
         </dl>
@@ -295,10 +295,12 @@ ${header(p, false)}
       <div class="thread wrap" aria-hidden="true"><i class="thread__track"></i><i class="thread__fill"></i><i class="thread__dot"></i></div>
 
     <div id="story" class="story wrap">
-      ${proj.context ? `<section class="blk"><h2 class="blk__h">The context</h2><div class="prose">${para(proj.context)}</div></section>` : ''}
+      ${proj.sections
+        ? proj.sections.map(([h, paras]) => `<section class="blk"><h2 class="blk__h">${esc(h)}</h2><div class="prose">${para(paras)}</div></section>`).join('\n      ')
+        : `${proj.context ? `<section class="blk"><h2 class="blk__h">The context</h2><div class="prose">${para(proj.context)}</div></section>` : ''}
       <section class="blk"><h2 class="blk__h">The problem</h2><div class="prose">${para(proj.problem)}</div></section>
       <section class="blk"><h2 class="blk__h">Why it was hard</h2><div class="prose">${para(proj.hard)}</div></section>
-      <section class="blk"><h2 class="blk__h">My role</h2><div class="prose">${para(proj.role_body)}</div></section>
+      <section class="blk"><h2 class="blk__h">My role</h2><div class="prose">${para(proj.role_body)}</div></section>`}
       <section class="blk"><h2 class="blk__h">The decisions that shaped the product</h2><ol class="decisions">${decisions}</ol></section>
     </div>
 

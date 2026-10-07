@@ -770,3 +770,9 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
 
 /* the first paragraph of each story section leads in bold */
 .story .prose p:first-child { font-weight: 500; letter-spacing: -0.012em; }
+
+/* two logos side by side in the Company row */
+.logos { display: inline-flex; align-items: center; gap: clamp(18px, 2vw, 28px); }
+.meta .logos img.org-logo { height: 26px; max-width: 140px; margin: 0; }
+.meta .logos img.org-logo--civarea { height: 30px; max-width: 150px; }
+.meta .logos img.org-logo--waterplan { height: 20px; }

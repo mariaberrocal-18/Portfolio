@@ -179,29 +179,34 @@ export const projects = [
   },
   {
     slug: 'site-selection',
-    blurb: 'Hundreds of signals, dozens of candidate sites. I designed a ranked shortlist with adjustable weights, so every choice comes with its reasoning.',
+    blurb: 'Designing an AI-native platform that helps data center teams evaluate sites, uncover critical risks early, and make better decisions before capital is committed.',
     visual: 'siteSelection',
     tone: 'light',
     card: 'b',
     draft: true,
-    title: 'Turning hundreds of location signals into clear infrastructure decisions',
+    title: 'From weeks of data center due diligence to hours',
     short: 'Civarea Site Selection',
     tags: ['Product Design', 'Data Visualization', 'AI-driven'],
     company: 'Civarea',
-    companyLogo: null,
+    companyLogos: [['civarea', 'Civarea'], ['waterplan', 'Waterplan']],
+    clients: ['A global leader in cloud infrastructure and data centers'],
     role: 'Senior Product Designer',
     scope: 'Site comparison, scoring model, map and shortlist',
     team: 'Product, Engineering, Data',
-    lede: 'Choosing where to build means weighing hundreds of signals across dozens of sites. The job was to make that judgment something a team could defend.',
-    problem: [
-      'Deciding where to place infrastructure meant weighing land, access, water, regulation and more, across many candidate sites. Teams worked from exports and slide decks, and the reasoning behind a choice was hard to retrace.',
-    ],
-    hard: [
-      'The signals differ in quality, scale and relevance. The weights are partly subjective. And people had to trust a ranking before committing real capital to it.',
-      'A map full of data points would have looked impressive and decided nothing.',
-    ],
-    role_body: [
-      'I owned the experience end to end: how a team frames a search, how signals become criteria, and how a shortlist earns trust.',
+    lede: 'Civarea turns weeks of data center due diligence into hours.',
+    sections: [
+      ['The problem', [
+        'A bad site decision gets expensive long before construction begins.',
+        'Teams can spend months and significant capital evaluating a location before discovering a constraint that makes the site unviable: from power and water availability to permitting, environmental risks or community opposition.',
+      ]],
+      ['The opportunity', [
+        'What if the risks that kill a deal could surface first?',
+        'Civarea brings thousands of sources into one assessment, evaluating 280+ risk factors across power, water, constructibility, permitting, connectivity, climate, financial considerations and more.',
+      ]],
+      ['The design challenge', [
+        'Make an enormous amount of due diligence understandable in about two hours.',
+        'The challenge wasn’t getting more information onto the screen. It was helping teams understand what matters, how serious it is, why it matters, and what deserves further investigation, without losing the evidence behind each finding.',
+      ]],
     ],
     decisions: [
       {
