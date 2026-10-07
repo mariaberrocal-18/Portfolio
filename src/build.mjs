@@ -314,9 +314,9 @@ ${header(p, false)}
           </div>
         </div>
       </div>
-      <div class="wrap evolve__after">
+      <div class="evolve__after"><div class="wrap">
         <section class="blk"><h2 class="blk__h">Outcome</h2><div class="prose">${para(proj.outcome)}</div></section>
-      </div>
+      </div></div>
     </section>
 
     ${proj.lessons ? `<section class="lessons wrap" aria-labelledby="lessons-h">
