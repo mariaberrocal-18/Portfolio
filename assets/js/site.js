@@ -256,7 +256,6 @@
       // parallax: the drawing drifts a little inside its frame
       const r = media.getBoundingClientRect();
       const mid = (r.top + r.height / 2 - innerHeight / 2) / innerHeight;
-      media.style.setProperty('--py', `${(clamp(mid, -1, 1) * -2.2).toFixed(2)}%`);
       // settle back when the next project covers this one
       const nxt = stack[i + 1] ? stack[i + 1].querySelector('.work__media').getBoundingClientRect().top : Infinity;
       const q = nxt === Infinity ? 0 : clamp((innerHeight - nxt) / (innerHeight - top));
