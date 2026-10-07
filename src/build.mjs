@@ -289,6 +289,7 @@ ${header(p, false)}
       </div>
     </div></header>
     <div class="case-sheet">
+      <div class="thread wrap" aria-hidden="true"><i class="thread__track"></i><i class="thread__fill"></i><i class="thread__dot"></i></div>
 
     <div id="story" class="story wrap">
       ${proj.context ? `<section class="blk"><h2 class="blk__h">The context</h2><div class="prose">${para(proj.context)}</div></section>` : ''}

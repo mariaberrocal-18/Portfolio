@@ -391,6 +391,37 @@
     caseTop.style.setProperty('--cp', easeOut(cover).toFixed(3));
   };
 
+  // thread: starts with the story, ends at the "How it evolved" title
+  const thread = document.querySelector('.thread');
+  const storyEl = document.querySelector('.case-sheet .story');
+  const evolveH = document.querySelector('.evolve__h');
+  let thTop = 0, thLen = 0;
+  const measureThread = () => {
+    if (!thread || !storyEl || !evolveH || !wide.matches) return;
+    const sheetTop = thread.parentElement.getBoundingClientRect().top + scrollY;
+    const st = storyEl.getBoundingClientRect().top + scrollY + parseFloat(getComputedStyle(storyEl).paddingTop);
+    const en = evolveH.getBoundingClientRect().top + scrollY + evolveH.offsetHeight / 2;
+    thTop = st; thLen = Math.max(0, en - st);
+    thread.style.top = `${st - sheetTop}px`;
+    thread.style.height = `${thLen}px`;
+    thread.style.setProperty('--th', `${thLen}px`);
+  };
+  const updateThread = () => {
+    if (!thread) return;
+    if (!wide.matches || reduce) { thread.style.setProperty('--tp', reduce ? 1 : 0); return; }
+    const p = clamp((scrollY + innerHeight * 0.55 - thTop) / Math.max(1, thLen));
+    thread.style.setProperty('--tp', p.toFixed(4));
+    const dot = thread.querySelector('.thread__dot');
+    if (dot) dot.classList.toggle('is-end', p >= 0.995);
+  };
+  if (thread) {
+    measureThread();
+    wide.addEventListener('change', () => { measureThread(); update(); });
+    addEventListener('resize', () => { measureThread(); update(); });
+    addEventListener('load', () => { measureThread(); update(); });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { measureThread(); update(); });
+  }
+
   const nav = document.querySelector('.nav');
   let lastY = scrollY, hx = 0;
   function update() {
@@ -416,6 +447,7 @@
 
     updateBridge();
     updateCase();
+    updateThread();
     updateCurtains();
     updateEdges();
     updateAbout();

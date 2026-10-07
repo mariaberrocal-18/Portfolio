@@ -503,10 +503,12 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
 .case-media { aspect-ratio: var(--ar, 16 / 10); border-radius: 22px; }
 .case-note { margin-top: 12px; color: var(--ink-3); font-size: 0.8125rem; }
 
-.story { padding-top: clamp(80px, 9vw, 140px); display: grid; gap: clamp(64px, 9vw, 130px); }
+.story { padding-top: clamp(80px, 9vw, 140px); display: grid; gap: clamp(20px, 2.4vw, 32px); }
 .story--end { padding-bottom: clamp(88px, 11vw, 170px); padding-top: clamp(64px, 8vw, 110px); }
 .blk { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--gap); align-items: start; }
-.blk__h { grid-column: 1 / span 5; position: sticky; top: 96px; font-size: clamp(1.9rem, 1.1rem + 2.6vw, 3.4rem); font-weight: 650; line-height: 1; letter-spacing: -0.045em; text-wrap: balance; }
+/* each part of the story is its own card */
+.story > .blk { background: #fff; border: 1px solid var(--line); border-radius: 28px; padding: clamp(28px, 4vw, 60px); box-shadow: 0 1px 0 rgba(12, 12, 12, 0.03), 0 30px 60px -44px rgba(12, 12, 12, 0.25); }
+.blk__h { grid-column: 1 / span 5; position: sticky; top: 96px; font-size: clamp(1.4rem, 1rem + 1.3vw, 2.15rem); font-weight: 650; line-height: 1.04; letter-spacing: -0.04em; text-wrap: balance; }
 .blk > :not(.blk__h) { grid-column: 7 / span 6; }
 .prose { display: grid; gap: 1em; max-width: 36rem; font-size: clamp(1rem, 0.94rem + 0.22vw, 1.125rem); line-height: 1.55; letter-spacing: -0.012em; text-wrap: pretty; }
 .prose p:not(:first-child) { color: var(--ink-2); }
@@ -545,7 +547,7 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
 @media (min-width: 960px) {
   .evolve--pinned { height: 340vh; }
   .evolve--pinned > .wrap { height: 100%; }
-  .evolve--pinned .evolve__h { margin-bottom: 0; }
+  .evolve--pinned .evolve__h { margin-bottom: 28px; }
   .evolve--pinned .evolve__pin { position: sticky; top: 14vh; grid-template-columns: repeat(12, 1fr); gap: var(--gap); align-items: center; }
   .evolve--pinned .evolve__stage { grid-column: 1 / span 8; }
   .evolve--pinned .evolve__steps { grid-column: 9 / span 4; gap: 0; }
@@ -716,6 +718,18 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
 /* hero prototypes float: no container, each block lifts off the dark with its own shadow */
 .v--float { background: transparent !important; box-shadow: none !important; border-radius: 0 !important; overflow: visible; }
 .v--float .v-svg, .v--loop.v--float .v-svg { overflow: visible; }
-.v--float rect.blk { filter: drop-shadow(0 26px 34px rgba(0, 0, 0, 0.5)) drop-shadow(0 3px 6px rgba(0, 0, 0, 0.3)); }
+.v--float rect.fl { filter: drop-shadow(0 26px 34px rgba(0, 0, 0, 0.5)) drop-shadow(0 3px 6px rgba(0, 0, 0, 0.3)); }
 .case-top .case-note { margin-top: 16px; text-shadow: none; color: var(--ink-3); }
 .meta img.org-logo--ey-design-studio { height: 40px; max-width: 150px; margin-block: -10px; }
+
+/* the thread: one line that follows the reading and ends where the story is summed up (How it evolved) */
+.thread { position: absolute; left: 0; right: 0; top: 0; height: 0; display: none; pointer-events: none; z-index: 3; --tp: 0; }
+@media (min-width: 960px) {
+  .thread { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: var(--gap); }
+  .thread > i { grid-column: 6; grid-row: 1; justify-self: center; }
+  .thread__track, .thread__fill { width: 1px; height: 100%; }
+  .thread__track { background: var(--line); }
+  .thread__fill { background: var(--sage); transform-origin: top; transform: scaleY(var(--tp)); }
+  .thread__dot { position: relative; align-self: start; width: 11px; height: 11px; margin-top: -5px; border-radius: 50%; background: var(--sage); box-shadow: 0 0 0 6px rgba(63, 122, 92, 0.16); transform: translateY(calc(var(--th, 0px) * var(--tp))); }
+  .thread__dot.is-end { box-shadow: 0 0 0 9px rgba(63, 122, 92, 0.2); }
+}

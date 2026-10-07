@@ -31,7 +31,7 @@ const line = (x1, y1, x2, y2, o = {}) =>
   `<line x1="${f(x1)}" y1="${f(y1)}" x2="${f(x2)}" y2="${f(y2)}" stroke="${o.stroke ?? 'var(--v-line)'}" stroke-width="${o.sw ?? 1}" ${o.dash ? `stroke-dasharray="${o.dash}"` : ''} opacity="${o.op ?? 1}"/>`;
 const circle = (x, y, r, o = {}) =>
   `<circle cx="${f(x)}" cy="${f(y)}" r="${r}" fill="${o.fill ?? 'none'}" stroke="${o.stroke ?? 'none'}" stroke-width="${o.sw ?? 1}" opacity="${o.op ?? 1}"/>`;
-const card = (x, y, w, h, rx = 16) => rect(x, y, w, h, { rx, fill: 'var(--v-card)', stroke: 'var(--v-card-line)', cls: 'blk' });
+const card = (x, y, w, h, rx = 16) => rect(x, y, w, h, { rx, fill: 'var(--v-card)', stroke: 'var(--v-card-line)', cls: 'fl' });
 const draw = (d, o = {}) =>
   `<path d="${d}" pathLength="1" class="${o.dash ? 'fade' : 'draw'}" fill="none" stroke="${o.stroke ?? 'var(--v-ink)'}" stroke-width="${o.sw ?? 2}" stroke-linecap="round" stroke-linejoin="round" ${o.dash ? `stroke-dasharray="${o.dash}"` : ''} style="--d:${o.delay ?? 0}ms"/>`;
 
@@ -103,13 +103,13 @@ function ttShipped(float = false) {
   const kpis = [['Status to target', 'On track', 1], ['Target value', '0.246 hl/hl', 0], ['Expected impact', '5.1M hl', 0], ['Scenario cost', '$2.8M', 0]];
   kpis.forEach(([k, val, hi], i) => {
     const x = 56 + i * 172;
-    s += rect(x, 44, 160, 54, { rx: 10, fill: hi ? '#e4f6ec' : '#fff', stroke: hi ? GREEN : 'var(--v-card-line)', cls: 'blk' });
+    s += rect(x, 44, 160, 54, { rx: 10, fill: hi ? '#e4f6ec' : '#fff', stroke: hi ? GREEN : 'var(--v-card-line)', cls: 'fl' });
     s += text(x + 12, 63, k, { size: 10.5, fill: 'var(--v-mute2)' });
     s += text(x + 12, 85, val, { size: hi ? 15 : 14.5, weight: 650, fill: hi ? GREEN : 'var(--v-ink)' });
   });
   // chart
   const cx = 56, cy = 112, cw = 688, ch = 268;
-  s += rect(cx, cy, cw, ch, { rx: 12, fill: '#fff', stroke: 'var(--v-card-line)', cls: 'blk' });
+  s += rect(cx, cy, cw, ch, { rx: 12, fill: '#fff', stroke: 'var(--v-card-line)', cls: 'fl' });
   s += text(cx + 16, cy + 25, 'Target: Water Use Efficiency', { size: 13, weight: 650 });
   const px = cx + 56, pw = cw - 92, py = cy + 62, ph = 150;
   for (let i = 0; i < 4; i++) s += line(px, py + (ph / 3) * i, px + pw, py + (ph / 3) * i, { op: 0.7, dash: '2 4' });
@@ -141,7 +141,7 @@ function ttShipped(float = false) {
   const rows = [['Scenario 1', 'Low investment', SLATE, 0, 'Short by 2.6M m³'], ['Scenario 2', 'Full programme', GREEN, 1, 'Reaches the target in FY2029'], ['Scenario 3', 'Phased rollout', SKY, 0, 'Short by 1.1M m³']];
   rows.forEach(([n, sub, col, ok, note], i) => {
     const y = 392 + i * 50;
-    s += rect(56, y, 688, 42, { rx: 10, fill: '#fff', stroke: 'var(--v-card-line)', cls: 'blk' });
+    s += rect(56, y, 688, 42, { rx: 10, fill: '#fff', stroke: 'var(--v-card-line)', cls: 'fl' });
     s += rect(56, y, 5, 42, { rx: 2.5, fill: col });
     s += circle(80, y + 21, 5, { fill: col });
     s += text(94, y + 19, n, { size: 12.5, weight: 650 });
