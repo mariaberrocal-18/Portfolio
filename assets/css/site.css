@@ -381,8 +381,10 @@ button { font: inherit; color: inherit; }
   --ink: var(--on-night); --ink-2: #a9a8a3; --ink-3: #7c7b76; --line: rgba(255, 255, 255, 0.16);
   background-color: var(--night); color: var(--on-night);
 }
-.journey { padding-block: clamp(72px, 9vw, 130px) clamp(100px, 13vw, 190px); }
-.journey::after { content: ''; position: absolute; left: 0; right: 0; top: calc(100% - 1px); height: clamp(90px, 14vh, 150px); background: linear-gradient(to bottom, var(--night), rgba(10, 10, 10, 0)); pointer-events: none; z-index: 3; }
+.journey { padding-block: clamp(72px, 9vw, 130px) clamp(140px, 18vw, 260px); }
+/* a long, eased fade from black into the page, so there is no visible edge */
+.journey::after { content: ''; position: absolute; left: 0; right: 0; top: calc(100% - 1px); height: clamp(380px, 62vh, 640px); pointer-events: none; z-index: 3;
+  background: linear-gradient(to bottom, rgba(10,10,10,1) 0%, rgba(10,10,10,.96) 8%, rgba(10,10,10,.86) 18%, rgba(10,10,10,.7) 30%, rgba(10,10,10,.5) 43%, rgba(10,10,10,.32) 56%, rgba(10,10,10,.18) 69%, rgba(10,10,10,.08) 82%, rgba(10,10,10,.025) 92%, rgba(10,10,10,0) 100%); }
 .journey__grid { filter: blur(var(--jb, 0px)); opacity: var(--jo, 1); will-change: filter, opacity; }
 /* curtain: a black arc that rises with the page and flattens as the section arrives */
 .curtain { position: relative; --jc: 1; --cap: clamp(56px, 7vw, 104px); }
@@ -442,7 +444,7 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
 .about__label { justify-self: start; display: inline-flex; align-items: center; gap: 10px; height: 38px; padding: 0 16px 0 14px; border-radius: 999px; background: var(--ink); color: var(--paper); font-size: 0.9375rem; font-weight: 550; letter-spacing: -0.01em; }
 .about__label::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: #6fb08e; }
 .about__center { position: relative; align-self: center; max-width: 66rem; }
-.about__quote { margin: 0; position: relative; z-index: 1; font-size: clamp(1.75rem, 1rem + 2.9vw, 3.6rem); line-height: 1.12; letter-spacing: -0.04em; font-weight: 650; text-wrap: pretty; }
+.about__quote { margin: 0; position: relative; z-index: 1; font-size: clamp(1.75rem, min(1rem + 2.9vw, 5.4vh), 3.6rem); line-height: 1.12; letter-spacing: -0.04em; font-weight: 650; text-wrap: pretty; }
 .aw { display: inline-block; will-change: transform, filter, opacity; }
 .about__web { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; z-index: 0; }
 .about__path { fill: none; stroke: var(--sage); stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; opacity: 0; }
@@ -453,7 +455,7 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
 .about__beliefs h3 { font-size: 1.0625rem; font-weight: 650; letter-spacing: -0.02em; }
 .about__beliefs p { margin-top: 6px; max-width: 22rem; color: var(--ink-2); font-size: 1rem; line-height: 1.45; text-wrap: pretty; }
 @media (min-width: 960px) {
-  .about--pinned { height: 330vh; }
+  .about--pinned { height: calc(330vh + 42vh); padding-bottom: 42vh; box-sizing: border-box; }
   .about--pinned .about__stage { position: sticky; top: 0; height: 100vh; min-height: 0; overflow: clip; }
   .about--pinned .about__by { opacity: var(--bo, 0); translate: 0 calc((1 - var(--bo, 0)) * 18px); }
   .about--pinned .about__beliefs li { opacity: var(--bo, 0); translate: 0 calc((1 - var(--bo, 0)) * 18px); }

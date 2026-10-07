@@ -321,7 +321,7 @@
   const footerEl = document.querySelector('.contact');
   const updateEdges = () => {
     if (jGrid && jSec && !reduce) {
-      const k = easeOut(clamp((innerHeight - jSec.getBoundingClientRect().bottom) / (innerHeight * 0.75)));
+      const k = easeOut(clamp((innerHeight * 1.05 - jSec.getBoundingClientRect().bottom) / (innerHeight * 1.0)));
       jGrid.style.setProperty('--jb', `${(k * 14).toFixed(1)}px`);
       jGrid.style.setProperty('--jo', (1 - k * 0.85).toFixed(3));
     }
