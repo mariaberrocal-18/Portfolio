@@ -777,43 +777,59 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
 .meta .logos img.org-logo--civarea { height: 30px; max-width: 150px; }
 .meta .logos img.org-logo--waterplan { height: 20px; }
 
-/* Civarea map: a slow 18s loop. Each layer fades in, flags the sites it rules out, and the last site stays. */
-.sm { transition: none; }
-.sm-flag, .sm-x, .sm-ring, .sm-ring2 { opacity: 1; }
+/* Civarea map: 10s loop. Layers toggle over the map while the assessment list completes row by row. */
+.sm-spin { transform-box: fill-box; transform-origin: center; }
 @media (prefers-reduced-motion: no-preference) {
-  .v--loop .sm { opacity: 0; }
-  .v--loop .sm-l1 { animation: sm-l1 18s ease-in-out infinite; }
-  .v--loop .sm-l2 { animation: sm-l2 18s ease-in-out infinite; }
-  .v--loop .sm-l3 { animation: sm-l3 18s ease-in-out infinite; }
-  .v--loop .sm-l4 { animation: sm-l4 18s ease-in-out infinite; }
-  .v--loop .sm-chip { opacity: .4; }
-  .v--loop .sm-c1 { animation: sm-c1 18s ease-in-out infinite; }
-  .v--loop .sm-c2 { animation: sm-c2 18s ease-in-out infinite; }
-  .v--loop .sm-c3 { animation: sm-c3 18s ease-in-out infinite; }
-  .v--loop .sm-c4 { animation: sm-c4 18s ease-in-out infinite; }
-  .v--loop .sm-flag, .v--loop .sm-x { opacity: 0; }
-  .v--loop .sm-fl1 .sm-flag, .v--loop .sm-fl1 .sm-x { animation: sm-f1 18s ease-in-out infinite; }
-  .v--loop .sm-fl2 .sm-flag, .v--loop .sm-fl2 .sm-x { animation: sm-f2 18s ease-in-out infinite; }
-  .v--loop .sm-fl3 .sm-flag, .v--loop .sm-fl3 .sm-x { animation: sm-f3 18s ease-in-out infinite; }
-  .v--loop .sm-fl4 .sm-flag, .v--loop .sm-fl4 .sm-x { animation: sm-f4 18s ease-in-out infinite; }
-  .v--loop .sm-sel .sm-ring, .v--loop .sm-sel .sm-ring2 { opacity: 0; transform-box: fill-box; transform-origin: center; animation: sm-sel 18s ease-in-out infinite; }
-  .v--loop .sm-sel .sm-ring2 { animation-name: sm-pulse; }
-  .v--loop .sm-sel .sm-area { animation: sm-area 18s ease-in-out infinite; }
-  .v--loop .sm-card { opacity: 0; transform-box: fill-box; transform-origin: 50% 100%; animation: sm-card 18s ease-in-out infinite; }
+  .v--loop .sm-l1 { animation: sm-l1 10s ease-in-out infinite; }
+  .v--loop .sm-c1 { animation: sm-l1 10s ease-in-out infinite; }
+  .v--loop .sm-l2 { animation: sm-l2 10s ease-in-out infinite; }
+  .v--loop .sm-c2 { animation: sm-l2 10s ease-in-out infinite; }
+  .v--loop .sm-l3 { animation: sm-l3 10s ease-in-out infinite; }
+  .v--loop .sm-c3 { animation: sm-l3 10s ease-in-out infinite; }
+  .v--loop .sm-l4 { animation: sm-l4 10s ease-in-out infinite; }
+  .v--loop .sm-c4 { animation: sm-l4 10s ease-in-out infinite; }
+  .v--loop .sm-l5 { animation: sm-l5 10s ease-in-out infinite; }
+  .v--loop .sm-c5 { animation: sm-l5 10s ease-in-out infinite; }
+  .v--loop .sm-r1 .sm-spin { animation: sm-spin 1s linear infinite, sm-sp1 10s ease-in-out infinite; }
+  .v--loop .sm-r1 .sm-ok, .v--loop .sm-r1 .sm-res { animation: sm-ok1 10s ease-in-out infinite; }
+  .v--loop .sm-r1 .sm-lbl { animation: sm-lb1 10s ease-in-out infinite; }
+  .v--loop .sm-r2 .sm-spin { animation: sm-spin 1s linear infinite, sm-sp2 10s ease-in-out infinite; }
+  .v--loop .sm-r2 .sm-ok, .v--loop .sm-r2 .sm-res { animation: sm-ok2 10s ease-in-out infinite; }
+  .v--loop .sm-r2 .sm-lbl { animation: sm-lb2 10s ease-in-out infinite; }
+  .v--loop .sm-r3 .sm-spin { animation: sm-spin 1s linear infinite, sm-sp3 10s ease-in-out infinite; }
+  .v--loop .sm-r3 .sm-ok, .v--loop .sm-r3 .sm-res { animation: sm-ok3 10s ease-in-out infinite; }
+  .v--loop .sm-r3 .sm-lbl { animation: sm-lb3 10s ease-in-out infinite; }
+  .v--loop .sm-r4 .sm-spin { animation: sm-spin 1s linear infinite, sm-sp4 10s ease-in-out infinite; }
+  .v--loop .sm-r4 .sm-ok, .v--loop .sm-r4 .sm-res { animation: sm-ok4 10s ease-in-out infinite; }
+  .v--loop .sm-r4 .sm-lbl { animation: sm-lb4 10s ease-in-out infinite; }
+  .v--loop .sm-r5 .sm-spin { animation: sm-spin 1s linear infinite, sm-sp5 10s ease-in-out infinite; }
+  .v--loop .sm-r5 .sm-ok, .v--loop .sm-r5 .sm-res { animation: sm-ok5 10s ease-in-out infinite; }
+  .v--loop .sm-r5 .sm-lbl { animation: sm-lb5 10s ease-in-out infinite; }
+  .v--loop .sm-final { animation: sm-fin 10s ease-in-out infinite; }
+  .v--loop .sm-ring { opacity: 0; animation: sm-ring 10s ease-in-out infinite; }
+  .v--loop .sm-bar { transform-box: fill-box; transform-origin: left; animation: sm-bar 10s ease-out infinite; }
 }
-@keyframes sm-l1 { 0%, 6% { opacity: 0 } 14%, 78% { opacity: 1 } 86% { opacity: .22 } 94% { opacity: .22 } 98%, 100% { opacity: 0 } }
-@keyframes sm-l2 { 0%, 22% { opacity: 0 } 30%, 78% { opacity: 1 } 86% { opacity: .22 } 94% { opacity: .22 } 98%, 100% { opacity: 0 } }
-@keyframes sm-l3 { 0%, 38% { opacity: 0 } 46%, 78% { opacity: 1 } 86% { opacity: .22 } 94% { opacity: .22 } 98%, 100% { opacity: 0 } }
-@keyframes sm-l4 { 0%, 54% { opacity: 0 } 62%, 78% { opacity: 1 } 86% { opacity: .22 } 94% { opacity: .22 } 98%, 100% { opacity: 0 } }
-@keyframes sm-c1 { 0%, 6% { opacity: .4 } 14%, 94% { opacity: 1 } 98%, 100% { opacity: .4 } }
-@keyframes sm-c2 { 0%, 22% { opacity: .4 } 30%, 94% { opacity: 1 } 98%, 100% { opacity: .4 } }
-@keyframes sm-c3 { 0%, 38% { opacity: .4 } 46%, 94% { opacity: 1 } 98%, 100% { opacity: .4 } }
-@keyframes sm-c4 { 0%, 54% { opacity: .4 } 62%, 94% { opacity: 1 } 98%, 100% { opacity: .4 } }
-@keyframes sm-f1 { 0%, 14% { opacity: 0 } 20%, 94% { opacity: 1 } 98%, 100% { opacity: 0 } }
-@keyframes sm-f2 { 0%, 30% { opacity: 0 } 36%, 94% { opacity: 1 } 98%, 100% { opacity: 0 } }
-@keyframes sm-f3 { 0%, 46% { opacity: 0 } 52%, 94% { opacity: 1 } 98%, 100% { opacity: 0 } }
-@keyframes sm-f4 { 0%, 62% { opacity: 0 } 68%, 94% { opacity: 1 } 98%, 100% { opacity: 0 } }
-@keyframes sm-sel { 0%, 76% { opacity: 0; transform: scale(.7) } 84%, 94% { opacity: 1; transform: scale(1) } 98%, 100% { opacity: 0; transform: scale(1) } }
-@keyframes sm-pulse { 0%, 82% { opacity: 0; transform: scale(1) } 88% { opacity: .6; transform: scale(1.05) } 96%, 100% { opacity: 0; transform: scale(1.4) } }
-@keyframes sm-area { 0%, 76% { fill: rgba(20,20,20,.07) } 84%, 94% { fill: rgba(47,138,91,.3) } 98%, 100% { fill: rgba(20,20,20,.07) } }
-@keyframes sm-card { 0%, 82% { opacity: 0; transform: translateY(10px) } 90%, 94% { opacity: 1; transform: none } 98%, 100% { opacity: 0; transform: none } }
+@keyframes sm-spin { to { transform: rotate(360deg) } }
+@keyframes sm-l1 { 0% { opacity: 0 } 6% { opacity: 0 } 10% { opacity: 1 } 22% { opacity: 1 } 26% { opacity: 0 } 100% { opacity: 0 } }
+@keyframes sm-l2 { 0% { opacity: 0 } 22% { opacity: 0 } 26% { opacity: 1 } 38% { opacity: 1 } 42% { opacity: 0 } 100% { opacity: 0 } }
+@keyframes sm-l3 { 0% { opacity: 0 } 38% { opacity: 0 } 42% { opacity: 1 } 54% { opacity: 1 } 58% { opacity: 0 } 100% { opacity: 0 } }
+@keyframes sm-l4 { 0% { opacity: 0 } 54% { opacity: 0 } 58% { opacity: 1 } 66% { opacity: 1 } 70% { opacity: 0 } 100% { opacity: 0 } }
+@keyframes sm-l5 { 0% { opacity: 0 } 66% { opacity: 0 } 70% { opacity: 1 } 76% { opacity: 1 } 80% { opacity: 0 } 100% { opacity: 0 } }
+@keyframes sm-sp1 { 0% { opacity: 0 } 6% { opacity: 0 } 8% { opacity: 1 } 15% { opacity: 1 } 16% { opacity: 0 } 100% { opacity: 0 } }
+@keyframes sm-ok1 { 0% { opacity: 0 } 16% { opacity: 0 } 18% { opacity: 1 } 95% { opacity: 1 } 98% { opacity: 0 } 100% { opacity: 0 } }
+@keyframes sm-lb1 { 0% { opacity: 0.5 } 6% { opacity: 0.5 } 8% { opacity: 1 } 95% { opacity: 1 } 98% { opacity: 0.5 } 100% { opacity: 0.5 } }
+@keyframes sm-sp2 { 0% { opacity: 0 } 20% { opacity: 0 } 22% { opacity: 1 } 29% { opacity: 1 } 30% { opacity: 0 } 100% { opacity: 0 } }
+@keyframes sm-ok2 { 0% { opacity: 0 } 30% { opacity: 0 } 32% { opacity: 1 } 95% { opacity: 1 } 98% { opacity: 0 } 100% { opacity: 0 } }
+@keyframes sm-lb2 { 0% { opacity: 0.5 } 20% { opacity: 0.5 } 22% { opacity: 1 } 95% { opacity: 1 } 98% { opacity: 0.5 } 100% { opacity: 0.5 } }
+@keyframes sm-sp3 { 0% { opacity: 0 } 34% { opacity: 0 } 36% { opacity: 1 } 43% { opacity: 1 } 44% { opacity: 0 } 100% { opacity: 0 } }
+@keyframes sm-ok3 { 0% { opacity: 0 } 44% { opacity: 0 } 46% { opacity: 1 } 95% { opacity: 1 } 98% { opacity: 0 } 100% { opacity: 0 } }
+@keyframes sm-lb3 { 0% { opacity: 0.5 } 34% { opacity: 0.5 } 36% { opacity: 1 } 95% { opacity: 1 } 98% { opacity: 0.5 } 100% { opacity: 0.5 } }
+@keyframes sm-sp4 { 0% { opacity: 0 } 48% { opacity: 0 } 50% { opacity: 1 } 57% { opacity: 1 } 58% { opacity: 0 } 100% { opacity: 0 } }
+@keyframes sm-ok4 { 0% { opacity: 0 } 58% { opacity: 0 } 60% { opacity: 1 } 95% { opacity: 1 } 98% { opacity: 0 } 100% { opacity: 0 } }
+@keyframes sm-lb4 { 0% { opacity: 0.5 } 48% { opacity: 0.5 } 50% { opacity: 1 } 95% { opacity: 1 } 98% { opacity: 0.5 } 100% { opacity: 0.5 } }
+@keyframes sm-sp5 { 0% { opacity: 0 } 62% { opacity: 0 } 64% { opacity: 1 } 71% { opacity: 1 } 72% { opacity: 0 } 100% { opacity: 0 } }
+@keyframes sm-ok5 { 0% { opacity: 0 } 72% { opacity: 0 } 74% { opacity: 1 } 95% { opacity: 1 } 98% { opacity: 0 } 100% { opacity: 0 } }
+@keyframes sm-lb5 { 0% { opacity: 0.5 } 62% { opacity: 0.5 } 64% { opacity: 1 } 95% { opacity: 1 } 98% { opacity: 0.5 } 100% { opacity: 0.5 } }
+@keyframes sm-fin { 0% { opacity: 0 } 80% { opacity: 0 } 86% { opacity: 1 } 95% { opacity: 1 } 98% { opacity: 0 } 100% { opacity: 0 } }
+@keyframes sm-ring { 0% { opacity: 0 } 78% { opacity: 0 } 84% { opacity: 1 } 95% { opacity: 1 } 98% { opacity: 0 } 100% { opacity: 0 } }
+@keyframes sm-bar { 0%, 82% { transform: scaleX(0) } 94% { transform: scaleX(1) } 98%, 100% { transform: scaleX(0) } }

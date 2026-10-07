@@ -173,99 +173,88 @@ function ttShipped(float = false) {
   return wrap(s, 'Target tracking: an evolution chart with historic data, the target and three scenarios, a list of scenarios with on-track and off-track status, and a popover with project and investment combinations that reach the target', 552, 752);
 }
 
-export const ratio = { targetTracking: '752 / 552', siteSelection: '780 / 500' };
+export const ratio = { targetTracking: '752 / 552', siteSelection: '860 / 500' };
 
 // 2. Civarea site selection ---------------------------------------------------
 
-// Civarea site selection: a map that is read in layers ------------------------
-// Clean map with candidate areas → power → water → environment → permitting, each
-// layer flagging the sites it rules out → one site stays suitable and is shortlisted.
-// stage 1 = clean map, 2 = layers visible, 3 = full (animated on a loop via CSS .v--loop).
-const SITES = [
-  { id: 'A', x: 150, y: 140, flag: 'No grid capacity', layer: 1 },
-  { id: 'B', x: 340, y: 262, flag: null, layer: 0 },
-  { id: 'C', x: 450, y: 120, flag: 'Water stress', layer: 2 },
-  { id: 'D', x: 170, y: 340, flag: 'Protected wetland', layer: 3 },
-  { id: 'E', x: 470, y: 360, flag: 'Zoning restriction', layer: 4 },
-];
-const blob = (cx, cy, k = 1, seed = 1) => {
-  const r = rng(seed);
-  const pts = Array.from({ length: 7 }, (_, i) => {
-    const a = (i / 7) * Math.PI * 2 + 0.3;
-    const rr = (30 + r() * 12) * k;
-    return [cx + Math.cos(a) * rr * 1.25, cy + Math.sin(a) * rr * 0.9];
-  });
-  let d = `M ${f((pts[0][0] + pts[6][0]) / 2)} ${f((pts[0][1] + pts[6][1]) / 2)}`;
-  pts.forEach((p, i) => {
-    const n = pts[(i + 1) % 7];
-    d += ` Q ${f(p[0])} ${f(p[1])} ${f((p[0] + n[0]) / 2)} ${f((p[1] + n[1]) / 2)}`;
-  });
-  return d + ' Z';
-};
+// Civarea site selection: an illustrated site map read through toggled layers ----
+// One site is evaluated. Layers switch on and off over the map (power grid, flood,
+// wetlands, critical habitat, protected areas) while the assessment checklist loads
+// row by row, ending in "Site shortlisted". stage 1 = map, 2 = layers + pending list, 3 = done.
+const SM_LAYERS = [['Power grid', '#141414'], ['Flood maps', '#3566d6'], ['Wetlands', '#1f8f86'], ['Critical habitat', '#2f8a5b'], ['Protected areas', '#6b8f2a']];
+const SM_ROWS = [['Land & constructability', 'Suitable'], ['Zoning & permitting', 'Compliant'], ['Water', 'Secured'], ['Natural resources', 'Clear'], ['Natural hazards', 'Low risk']];
 
 function siteSelection(stage, float = false) {
-  const GREEN = '#2f8a5b', RED = '#d6453d', BLUE = '#3566d6', INK = '#141414';
-  const MX = 40, MY = 28, MW = 556, MH = 444;
-  const L = (n, inner) => `<g class="sm sm-l${n}" ${stage === 1 ? 'style="opacity:0"' : ''}>${inner}</g>`;
+  const GREEN = '#2f8a5b', RED = '#d6453d', INK = '#141414';
+  const MX = 40, MY = 28, MW = 520, MH = 444;
+  const r = rng(11);
+  const lay = (n, inner) => `<g class="sm sm-l${n}" style="opacity:${stage === 1 ? 0 : n < 3 ? 0.9 : 0}">${inner}</g>`;
   let s = `<defs><clipPath id="smclip"><rect x="${MX}" y="${MY}" width="${MW}" height="${MH}" rx="16"/></clipPath>
-    <pattern id="smhatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(40)"><line x1="0" y1="0" x2="0" y2="7" stroke="#2f8a5b" stroke-width="1.3" opacity=".55"/></pattern>
-    <pattern id="smdry" width="6" height="6" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#b3822e" opacity=".5"/></pattern></defs>`;
-  // base map
-  s += rect(MX, MY, MW, MH, { rx: 16, fill: '#f3f3ef', stroke: 'var(--v-card-line)', cls: 'fl' });
+    <pattern id="smhatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(40)"><line x1="0" y1="0" x2="0" y2="6" stroke="#1f8f86" stroke-width="1.4" opacity=".7"/></pattern>
+    <pattern id="smdot" width="5" height="5" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r=".9" fill="#2f8a5b" opacity=".6"/></pattern></defs>`;
+  s += rect(MX, MY, MW, MH, { rx: 16, fill: '#ebe9e3', stroke: 'var(--v-card-line)', cls: 'fl' });
   s += `<g clip-path="url(#smclip)">`;
-  for (let i = 0; i < 9; i++) {
-    const y0 = MY + 30 + i * 52;
-    s += `<path d="M${MX - 10} ${y0} C ${MX + 140} ${y0 - 40 + (i % 3) * 20}, ${MX + 330} ${y0 + 36 - (i % 2) * 30}, ${MX + MW + 10} ${y0 - 14 + (i % 4) * 12}" fill="none" stroke="#000" stroke-opacity=".055" stroke-width="1"/>`;
-  }
-  // 1. power: transmission network and substations
-  s += L(1, `<g fill="none" stroke="${INK}" stroke-width="1.4" stroke-dasharray="5 4" opacity=".8"><path d="M${MX} 232 C 180 190 260 250 340 250 S 520 222 ${MX + MW} 196"/><path d="M340 250 C 360 180 380 120 440 62"/><path d="M340 250 C 300 330 250 380 232 ${MY + MH}"/></g>`
-    + [[180, 205], [340, 250], [440, 150], [232, 440]].map(([x, y]) => `<rect x="${x - 5}" y="${y - 5}" width="10" height="10" rx="2.5" fill="#fff" stroke="${INK}" stroke-width="1.5"/>`).join('')
-    + `<path d="M${MX + 14} ${MY + MH - 24} l5 -9 l-1.4 6 h5 l-5 9 l1.4 -6 z" fill="${INK}" transform="translate(0 0)"/>`
-    + `<text x="${MX + 30}" y="${MY + MH - 17}" font-size="10" font-weight="600" fill="${INK}">Power</text>`);
-  // 2. water: river and stressed (dry) basin
-  s += L(2, `<path d="M${MX} 330 C 150 290 210 300 300 330 S 470 400 ${MX + MW} 330" fill="none" stroke="${BLUE}" stroke-opacity=".28" stroke-width="22" stroke-linecap="round"/><path d="M${MX} 330 C 150 290 210 300 300 330 S 470 400 ${MX + MW} 330" fill="none" stroke="${BLUE}" stroke-width="2.2" stroke-linecap="round"/>
-    <path d="${blob(450, 118, 1.9, 4)}" fill="url(#smdry)" stroke="#b3822e" stroke-opacity=".5" stroke-dasharray="3 3"/>
-    <path d="M${MX + 100} ${MY + MH - 24} q-6 -9 0 -16 q6 7 0 16 z" fill="${BLUE}" opacity="0"/>`
-    + `<text x="${MX + 100}" y="${MY + MH - 17}" font-size="10" font-weight="600" fill="${BLUE}">Water</text>`);
-  // 3. environment: protected wetland / habitat
-  s += L(3, `<path d="${blob(176, 346, 2.1, 9)}" fill="url(#smhatch)" stroke="${GREEN}" stroke-opacity=".7"/><path d="${blob(540, 90, 1.1, 12)}" fill="url(#smhatch)" stroke="${GREEN}" stroke-opacity=".5"/>`
-    + `<text x="${MX + 176}" y="${MY + MH - 17}" font-size="10" font-weight="600" fill="${GREEN}">Environment</text>`);
-  // 4. permitting: parcel grid and zoning boundary
-  s += L(4, `<g fill="none" stroke="${INK}" stroke-opacity=".3" stroke-width="1" stroke-dasharray="2 3">${[0, 1, 2, 3, 4, 5].map((i) => `<path d="M${MX + 70 + i * 90} ${MY} V${MY + MH}"/>`).join('')}${[0, 1, 2, 3].map((i) => `<path d="M${MX} ${MY + 80 + i * 100} H${MX + MW}"/>`).join('')}</g>
-    <path d="${blob(470, 360, 1.8, 15)}" fill="rgba(214,69,61,.07)" stroke="${RED}" stroke-width="1.4" stroke-dasharray="6 4"/>`
-    + `<text x="${MX + 280}" y="${MY + MH - 17}" font-size="10" font-weight="600" fill="${INK}">Permitting</text>`);
-  s += `</g>`;
-  // candidate areas (always visible), flags as layers reveal
-  SITES.forEach((st, i) => {
-    const sel = st.flag === null;
-    s += `<g class="${sel ? 'sm-site sm-sel' : `sm-site sm-fl${st.layer}`}">`;
-    s += `<path class="sm-area" d="${blob(st.x, st.y, 0.85, i + 3)}" fill="${sel ? 'rgba(47,138,91,.18)' : 'rgba(20,20,20,.07)'}" stroke="${INK}" stroke-width="1.6"/>`;
-    s += circle(st.x, st.y, 11, { fill: '#fff', stroke: INK, sw: 1.6 }) + text(st.x, st.y + 4, st.id, { size: 11, weight: 700, anchor: 'middle' });
-    if (!sel) {
-      const w = st.flag.length * 5.9 + 32;
-      s += `<g class="sm-flag"><rect x="${st.x - w / 2}" y="${st.y + 26}" width="${w}" height="22" rx="11" fill="#fff" stroke="${RED}" stroke-opacity=".5"/><circle cx="${st.x - w / 2 + 12}" cy="${st.y + 37}" r="3.5" fill="${RED}"/><text x="${st.x - w / 2 + 22}" y="${st.y + 40.5}" font-size="10" font-weight="600" fill="${RED}">${st.flag}</text></g>`;
-      s += `<path class="sm-x" d="M${st.x - 18} ${st.y - 18} l36 36 M${st.x + 18} ${st.y - 18} l-36 36" stroke="${RED}" stroke-opacity=".5" stroke-width="1.4"/>`;
-    } else {
-      s += `<circle class="sm-ring" cx="${st.x}" cy="${st.y}" r="40" fill="none" stroke="${GREEN}" stroke-width="2"/><circle class="sm-ring2" cx="${st.x}" cy="${st.y}" r="40" fill="none" stroke="${GREEN}" stroke-width="1.2"/>`;
+  // fields
+  s += `<path d="M${MX} ${MY} H${MX + 300} C 330 70 280 90 250 60 S 120 90 ${MX} 100 Z" fill="#e0e4d6"/><path d="M${MX + MW} 330 C 480 350 440 420 380 ${MY + MH} H${MX + MW} Z" fill="#e0e4d6"/><path d="M${MX} 380 C 90 370 130 410 150 ${MY + MH} H${MX} Z" fill="#e0e4d6"/>`;
+  // industrial blocks (buildings), rotated to the street grid
+  s += `<g transform="rotate(-16 300 250)">`;
+  for (let gx = 0; gx < 9; gx++) for (let gy = 0; gy < 8; gy++) {
+    const bx = -20 + gx * 76, by = 40 + gy * 62;
+    if (r() < 0.12) continue;
+    const n = 1 + Math.floor(r() * 3);
+    for (let k = 0; k < n; k++) {
+      const w = 22 + r() * 26, h = 14 + r() * 18, x = bx + 4 + (k % 2) * 34 + r() * 4, y = by + 4 + Math.floor(k / 2) * 26 + r() * 4;
+      s += `<rect x="${f(x)}" y="${f(y)}" width="${f(w)}" height="${f(h)}" rx="1.5" fill="${['#d8d5cd', '#cfccc3', '#dedbd3', '#c8c5bc'][Math.floor(r() * 4)]}"/>`;
     }
-    s += `</g>`;
+  }
+  s += `</g>`;
+  // roads
+  const road = (d, w = 7) => `<path d="${d}" fill="none" stroke="#cdc9bf" stroke-width="${w + 2.4}" stroke-linecap="round"/><path d="${d}" fill="none" stroke="#fbfaf7" stroke-width="${w}" stroke-linecap="round"/>`;
+  s += road(`M${MX - 10} 150 C 160 190 300 170 ${MX + MW + 10} 250`, 9)
+    + road(`M${MX - 10} 340 C 160 310 360 350 ${MX + MW + 10} 300`, 7)
+    + road(`M210 ${MY - 10} C 230 160 250 280 300 ${MY + MH + 10}`, 7)
+    + road(`M420 ${MY - 10} C 410 200 440 330 470 ${MY + MH + 10}`, 6)
+    + road(`M${MX - 10} 250 C 120 240 170 270 250 262`, 5);
+  s += `<path d="M${MX - 10} 440 C 200 400 380 440 ${MX + MW + 10} 395" fill="none" stroke="#a8a59c" stroke-width="1.6" stroke-dasharray="7 3"/>`;
+  // layers
+  s += lay(1, `<g fill="none" stroke="${INK}" stroke-width="1.5" stroke-dasharray="6 4"><path d="M${MX} 90 C 190 120 330 100 ${MX + MW} 70"/><path d="M330 104 C 360 170 400 190 ${MX + MW} 200"/><path d="M330 104 C 300 70 280 ${MY}  270 ${MY}"/></g>`
+    + [[100, 106], [190, 118], [262, 112], [330, 104], [400, 178], [480, 192]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="3.2" fill="#fff" stroke="${INK}" stroke-width="1.5"/>`).join('')
+    + `<rect x="316" y="90" width="28" height="28" rx="6" fill="${INK}"/><path d="M331 95 l-6 12 h5 l-2 10 l8 -13 h-5 l2 -9 z" fill="#fff"/>`);
+  s += lay(2, `<path d="M${MX} 390 C 140 330 200 420 290 372 S 450 330 ${MX + MW} 372" fill="none" stroke="#3566d6" stroke-opacity=".22" stroke-width="64" stroke-linecap="round"/><path d="M${MX} 390 C 140 330 200 420 290 372 S 450 330 ${MX + MW} 372" fill="none" stroke="#3566d6" stroke-opacity=".3" stroke-width="30" stroke-linecap="round"/><path d="M${MX} 390 C 140 330 200 420 290 372 S 450 330 ${MX + MW} 372" fill="none" stroke="#3566d6" stroke-width="3" stroke-linecap="round"/>`);
+  s += lay(3, `<path d="M70 130 q40 -26 80 -4 q24 22 -6 42 q-50 16 -74 -8 z" fill="url(#smhatch)" stroke="#1f8f86" stroke-width="1.3"/><path d="M440 270 q40 -20 70 6 q10 32 -30 38 q-44 -4 -40 -44 z" fill="url(#smhatch)" stroke="#1f8f86" stroke-width="1.3"/><path d="M110 270 q26 -14 52 2 q4 24 -22 28 q-30 -6 -30 -30 z" fill="url(#smhatch)" stroke="#1f8f86" stroke-width="1.3"/>`);
+  s += lay(4, `<path d="M400 50 L 520 44 L 540 140 L 430 150 Z" fill="url(#smdot)" stroke="#2f8a5b" stroke-width="1.5" stroke-dasharray="3 3"/><path d="M80 300 L 190 292 L 200 350 L 90 360 Z" fill="url(#smdot)" stroke="#2f8a5b" stroke-width="1.5" stroke-dasharray="3 3"/>`);
+  s += lay(5, `<path d="M${MX + 14} 210 C 120 150 240 180 360 150 S 520 230 ${MX + MW - 14} 240 L ${MX + MW - 14} 330 C 420 300 300 340 200 320 S 70 330 ${MX + 14} 320 Z" fill="rgba(107,143,42,.1)" stroke="#6b8f2a" stroke-width="1.6" stroke-dasharray="8 5"/>`);
+  // the site
+  const P = [[-34, -78], [34, -78], [34, 78], [-34, 78]].map(([x, y]) => { const a = 0.38, c = Math.cos(a), sn = Math.sin(a); return [300 + x * c - y * sn, 250 + x * sn + y * c]; });
+  const sp = P.map((p) => p.map(f).join(' ')).join(' L ');
+  s += `<g class="sm-site"><path d="M${sp} Z" fill="rgba(214,69,61,.14)" stroke="${RED}" stroke-width="2.4" stroke-linejoin="round"/><path class="sm-ring" d="M${sp} Z" fill="none" stroke="${GREEN}" stroke-width="3.2" stroke-linejoin="round"/>`
+    + circle(300, 250, 10, { fill: '#fff', stroke: RED, sw: 3.5 }) + circle(300, 250, 3.4, { fill: RED }) + `</g>`;
+  s += `</g>`;
+  s += rect(MX + 372, MY + 20, 130, 26, { rx: 13, fill: '#fff', stroke: 'var(--v-card-line)', cls: 'fl' }) + circle(MX + 388, MY + 33, 4, { fill: RED }) + text(MX + 398, MY + 37, 'Site under evaluation', { size: 9.5, weight: 600 });
+  // active layer chip
+  SM_LAYERS.forEach(([n, col], i) => {
+    const w = n.length * 6.2 + 34;
+    s += `<g class="sm sm-ch sm-c${i + 1}" style="opacity:${stage === 1 ? 0 : i < 2 ? 1 : 0}">` + rect(MX + 16, MY + MH - 42, w, 26, { rx: 13, fill: '#fff', stroke: 'var(--v-card-line)', cls: 'fl' }) + circle(MX + 32, MY + MH - 29, 4.5, { fill: col }) + text(MX + 43, MY + MH - 25, n, { size: 10, weight: 600 }) + `</g>`;
   });
-  // layer legend
-  s += rect(616, 60, 140, 160, { rx: 14, fill: '#fff', stroke: 'var(--v-card-line)', cls: 'fl' });
-  s += text(634, 88, 'Assessment layers', { size: 11.5, weight: 650 });
-  [['Power', INK, 1], ['Water', BLUE, 2], ['Environment', GREEN, 3], ['Permitting', RED, 4]].forEach(([n, col, k], i) => {
-    const y = 114 + i * 26;
-    s += `<g class="sm-chip sm-c${k}">` + rect(634, y - 10, 104, 22, { rx: 11, fill: '#f3f3ef' }) + circle(646, y + 1, 4, { fill: col }) + text(657, y + 5, n, { size: 10.5, weight: 600 }) + `</g>`;
+  // assessment checklist
+  const CX = 584, CY = 44, CW = 252, CH = 412;
+  s += rect(CX, CY, CW, CH, { rx: 16, fill: '#fff', stroke: 'var(--v-card-line)', cls: 'fl' });
+  s += text(CX + 22, CY + 36, 'Site assessment', { size: 13.5, weight: 650 }) + text(CX + 22, CY + 54, '5 categories · analysing…', { size: 10, fill: 'var(--v-mute2)' });
+  SM_ROWS.forEach(([n, res], i) => {
+    const y = CY + 92 + i * 46, done = stage === 3;
+    s += `<g class="sm-row sm-r${i + 1}">` + line(CX + 22, y - 22, CX + CW - 22, y - 22, { stroke: 'rgba(0,0,0,.06)' })
+      + circle(CX + 34, y, 9, { fill: 'none', stroke: 'rgba(0,0,0,.14)', sw: 1.6 })
+      + `<circle class="sm-spin" cx="${CX + 34}" cy="${y}" r="9" fill="none" stroke="${INK}" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="16 41" style="opacity:0"/>`
+      + `<g class="sm-ok" style="opacity:${done ? 1 : 0}">` + circle(CX + 34, y, 9, { fill: GREEN }) + `<path d="M${CX + 29.5} ${y + 0.5} l3.2 3.2 l6 -6.6" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></g>`
+      + `<g class="sm-lbl" style="opacity:${done ? 1 : 0.5}">` + text(CX + 54, y + 4, n, { size: 11.5, weight: 600 }) + `</g>`
+      + `<g class="sm-res" style="opacity:${done ? 1 : 0}">` + text(CX + CW - 22, y + 4, res, { size: 10, weight: 600, anchor: 'end', fill: GREEN }) + `</g></g>`;
   });
-  // shortlisted card
-  s += `<g class="sm-card">` + rect(616, 262, 140, 150, { rx: 14, fill: '#fff', stroke: GREEN, cls: 'fl' })
-    + circle(640, 292, 12, { fill: 'rgba(47,138,91,.14)' }) + `<path d="M634 292 l4 4 l8 -9" fill="none" stroke="${GREEN}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`
-    + text(660, 296, 'Site B', { size: 12.5, weight: 650 })
-    + text(634, 330, 'Site shortlisted', { size: 11.5, weight: 650 })
-    + text(634, 350, 'Suitability', { size: 10, fill: 'var(--v-mute2)' }) + text(738, 350, '86', { size: 12, weight: 700, anchor: 'end', fill: GREEN })
-    + rect(634, 360, 104, 6, { rx: 3, fill: 'rgba(0,0,0,.08)' }) + rect(634, 360, 90, 6, { rx: 3, fill: GREEN })
-    + text(634, 390, '4 layers cleared', { size: 10, fill: 'var(--v-mute2)' }) + `</g>`;
-  return wrap(s, 'A site-selection map revealed in layers: power, water, environment and permitting each flag locations as higher risk until one site, B, is shortlisted as suitable', 500, 780);
+  s += `<g class="sm-final" style="opacity:${stage === 3 ? 1 : 0}">` + rect(CX + 14, CY + CH - 98, CW - 28, 82, { rx: 12, fill: 'rgba(47,138,91,.1)' })
+    + circle(CX + 40, CY + CH - 68, 11, { fill: GREEN }) + `<path d="M${CX + 34.5} ${CY + CH - 68} l4 4 l7 -8" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`
+    + text(CX + 62, CY + CH - 64, 'Site shortlisted', { size: 12.5, weight: 650 })
+    + text(CX + 30, CY + CH - 34, 'Suitability', { size: 10, fill: 'var(--v-mute2)' }) + text(CX + CW - 30, CY + CH - 34, '86', { size: 12, weight: 700, anchor: 'end', fill: GREEN })
+    + rect(CX + 30, CY + CH - 26, CW - 60, 6, { rx: 3, fill: 'rgba(0,0,0,.08)' }) + `<rect class="sm-bar" x="${CX + 30}" y="${CY + CH - 26}" width="${f((CW - 60) * 0.86)}" height="6" rx="3" fill="${GREEN}"/></g>`;
+  return wrap(s, 'An illustrated site map where layers such as power grid, flood maps, wetlands, critical habitat and protected areas switch on and off while an assessment checklist completes and the site is shortlisted', 500, 860);
 }
 
 // 3. EY digital banking -------------------------------------------------------
