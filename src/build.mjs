@@ -295,7 +295,7 @@ ${header(p, false)}
       <section class="blk"><h2 class="blk__h">The problem</h2><div class="prose">${para(proj.problem)}</div></section>
       <section class="blk"><h2 class="blk__h">Why it was hard</h2><div class="prose">${para(proj.hard)}</div></section>
       <section class="blk"><h2 class="blk__h">My role</h2><div class="prose">${para(proj.role_body)}</div></section>
-      <section class="blk"><h2 class="blk__h">Decisions and tradeoffs</h2><ol class="decisions">${decisions}</ol></section>
+      <section class="blk"><h2 class="blk__h">The decisions that shaped the product</h2><ol class="decisions">${decisions}</ol></section>
     </div>
 
     <section class="evolve" data-evolve aria-labelledby="evolve-h">
