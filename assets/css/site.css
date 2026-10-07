@@ -485,13 +485,15 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
 .case-hero { padding-top: clamp(84px, 8vw, 104px); padding-bottom: clamp(40px, 5vw, 72px); display: grid; grid-template-columns: repeat(12, 1fr); column-gap: var(--gap); align-items: start; }
 .case-hero__copy { grid-column: 1 / span 5; display: grid; align-content: start; }
 .case-hero__media { grid-column: 6 / -1; position: sticky; top: 84px; }
+.case-hero__kicker { justify-self: start; display: inline-flex; align-items: center; gap: 9px; height: 32px; padding: 0 14px 0 12px; margin-bottom: 18px; border-radius: 999px; background: #fff; border: 1px solid var(--line); font-size: 0.875rem; font-weight: 550; letter-spacing: -0.01em; }
+.case-hero__kicker::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--sage); }
 .case-hero__title { font-size: clamp(2rem, 1rem + 2.7vw, 3.5rem); line-height: 1; letter-spacing: -0.045em; font-weight: 650; text-wrap: balance; }
 .case-hero__lede { margin-top: clamp(14px, 1.8vw, 22px); font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem); line-height: 1.4; letter-spacing: -0.01em; color: var(--ink-2); text-wrap: pretty; }
 .meta { margin-top: clamp(24px, 3vw, 40px); display: grid; border-top: 1px solid var(--line); }
 .meta__row { display: grid; grid-template-columns: 7rem 1fr; gap: var(--gap); padding: 12px 0; border-bottom: 1px solid var(--line); align-items: center; }
 .meta dt { color: var(--ink-3); font-size: var(--fs-small); align-self: start; padding-top: 3px; }
 .meta dd { font-weight: 500; letter-spacing: -0.01em; text-wrap: balance; font-size: 0.9375rem; line-height: 1.4; }
-.meta .org-logo { max-height: 30px; object-position: left center; }
+.meta img.org-logo { height: 20px; max-width: 130px; margin: 0; object-position: left center; }
 .clients { display: grid; gap: 8px; }
 .clients li { display: grid; grid-template-columns: 5px 1fr; gap: 10px; align-items: start; color: var(--ink-2); font-weight: 450; }
 .clients li::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--sage); margin-top: 0.55em; }
@@ -654,3 +656,20 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
   .contact { position: fixed; left: 0; right: 0; bottom: 0; height: 100svh; z-index: 1; }
   .contact__stage { height: 100%; min-height: 0; transform: translate3d(0, calc((1 - var(--fr, 1)) * -6vh), 0); opacity: calc(0.4 + 0.6 * var(--fr, 1)); }
 }
+
+/* hero prototype plays on a loop: lines draw, bars grow, panels appear, the cursor clicks */
+.case-hero .v { padding: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  .js .case-hero .v .draw { animation: loop-draw 9s ease-in-out infinite; animation-delay: var(--d, 0ms); }
+  .js .case-hero .v .fade { animation: loop-fade 9s ease-in-out infinite; animation-delay: var(--d, 0ms); }
+  .js .case-hero .v .grow { animation: loop-grow 9s var(--ease) infinite; animation-delay: var(--d, 0ms); }
+  .tt-cursor { animation: tt-cursor 9s ease-in-out infinite; }
+  .tt-pop { opacity: 0; transform-box: fill-box; transform-origin: 100% 100%; animation: tt-pop 9s var(--ease) infinite; }
+  .tt-press { transform-box: fill-box; transform-origin: center; animation: tt-press 9s ease-in-out infinite; }
+}
+@keyframes loop-draw { 0% { stroke-dashoffset: 1; opacity: 1; } 22% { stroke-dashoffset: 0; } 90% { stroke-dashoffset: 0; opacity: 1; } 96% { stroke-dashoffset: 0; opacity: 0; } 100% { stroke-dashoffset: 1; opacity: 0; } }
+@keyframes loop-fade { 0%, 12% { opacity: 0; } 24%, 90% { opacity: 1; } 97%, 100% { opacity: 0; } }
+@keyframes loop-grow { 0% { transform: scaleX(0); } 24% { transform: scaleX(1); } 90% { transform: scaleX(1); opacity: 1; } 96%, 100% { transform: scaleX(1); opacity: 0; } }
+@keyframes tt-cursor { 0%, 26% { transform: translate(420px, 210px); opacity: 0; } 32% { opacity: 1; } 46%, 52% { transform: translate(716px, 394px); opacity: 1; } 57% { transform: translate(716px, 394px) scale(.88); } 62% { transform: translate(716px, 394px) scale(1); } 74% { transform: translate(716px, 300px); opacity: 1; } 78%, 82% { transform: translate(708px, 304px) scale(.88); opacity: 1; } 86% { transform: translate(708px, 304px); opacity: 0; } 100% { transform: translate(420px, 210px); opacity: 0; } }
+@keyframes tt-press { 0%, 52% { transform: scale(1); } 56% { transform: scale(.92); } 62%, 100% { transform: scale(1); } }
+@keyframes tt-pop { 0%, 60% { opacity: 0; transform: scale(.94) translateY(8px); } 68%, 88% { opacity: 1; transform: none; } 94%, 100% { opacity: 0; transform: scale(.98); } }

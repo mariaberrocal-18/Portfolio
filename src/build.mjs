@@ -272,12 +272,12 @@ ${header(p, false)}
   <article>
     <header class="case-hero wrap">
       <div class="case-hero__copy">
+        <p class="case-hero__kicker">Case study</p>
         <h1 class="case-hero__title">${esc(proj.title)}</h1>
         <p class="case-hero__lede">${esc(proj.lede)}</p>
         <dl class="meta">
           <div class="meta__row"><dt>Company</dt><dd>${proj.companyLogo ? orgLogo(proj.companyLogo, proj.company, p) : esc(proj.company)}</dd></div>
           ${proj.clients ? `<div class="meta__row"><dt>Clients</dt><dd><ul class="clients">${proj.clients.map((c) => `<li>${esc(c)}</li>`).join('')}</ul></dd></div>` : ''}
-          <div class="meta__row"><dt>Role</dt><dd>${esc(proj.role)}</dd></div>
           <div class="meta__row"><dt>Scope</dt><dd>${esc(proj.scope)}</dd></div>
           <div class="meta__row"><dt>Worked with</dt><dd>${esc(proj.team)}</dd></div>
         </dl>

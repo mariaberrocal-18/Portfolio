@@ -92,52 +92,68 @@ function targetTracking(stage) {
 // Shipped state, inspired by how the real tool is organised: KPI strip, one evolution
 // chart with Baseline / Last reported / Target markers, and per-target status rows.
 function ttShipped() {
-  let s = card(36, 26, 728, 448, 18);
+  const BLUE = '#3566d6', TEAL = '#1d7894', RED = '#c23b32', GREEN = '#2f8a5b';
+  let s = `<defs><linearGradient id="ttg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#dfeaff"/><stop offset=".6" stop-color="#eaf2ff"/><stop offset="1" stop-color="#f4f8ff"/></linearGradient></defs>`;
+  s += `<g transform="translate(-20 -12.5) scale(1.05)">`;
+  s += card(36, 26, 728, 448, 18);
+  s += `<path d="M36 44a18 18 0 0 1 18-18h692a18 18 0 0 1 18 18v36H36z" fill="url(#ttg)"/>`;
   // KPI strip
   const kpis = [['Status to target', 'On track', 1], ['Target value', '0.246 hl/hl', 0], ['Expected impact', '5.1M hl', 0], ['Scenario cost', '$2.8M', 0]];
   kpis.forEach(([k, v, hi], i) => {
     const x = 56 + i * 172;
-    s += rect(x, 44, 160, 54, { rx: 10, fill: hi ? 'rgba(52,112,80,.10)' : '#fff', stroke: hi ? 'var(--v-accent)' : 'var(--v-card-line)' });
+    s += rect(x, 44, 160, 54, { rx: 10, fill: hi ? '#e4f6ec' : '#fff', stroke: hi ? GREEN : 'var(--v-card-line)' });
     s += text(x + 12, 63, k, { size: 10.5, fill: 'var(--v-mute2)' });
-    s += text(x + 12, 85, v, { size: hi ? 15 : 14.5, weight: 650, fill: hi ? 'var(--v-accent)' : 'var(--v-ink)' });
+    s += text(x + 12, 85, v, { size: hi ? 15 : 14.5, weight: 650, fill: hi ? GREEN : 'var(--v-ink)' });
   });
-  // chart frame
+  // chart
   const cx = 56, cy = 112, cw = 688, ch = 214;
   s += rect(cx, cy, cw, ch, { rx: 12, fill: '#fff', stroke: 'var(--v-card-line)' });
   s += text(cx + 16, cy + 24, 'Water usage efficiency', { size: 12.5, weight: 650 });
-  const px = cx + 56, pw = cw - 92, py = cy + 52, ph = ch - 86;
+  [['Years', 0], ['Phase: All', 1], ['Left axis: All', 2]].forEach(([l, i]) => {
+    const w = l.length * 5.6 + 18, x = cx + 176 + [0, 52, 122][i];
+    s += rect(x, cy + 11, w, 18, { rx: 9, fill: '#e9f0ff', stroke: '#c5d6fb' });
+    s += text(x + w / 2, cy + 23.5, l, { size: 9.5, weight: 600, fill: BLUE, anchor: 'middle' });
+  });
+  const px = cx + 56, pw = cw - 92, py = cy + 58, ph = ch - 92;
   for (let i = 0; i < 4; i++) s += line(px, py + (ph / 3) * i, px + pw, py + (ph / 3) * i, { op: 0.7, dash: '2 4' });
   ['FY22', 'FY24', 'FY26', 'FY28', 'FY30'].forEach((l, i) => (s += text(px + (pw / 4) * i, py + ph + 18, l, { size: 10, fill: 'var(--v-mute)', anchor: 'middle' })));
-  const X = (t) => px + pw * t; // t 0..1 across FY22..FY30
-  const Y = (v) => py + ph * (1 - v); // v 0..1
-  // markers
+  const X = (t) => px + pw * t, Y = (v) => py + ph * (1 - v);
   [[0.25, 'Baseline'], [0.375, 'Last reported'], [1, 'Target']].forEach(([t, l]) => {
     s += line(X(t), py - 6, X(t), py + ph, { stroke: 'var(--v-mute)', op: 0.8 });
-    s += rect(X(t) - (l.length * 2.9 + 8), cy + 30, l.length * 5.8 + 16, 17, { rx: 5, fill: '#fff', stroke: 'var(--v-card-line)' });
-    s += text(X(t), cy + 42, l, { size: 9.5, fill: 'var(--v-mute2)', anchor: 'middle', weight: 500 });
+    s += rect(X(t) - (l.length * 2.9 + 8), cy + 36, l.length * 5.8 + 16, 17, { rx: 5, fill: '#fff', stroke: 'var(--v-card-line)' });
+    s += text(X(t), cy + 48, l, { size: 9.5, fill: 'var(--v-mute2)', anchor: 'middle', weight: 500 });
   });
-  // target path (dark) and reported (accent)
-  s += draw(`M${X(0.25)} ${Y(0.82)} C${X(0.4)} ${Y(0.6)} ${X(0.5)} ${Y(0.5)} ${X(0.62)} ${Y(0.44)} S${X(0.86)} ${Y(0.3)} ${X(1)} ${Y(0.25)}`, { sw: 2.6, delay: 150 });
-  s += draw(`M${X(0)} ${Y(0.79)} L${X(0.125)} ${Y(0.82)} L${X(0.25)} ${Y(0.82)} L${X(0.375)} ${Y(0.81)}`, { stroke: 'var(--v-accent)', sw: 2.4, delay: 50 });
-  s += draw(`M${X(0.375)} ${Y(0.81)} C${X(0.44)} ${Y(0.7)} ${X(0.52)} ${Y(0.4)} ${X(0.6)} ${Y(0.12)}`, { stroke: 'var(--v-accent)', sw: 2, dash: '0.03 0.02', delay: 700 });
-  [0, 0.125, 0.25, 0.375].forEach((t, i) => (s += circle(X(t), Y([0.79, 0.82, 0.82, 0.81][i]), 3.6, { fill: '#fff', stroke: 'var(--v-accent)', sw: 1.6 })));
-  [[0.25, 0.82], [0.5, 0.5], [0.75, 0.33], [1, 0.25]].forEach(([t, v]) => (s += circle(X(t), Y(v), 3.6, { fill: '#fff', stroke: 'var(--v-ink)', sw: 1.6 })));
-  // status rows
+  s += `<path class="tt-area" style="opacity:1" d="M${X(0.25)} ${Y(0.82)} C${X(0.4)} ${Y(0.6)} ${X(0.5)} ${Y(0.5)} ${X(0.62)} ${Y(0.44)} S${X(0.86)} ${Y(0.3)} ${X(1)} ${Y(0.25)} L${X(1)} ${py + ph} L${X(0.25)} ${py + ph} Z" fill="${BLUE}" fill-opacity=".08" stroke="none"/>`;
+  s += draw(`M${X(0.25)} ${Y(0.82)} C${X(0.4)} ${Y(0.6)} ${X(0.5)} ${Y(0.5)} ${X(0.62)} ${Y(0.44)} S${X(0.86)} ${Y(0.3)} ${X(1)} ${Y(0.25)}`, { stroke: '#1b1b1b', sw: 2.6, delay: 450 });
+  s += draw(`M${X(0)} ${Y(0.79)} L${X(0.125)} ${Y(0.82)} L${X(0.25)} ${Y(0.82)} L${X(0.375)} ${Y(0.81)}`, { stroke: BLUE, sw: 2.6, delay: 100 });
+  s += draw(`M${X(0.375)} ${Y(0.81)} C${X(0.44)} ${Y(0.7)} ${X(0.52)} ${Y(0.4)} ${X(0.6)} ${Y(0.12)}`, { stroke: RED, sw: 2.2, dash: '0.03 0.02', delay: 1300 });
+  [0, 0.125, 0.25, 0.375].forEach((t, i) => (s += circle(X(t), Y([0.79, 0.82, 0.82, 0.81][i]), 3.8, { fill: '#fff', stroke: BLUE, sw: 1.8 })));
+  [[0.25, 0.82], [0.5, 0.5], [0.75, 0.33], [1, 0.25]].forEach(([t, v]) => (s += circle(X(t), Y(v), 3.8, { fill: '#fff', stroke: '#1b1b1b', sw: 1.8 })));
+  // target rows
   const rows = [['Water usage efficiency', 'On track', 1, ''], ['Total discharges', 'Off track', 0, 'Short by 2.6M m³'], ['Total withdrawals', 'Off track', 0, 'Short by 12.0M m³']];
   rows.forEach(([n, st, ok, note], i) => {
     const y = 338 + i * 44;
     s += rect(56, y, 688, 36, { rx: 10, fill: '#fff', stroke: 'var(--v-card-line)' });
-    s += rect(68, y + 8, 20, 20, { rx: 6, fill: 'rgba(52,112,80,.12)' });
-    s += `<path d="M78 12.5c-2.6 3.2-4 5-4 6.8a4 4 0 0 0 8 0c0-1.8-1.4-3.6-4-6.8z" transform="translate(0 ${y - 4.5})" fill="none" stroke="var(--v-accent)" stroke-width="1.3" stroke-linejoin="round"/>`;
+    s += rect(68, y + 8, 20, 20, { rx: 6, fill: '#e3ecff' });
+    s += `<path d="M78 12.5c-2.6 3.2-4 5-4 6.8a4 4 0 0 0 8 0c0-1.8-1.4-3.6-4-6.8z" transform="translate(0 ${y - 4.5})" fill="none" stroke="${BLUE}" stroke-width="1.3" stroke-linejoin="round"/>`;
     s += text(100, y + 22, n, { size: 12.5, weight: 600 });
-    if (note) s += text(560, y + 22, note, { size: 10.5, fill: '#b3332b', anchor: 'end' });
-    s += rect(574, y + 8, 78, 20, { rx: 10, fill: ok ? 'rgba(52,112,80,.12)' : 'rgba(179,51,43,.10)' });
-    s += circle(586, y + 18, 3, { fill: ok ? 'var(--v-accent)' : '#b3332b' });
-    s += text(594, y + 22, st, { size: 10.5, weight: 600, fill: ok ? 'var(--v-accent)' : '#b3332b' });
-    s += rect(664, y + 7, 68, 22, { rx: 6, fill: 'var(--v-ink)' });
-    s += text(698, y + 22, 'Scenario', { size: 10.5, weight: 600, fill: '#fff', anchor: 'middle' });
+    if (note) s += text(560, y + 22, note, { size: 10.5, fill: RED, anchor: 'end' });
+    s += rect(574, y + 8, 78, 20, { rx: 10, fill: ok ? '#e4f6ec' : '#fde9e7' });
+    s += circle(586, y + 18, 3, { fill: ok ? GREEN : RED });
+    s += text(594, y + 22, st, { size: 10.5, weight: 600, fill: ok ? GREEN : RED });
+    s += `<g class="${i === 1 ? 'tt-press' : ''}">` + rect(664, y + 7, 68, 22, { rx: 6, fill: TEAL }) + text(698, y + 22, 'Scenario', { size: 10.5, weight: 600, fill: '#fff', anchor: 'middle' }) + '</g>';
   });
-  return wrap(s, 'Target tracking: KPI strip, an evolution chart with baseline, last reported value and target markers, and per-target on-track and off-track status rows');
+  // AI suggestion that appears after the cursor clicks "Scenario" on an off-track target
+  s += `<g class="tt-pop"><rect x="396" y="236" width="356" height="92" rx="12" fill="#fff" stroke="${BLUE}" stroke-width="1.2" style="filter:drop-shadow(0 10px 24px rgba(20,40,90,.22))"/>
+    <rect x="410" y="250" width="22" height="22" rx="7" fill="#e3ecff"/><path d="M421 254l1.6 4.2 4.2 1.6-4.2 1.6L421 266l-1.6-4.6-4.2-1.6 4.2-1.6z" fill="${BLUE}"/>
+    <text x="442" y="265" font-size="11" font-weight="650" fill="#1b1b1b">Suggested action</text>
+    <text x="410" y="290" font-size="12.5" font-weight="600" fill="#1b1b1b">Review cooling cycles at Facility 04</text>
+    <text x="410" y="308" font-size="10.5" fill="var(--v-mute2)">Closes about 38% of the projected gap</text>
+    <rect x="676" y="294" width="62" height="24" rx="7" fill="${GREEN}"/><text x="707" y="310" font-size="11" font-weight="650" fill="#fff" text-anchor="middle">Apply</text></g>`;
+  // cursor
+  s += `<g class="tt-cursor"><path d="M0 0l0 15 4-3.6 3 6.6 2.4-1.1-3-6.5 5.4-.3z" fill="#1b1b1b" stroke="#fff" stroke-width="1.2" stroke-linejoin="round"/></g>`;
+  s += '</g>';
+  return wrap(s, 'Target tracking: KPI strip, an evolution chart with baseline, last reported value and target markers, per-target status rows, and an AI-suggested action appearing after a click on Scenario');
 }
 
 // 2. Civarea site selection ---------------------------------------------------
