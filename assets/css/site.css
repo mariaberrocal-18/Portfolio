@@ -544,7 +544,7 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
 .evolve__after {
   --ink: #f4faf6; --ink-2: rgba(244, 250, 246, 0.78); --ink-3: rgba(244, 250, 246, 0.55); --line: rgba(244, 250, 246, 0.24);
   background-color: var(--sage); background-image: var(--grain-light); color: #f4faf6;
-  padding-block: clamp(72px, 9vw, 130px) calc(clamp(72px, 9vw, 140px) + var(--lr)); transform-origin: 50% 0;
+  padding-block: clamp(72px, 9vw, 130px) clamp(72px, 9vw, 140px); border-radius: 0 0 var(--lr) var(--lr);
 }
 .evolve__h { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: var(--gap); margin-bottom: clamp(24px, 4vw, 56px); }
 .evolve__h span { grid-column: 6; justify-self: center; white-space: nowrap; padding-top: 22px; }
@@ -583,10 +583,7 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
 }
 
 /* lessons learned: back on the normal page background, three cards in a row */
-.lessons { --lr: clamp(28px, 4vw, 56px); position: relative; z-index: 1; margin-top: calc(var(--lr) * -1); padding-block: clamp(80px, 10vw, 150px) clamp(88px, 11vw, 170px); }
-/* the lessons sheet slides up over the green outcome */
-.lessons::before { content: ''; position: absolute; z-index: -1; top: 0; bottom: 0; left: 50%; width: 100vw; transform: translateX(-50%); border-radius: var(--lr) var(--lr) 0 0; background-color: var(--paper); background-image: var(--grain); box-shadow: 0 -30px 70px -20px rgba(0, 0, 0, 0.35); }
-.evolve__after .blk { transform: translateY(calc(var(--lp, 0) * -36px)) scale(calc(1 - var(--lp, 0) * 0.03)); opacity: calc(1 - var(--lp, 0) * 0.55); transform-origin: 0 0; will-change: transform, opacity; }
+.lessons { padding-block: clamp(80px, 10vw, 150px) clamp(88px, 11vw, 170px); }
 .js .lesson-list li { transition: opacity 0.9s var(--ease), transform 1s var(--ease); transition-delay: calc(var(--i, 0) * 120ms + 150ms); }
 .js .lessons:not(.is-in) .lesson-list li { opacity: 0; transform: translateY(44px); }
 .js .lessons__h { transition: opacity 0.8s var(--ease), transform 0.9s var(--ease); }
@@ -636,7 +633,6 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
 .failsafe .v[data-reveal] .v-svg { transform: none !important; }
 
 @media (prefers-reduced-motion: reduce) {
-  .evolve__after .blk { transform: none !important; opacity: 1 !important; }
   .js .lessons:not(.is-in) .lesson-list li, .js .lessons:not(.is-in) .lessons__h { opacity: 1; transform: none; }
   *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; transition-delay: 0s !important; }
   .js [data-lines] .line > span, .js [data-lines] .ch, .js .hero__lede, .js .hero .btn { transform: none; opacity: 1; filter: none; }
@@ -843,3 +839,14 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
 @keyframes sm-fin { 0% { opacity: 0 } 80% { opacity: 0 } 86% { opacity: 1 } 95% { opacity: 1 } 98% { opacity: 0 } 100% { opacity: 0 } }
 @keyframes sm-ring { 0% { opacity: 0 } 78% { opacity: 0 } 84% { opacity: 1 } 95% { opacity: 1 } 98% { opacity: 0 } 100% { opacity: 0 } }
 @keyframes sm-bar { 0%, 82% { transform: scaleX(0) } 94% { transform: scaleX(1) } 98%, 100% { transform: scaleX(0) } }
+
+/* finale: the outcome stays put while the page turns from green to paper, then its words give way to the lessons */
+.after--pinned { --ob: 0; --of: 0; height: 190vh; padding: 0; border-radius: 0; position: relative;
+  --ink: color-mix(in srgb, #141414 calc(var(--ob) * 100%), #f4faf6);
+  background-color: color-mix(in srgb, var(--paper) calc(var(--ob) * 100%), var(--sage)); color: var(--ink); }
+.after--pinned::after { content: ''; position: absolute; inset: 0; background-image: var(--grain); opacity: var(--ob); pointer-events: none; }
+.after--pinned > .wrap { position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; justify-content: center; z-index: 1; }
+.after--pinned .blk { opacity: calc(1 - var(--of)); transform: translateY(calc(var(--of) * -48px)); filter: blur(calc(var(--of) * 10px)); will-change: opacity, transform, filter; }
+.after--pinned .prose p:not(:first-child) { color: color-mix(in srgb, var(--ink) 72%, transparent); }
+.after--pinned .blk__h { color: color-mix(in srgb, var(--ink) 80%, transparent); }
+.after--pinned .prose { color: var(--ink); }

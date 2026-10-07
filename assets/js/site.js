@@ -422,9 +422,15 @@
     else new IntersectionObserver((es, o) => { if (es.some((e) => e.isIntersecting)) { lessonsEl.classList.add('is-in'); o.disconnect(); } }, { threshold: 0.15 }).observe(lessonsEl);
   }
   const updateLessons = () => {
-    if (!lessonsEl || !afterEl || reduce || !wide.matches) return;
-    const t = lessonsEl.getBoundingClientRect().top;
-    afterEl.style.setProperty('--lp', clamp(1 - t / (innerHeight * 0.85)).toFixed(3));
+    if (!afterEl) return;
+    const on = wide.matches && !reduce;
+    afterEl.classList.toggle('after--pinned', on);
+    if (!on) { afterEl.style.removeProperty('--ob'); afterEl.style.removeProperty('--of'); return; }
+    const r = afterEl.getBoundingClientRect();
+    const p = clamp(-r.top / Math.max(1, r.height - innerHeight));
+    const sm = (x) => x * x * (3 - 2 * x);
+    afterEl.style.setProperty('--ob', sm(clamp((p - 0.1) / 0.3)).toFixed(3));
+    afterEl.style.setProperty('--of', sm(clamp((p - 0.6) / 0.32)).toFixed(3));
   };
   const updateThread = () => {
     updateLessons();
