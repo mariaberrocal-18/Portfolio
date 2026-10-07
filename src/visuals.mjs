@@ -524,7 +524,64 @@ function siteEvolve(stage) {
   return wrap(s, 'A report pops up with insights for the site evaluation, each explaining why it matters', H, W);
 }
 
-export const visuals = { targetTracking, siteSelection, siteEvolve, banking, navigation };
+// EY Digital Banking, "The evolution": research notes → flow → polished screens → working product
+function bankEvolve(stage) {
+  const ACC = 'var(--v-accent)', INK = 'var(--v-ink)';
+  const phone = (x, y, w, h) => rect(x, y, w, h, { rx: 26, fill: 'var(--v-card)', stroke: 'var(--v-card-line)', cls: 'fl' });
+  const arrow = (x1, y1, x2, y2) => `<path d="M${x1} ${y1} L${x2} ${y2}" stroke="var(--v-mute)" stroke-width="1.6" fill="none" stroke-dasharray="4 4"/><circle cx="${x2}" cy="${y2}" r="3" fill="var(--v-mute)"/>`;
+  let s = '';
+  if (stage === 1) {
+    // insights become a flow: sticky notes linked into a journey
+    const notes = [
+      [40, 60, 'Can’t find “pay a bill”', 'Pain point'], [300, 40, 'Checks balance first, always', 'Insight'], [560, 70, 'Transfers feel risky', 'Pain point'],
+      [70, 270, 'Wants to know it went through', 'Need'], [330, 290, 'Too many menus', 'Pain point'], [580, 280, 'Mostly on mobile', 'Insight'],
+    ];
+    notes.forEach(([x, y, t, tag], i) => {
+      s += rect(x, y, 190, 100, { rx: 10, fill: 'var(--v-card)', stroke: 'var(--v-card-line)', cls: 'fl' });
+      s += rect(x + 14, y + 14, tag.length * 6 + 16, 20, { rx: 10, fill: tag === 'Pain point' ? 'rgba(214,69,61,.16)' : 'rgba(47,138,91,.18)' }) + text(x + 22, y + 28, tag, { size: 9.5, weight: 650, fill: tag === 'Pain point' ? '#d6453d' : ACC });
+      s += text(x + 14, y + 62, t, { size: 12, weight: 600 }) + rect(x + 14, y + 74, 110, 5, { rx: 2, fill: 'var(--v-line)' });
+    });
+    s += arrow(230, 110, 300, 90) + arrow(490, 90, 560, 112) + arrow(135, 160, 135, 270) + arrow(425, 140, 425, 290) + arrow(655, 170, 675, 280);
+    return wrap(s, 'Research notes: customer pain points and insights, starting to link into a journey', H, W);
+  }
+  if (stage === 2) {
+    // journey becomes polished mobile screens
+    const xs = [60, 300, 540];
+    xs.forEach((x, i) => {
+      s += phone(x, 30, 200, 440);
+      if (i === 0) {
+        s += text(x + 22, 76, 'Total balance', { size: 10.5, fill: 'var(--v-mute)' }) + text(x + 22, 110, '$12,480.20', { size: 24, weight: 600 });
+        ['Send', 'Pay', 'Move'].forEach((a, k) => { s += rect(x + 22 + k * 56, 132, 50, 30, { rx: 15, fill: k === 0 ? INK : 'none', stroke: k === 0 ? 'none' : INK }) + text(x + 47 + k * 56, 152, a, { size: 10.5, weight: 600, anchor: 'middle', fill: k === 0 ? 'var(--v-card)' : INK }); });
+        s += text(x + 22, 200, 'Today', { size: 11, weight: 600 });
+        [['Coffee Lab', '−4.80'], ['Salary', '+3,200.00'], ['Rent', '−1,150.00']].forEach(([n, v], k) => { s += line(x + 22, 216 + k * 52, x + 178, 216 + k * 52) + circle(x + 36, 244 + k * 52, 12, { fill: INK, op: 0.1 }) + text(x + 56, 248 + k * 52, n, { size: 11.5, weight: 500 }) + text(x + 178, 248 + k * 52, v, { size: 11.5, weight: 600, anchor: 'end' }); });
+      } else if (i === 1) {
+        s += text(x + 22, 76, 'Send money', { size: 14, weight: 650 }) + text(x + 22, 108, 'To', { size: 10, fill: 'var(--v-mute)' }) + rect(x + 22, 116, 156, 36, { rx: 10, fill: 'none', stroke: 'var(--v-card-line)' }) + text(x + 34, 139, 'Ana Pérez', { size: 12 });
+        s += text(x + 22, 190, 'Amount', { size: 10, fill: 'var(--v-mute)' }) + text(x + 22, 232, '$250.00', { size: 28, weight: 600 }) + text(x + 22, 262, 'From Savings · available $4,210', { size: 10, fill: 'var(--v-mute)' });
+        s += rect(x + 22, 398, 156, 40, { rx: 20, fill: INK }) + text(x + 100, 423, 'Continue', { size: 12.5, weight: 600, anchor: 'middle', fill: 'var(--v-card)' });
+        s += rect(x + 22, 20 + 28, 0, 0);
+      } else {
+        s += text(x + 22, 76, 'Review', { size: 14, weight: 650 });
+        [['To', 'Ana Pérez'], ['Amount', '$250.00'], ['Fee', 'Free'], ['Arrives', 'Today']].forEach(([k, val], n) => { s += line(x + 22, 100 + n * 44, x + 178, 100 + n * 44) + text(x + 22, 128 + n * 44, k, { size: 11, fill: 'var(--v-mute)' }) + text(x + 178, 128 + n * 44, val, { size: 12, weight: 600, anchor: 'end' }); });
+        s += rect(x + 22, 398, 156, 40, { rx: 20, fill: ACC }) + text(x + 100, 423, 'Confirm transfer', { size: 12.5, weight: 600, anchor: 'middle', fill: '#fff' });
+      }
+    });
+    s += arrow(262, 250, 298, 250) + arrow(502, 250, 538, 250);
+    return wrap(s, 'The flow becomes polished mobile screens: home, send money and review', H, W);
+  }
+  // stage 3: working product, tested and shipped
+  s += phone(300, 20, 200, 460);
+  s += rect(322, 48, 156, 400, { rx: 14, fill: 'none' });
+  s += circle(400, 150, 30, { fill: ACC }) + `<path d="M386 150 l10 10 l18 -20" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>`;
+  s += text(400, 214, 'Transfer sent', { size: 16, weight: 650, anchor: 'middle' }) + text(400, 238, '$250.00 to Ana Pérez', { size: 11.5, anchor: 'middle', fill: 'var(--v-mute)' });
+  s += rect(330, 270, 140, 90, { rx: 12, fill: 'var(--v-line)' }) + text(342, 296, 'Arrives', { size: 10, fill: 'var(--v-mute)' }) + text(342, 316, 'Today, 2:41 pm', { size: 12, weight: 600 }) + text(342, 346, 'Ref. 00482913', { size: 10, fill: 'var(--v-mute)' });
+  s += rect(330, 408, 140, 38, { rx: 19, fill: INK }) + text(400, 432, 'Done', { size: 12.5, weight: 600, anchor: 'middle', fill: 'var(--v-card)' });
+  const chip = (x, y, w, title, sub, ok) => rect(x, y, w, 64, { rx: 14, fill: 'var(--v-card)', stroke: 'var(--v-card-line)', cls: 'fl' }) + circle(x + 26, y + 32, 11, { fill: ok ? ACC : 'none', stroke: ok ? 'none' : 'var(--v-mute)', sw: 1.6 }) + (ok ? `<path d="M${x + 20.5} ${y + 32} l4 4 l7 -8" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>` : '') + text(x + 48, y + 29, title, { size: 12, weight: 650 }) + text(x + 48, y + 46, sub, { size: 10, fill: 'var(--v-mute)' });
+  s += chip(50, 110, 220, 'Tested with customers', 'Prototype · iterated', true) + chip(50, 190, 220, 'Edge cases covered', 'Errors, limits, retries', true) + chip(50, 270, 220, 'Handed to engineering', 'Specs · components', true);
+  s += chip(530, 150, 220, 'Built with the bank’s team', 'Adapted to constraints', true) + chip(530, 230, 220, 'In production', 'Live for customers', true);
+  return wrap(s, 'The finished product: a working transfer confirmation, tested with customers and handed to engineering', H, W);
+}
+
+export const visuals = { targetTracking, siteSelection, siteEvolve, bankEvolve, banking, navigation };
 export const render = (name, stage = 3, float = false) => visuals[name](stage, float);
 
 
