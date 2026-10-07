@@ -713,7 +713,7 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
 
 /* soft mesh gradient behind the loop story; it drifts with the scroll and shifts colour per beat */
 .loop-mesh { display: none; }
-.is-fly .loop-mesh { display: block; position: absolute; inset: -12% -8%; z-index: 0; pointer-events: none; filter: blur(70px) saturate(1.05); opacity: calc(var(--mo, 0) * 0.62); will-change: opacity; }
+.is-fly .loop-mesh { display: block; position: absolute; inset: -12% -8%; z-index: 0; pointer-events: none; filter: blur(90px) saturate(0.8); opacity: calc(var(--mo, 0) * 0.26); will-change: opacity; }
 .is-fly .loop > *, .is-fly .strengths { z-index: 1; }
 .loop-mesh i { position: absolute; width: 52%; height: 62%; border-radius: 50%; will-change: transform; }
 .loop-mesh i:nth-child(1) { left: -4%; top: -6%; background: radial-gradient(circle, #ff8fb1 0%, rgba(255, 143, 177, 0) 66%); transform: translate(calc(var(--mp, 0) * 70vw), calc(var(--mp, 0) * 30vh)) scale(1.05); animation: lm-a 16s ease-in-out infinite alternate; }
