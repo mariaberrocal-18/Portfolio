@@ -32,6 +32,11 @@ const orgLogo = (slug, org, p = '') => {
   if (f) return `<img class="org-logo org-logo--${slug}" src="${p}${f}" alt="${esc(org)} logo" loading="lazy">`;
   return `<span class="org-logo org-logo--text org-logo--${slug}" aria-label="${esc(org)}">${slug === 'ey' ? 'EY' : slug === 'ey-design-studio' ? 'EY <i>Design Studio</i>' : 'waterplan'}</span>`;
 };
+const lessonIcons = [
+  `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h10M18 8h2M4 16h2M10 16h10"/><circle cx="16" cy="8" r="2"/><circle cx="8" cy="16" r="2"/></svg>`,
+  `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2M11 8.5v5M8.5 11h5"/></svg>`,
+  `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.7-5.6L20 8.5M20 4v4.5h-4.5M20 12a8 8 0 0 1-13.7 5.6L4 15.5M4 20v-4.5h4.5"/></svg>`,
+];
 const label = (t) => `<span class="roll" data-text="${esc(t)}"><span>${esc(t)}</span></span>`;
 
 function head({ title, desc, p, noindex }) {
@@ -240,7 +245,6 @@ ${scripts('')}`;
 // Case study -----------------------------------------------------------------
 
 function caseStudy(proj, i) {
-  const next = projects[(i + 1) % projects.length];
   const p = '../';
   const para = (arr) => arr.map((t) => `<p>${esc(t)}</p>`).join('');
   const decisions = proj.decisions
@@ -316,23 +320,25 @@ ${header(p, false)}
     </section>
 
     ${proj.lessons ? `<section class="lessons wrap" aria-labelledby="lessons-h">
-      <div class="blk"><h2 id="lessons-h" class="blk__h">Lessons learned</h2>
-        <ol class="lesson-list">${proj.lessons.map(([h, t]) => `<li><h3>${esc(h)}</h3><p>${esc(t)}</p></li>`).join('')}</ol>
+      <div class="lessons__in"><h2 id="lessons-h" class="lessons__h">Lessons learned</h2>
+        <ol class="lesson-list">${proj.lessons.map(([h, t], i) => `<li><span class="lesson__ico">${lessonIcons[i % 3]}</span><h3>${esc(h)}</h3><p>${esc(t)}</p></li>`).join('')}</ol>
       </div>
     </section>` : ''}
     </div>
   </article>
 
-  <a class="next" href="${next.slug}.html" data-cursor="Next case study">
-    <div class="wrap next__grid">
-      <div>
-        <p class="next__k">Next</p>
-        <p class="next__title">${esc(next.title)}</p>
-        <p class="next__sub"><span>${esc(next.short)}</span>${arrow}</p>
+  <section class="next" aria-labelledby="next-h">
+    <div class="wrap">
+      <h2 id="next-h" class="next__h">More case studies</h2>
+      <div class="next__grid">
+        ${[1, 2].map((k) => projects[(i + k) % projects.length]).map((n) => `<a class="next__card" href="${n.slug}.html" data-cursor="View case study">
+          ${media(n, 3, 'next__media')}
+          <p class="next__title">${esc(n.title)}</p>
+          <p class="next__sub"><span>${esc(n.short)}</span>${arrow}</p>
+        </a>`).join('')}
       </div>
-      ${media(next, 3, 'next__media')}
     </div>
-  </a>
+  </section>
 </main>
 ${footer(p)}
 <div class="cursor" aria-hidden="true"><span></span></div>
