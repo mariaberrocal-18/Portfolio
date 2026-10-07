@@ -157,9 +157,9 @@ export const projects = [
       },
     ],
     stages: [
-      ['A table of numbers', 'The first version listed each target with its starting value and its latest result. It was accurate, but it did not say whether the target was in danger.'],
-      ['A line towards the goal', 'Turning the table into a timeline showed actual progress against the target, and the gap became visible for the first time.'],
-      ['From a gap to a plan', 'Scenarios appeared as lines, one by one, each a different possible outcome. Teams could compare them, and every scenario got its own card with its status.'],
+      ['A simple table that centralizes all the information', 'The first version was the trickiest, because first we needed to centralize the data. Once we had it, we could list the targets in a single picture of the data. It was accurate, but it was not tracking anything yet. We were just curating information.'],
+      ['Progress towards the target', 'Turning the data into a timeline showed the current situation against the targets, and the gaps became visible for the first time. That let us start asking the next question: now what do we do with this information?'],
+      ['From a gap to a plan', 'The idea of simulating scenarios emerged as a strategic tool to support decisions on project investment. Teams could compare scenarios, draft business cases to escalate to their managers, ask for more budget, and forecast data into the future.'],
     ],
     shipped: [
       'A target page showing results over time against the goal',

@@ -301,7 +301,7 @@ ${header(p, false)}
     <section class="evolve" data-evolve aria-labelledby="evolve-h">
       <div class="evolve__track">
         <div class="wrap">
-          <h2 id="evolve-h" class="h3 evolve__h">How it evolved</h2>
+          <h2 id="evolve-h" class="h3 evolve__h"><span>The evolution</span></h2>
           <div class="evolve__pin">
             ${proj.visual === 'targetTracking'
               ? `<div class="evolve__stage evolve__stage--tt">${ttEvolve()}</div>`

@@ -536,7 +536,8 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
   --ink: var(--on-night); --ink-2: #a9a8a3; --ink-3: #7c7b76; --line: rgba(255, 255, 255, 0.16);
   background: var(--night); color: var(--on-night); border-radius: clamp(28px, 4vw, 56px); margin-top: clamp(80px, 10vw, 150px); padding-top: clamp(72px, 8vw, 120px); padding-bottom: clamp(72px, 9vw, 140px); position: relative;
 }
-.evolve__h { margin-bottom: clamp(24px, 4vw, 56px); }
+.evolve__h { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: var(--gap); margin-bottom: clamp(24px, 4vw, 56px); }
+.evolve__h span { grid-column: 6; justify-self: center; white-space: nowrap; padding-top: 22px; }
 .evolve__pin { display: grid; gap: 28px; }
 .evolve__stage { aspect-ratio: 16 / 10; border-radius: 22px; }
 .evolve__stage:not(.evolve__stage--tt) { border: 1px solid rgba(255, 255, 255, 0.14); }
@@ -546,6 +547,7 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
 .evolve__stage--tt .v-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 .evolve__steps { display: grid; gap: 24px; }
 .evolve__steps li { border-top: 1px solid var(--line); padding-top: 14px; }
+.evolve__steps li:first-child { border-top: 0; }
 .evolve__steps h3 { font-family: var(--sans); font-weight: 650; font-size: 1.75rem; line-height: 1.08; letter-spacing: -0.04em; }
 .evolve__steps p { margin-top: 8px; color: var(--ink-2); max-width: 30rem; text-wrap: pretty; }
 .evolve__after { padding-top: clamp(64px, 8vw, 120px); }

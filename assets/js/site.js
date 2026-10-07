@@ -406,7 +406,7 @@
     if (!thread || !storyEl || !evolveH || !wide.matches) return;
     const sheetTop = thread.parentElement.getBoundingClientRect().top + scrollY;
     const st = storyEl.getBoundingClientRect().top + scrollY + parseFloat(getComputedStyle(storyEl).paddingTop);
-    const en = evolveH.getBoundingClientRect().top + scrollY + evolveH.offsetHeight / 2;
+    const en = evolveH.getBoundingClientRect().top + scrollY + 6;
     thTop = st; thLen = Math.max(0, en - st);
     thread.style.top = `${st - sheetTop}px`;
     thread.style.height = `${thLen}px`;
