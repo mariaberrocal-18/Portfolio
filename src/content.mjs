@@ -128,13 +128,13 @@ export const projects = [
       'The client asked us for a product where they could see their targets and monitor progress in real time, so they could answer the questions that matter: will we make it? And if not, what should we do?',
     ],
     hard: [
-      'Every target is measured differently: a different metric, a different starting year, a different set of plants.',
-      'The data arrives late and is often incomplete, because each plant reports on its own schedule.',
-      'The same screen also had to work for two kinds of people: analysts who want every detail, and executives who want a simple answer.',
-      'A single progress bar would have been easy to build and easy to read. It would also have been misleading.',
+      'Every client measures progress in its own way. Each one has its own formulas for calculating certain metrics, its own approach to collecting data, and its own language for reporting.',
+      'The same screen had to work for three different clients, all of them leaders in their field. And for each client, the solution had to serve two kinds of readers: analysts who want every detail, and executives who want a simple answer.',
+      'A single progress bar, or a dashboard that looks like a spreadsheet, would have been easy to build and easy to read. It would also have been the wrong solution.',
     ],
     role_body: [
-      'I led the design from the first question to the shipped screens, working every day with Product, Engineering and Data. My job was to decide what the product should tell people, and in what order.',
+      'From the very beginning, I supported the research team in asking the questions that would help us fully understand the pain. I went beyond what the client was telling us. My job was to tell apart what the client asked for from what they actually needed.',
+      'It is easy to fall into the trap of doing what we are told, and how we are told to do it, instead of asking more questions, strategic ones, and proposing new paths and solutions.',
     ],
     decisions: [
       {
