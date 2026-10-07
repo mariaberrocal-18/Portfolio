@@ -91,7 +91,7 @@ export const about = {
 
 export const contact = {
   title: 'Let’s work together.',
-  lede: 'Product design, UX/UI and consulting. Always happy to talk, even early.',
+  lede: 'UX/UI Product design. Let’s reframe problems together.',
 };
 
 // Case studies -------------------------------------------------------------
