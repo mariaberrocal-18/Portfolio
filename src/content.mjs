@@ -123,8 +123,9 @@ export const projects = [
       'Each target has a baseline (the starting point), the last reported results from the company’s plants, and the target itself (the goal).',
     ],
     problem: [
-      'A target is a promise made years in advance. Teams checked it once a year, in spreadsheets, after the data was already old. By the time they saw a gap, it was too late to close it.',
-      'The product could show a target and its latest number. It could not answer the two questions that matter: will we make it? And if not, what should we do?',
+      'A target is a promise made years in advance. Sustainability teams set it, mostly based on what each site produces: how much water it uses, how much electricity it consumes, how much carbon it emits.',
+      'That data lives in facilities all over the world, and collecting it is painful. Spreadsheets, disconnected systems and paper documents all feed into it, and there is too much of it to even begin analyzing. By the time a team has centralized and cleaned the data, it is already old. When they finally saw a gap, it was too late to close it.',
+      'The client asked us for a product where they could see their targets and monitor progress in real time, so they could answer the questions that matter: will we make it? And if not, what should we do?',
     ],
     hard: [
       'Every target is measured differently: a different metric, a different starting year, a different set of plants.',
