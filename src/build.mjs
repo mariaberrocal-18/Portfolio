@@ -5,7 +5,7 @@ import { createHash } from 'node:crypto';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { site, hero, journey, toolkit, about, contact, projects } from './content.mjs';
-import { render } from './visuals.mjs';
+import { render, ratio } from './visuals.mjs';
 import { mini } from './mini.mjs';
 import { marks } from './logos.mjs';
 import { existsSync } from 'node:fs';
@@ -102,7 +102,7 @@ function scripts(p) {
 }
 
 const media = (proj, stage = 3, extra = '', fit = 'slice') =>
-  `<div class="v v--${proj.tone} ${extra}" data-reveal>${render(proj.visual, stage).replace('xMidYMid slice', `xMidYMid ${fit}`)}</div>`;
+  `<div class="v v--${proj.tone} v--loop ${extra}" style="--ar:${ratio[proj.visual] || '16 / 10'}" data-reveal>${render(proj.visual, stage).replace('xMidYMid slice', `xMidYMid ${fit}`)}</div>`;
 
 // Home -----------------------------------------------------------------------
 
@@ -117,7 +117,7 @@ function workCard(proj, i, all) {
       <ul class="tags" aria-label="Disciplines">${proj.tags.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
       <span class="work__go">View case study${arrow}</span>
     </div>
-    <div class="work__media v v--${proj.tone}" data-reveal="stack">${render(proj.visual, 3).replace('xMidYMid slice', 'xMidYMid meet')}</div>
+    <div class="work__media v v--${proj.tone} v--loop" style="--ar:${ratio[proj.visual] || '16 / 10'}" data-reveal="stack">${render(proj.visual, 3).replace('xMidYMid slice', 'xMidYMid meet')}</div>
   </a>`;
 }
 
