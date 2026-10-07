@@ -27,9 +27,9 @@ const toolMark = (name, slug) => {
   if (marks[slug]) return `<svg class="mark" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="${marks[slug]}"/></svg>`;
   return `<span class="mark mark--mono" aria-hidden="true">${esc(name[0])}</span>`;
 };
-const orgLogo = (slug, org) => {
+const orgLogo = (slug, org, p = '') => {
   const f = logoFile(slug);
-  if (f) return `<img class="org-logo org-logo--${slug}" src="${f}" alt="${esc(org)} logo" loading="lazy">`;
+  if (f) return `<img class="org-logo org-logo--${slug}" src="${p}${f}" alt="${esc(org)} logo" loading="lazy">`;
   return `<span class="org-logo org-logo--text org-logo--${slug}" aria-label="${esc(org)}">${slug === 'ey' ? 'EY' : slug === 'ey-design-studio' ? 'EY <i>Design Studio</i>' : 'waterplan'}</span>`;
 };
 const label = (t) => `<span class="roll" data-text="${esc(t)}"><span>${esc(t)}</span></span>`;
@@ -271,20 +271,21 @@ ${header(p, false)}
 <main>
   <article>
     <header class="case-hero wrap">
-      <a class="case-hero__back" href="${p}index.html#work">${back}<span>All work</span></a>
-      <h1 class="case-hero__title">${esc(proj.title)}</h1>
-      <p class="case-hero__lede">${esc(proj.lede)}</p>
-      <dl class="meta">
-        <div><dt>Company</dt><dd>${esc(proj.company)}</dd></div>
-        <div><dt>Role</dt><dd>${esc(proj.role)}</dd></div>
-        <div><dt>Scope</dt><dd>${esc(proj.scope)}</dd></div>
-        <div><dt>Worked with</dt><dd>${esc(proj.team)}</dd></div>
-      </dl>
+      <div class="case-hero__copy">
+        <h1 class="case-hero__title">${esc(proj.title)}</h1>
+        <p class="case-hero__lede">${esc(proj.lede)}</p>
+        <dl class="meta">
+          <div class="meta__row"><dt>Company</dt><dd>${proj.companyLogo ? orgLogo(proj.companyLogo, proj.company, p) : esc(proj.company)}</dd></div>
+          ${proj.clients ? `<div class="meta__row"><dt>Clients</dt><dd><ul class="clients">${proj.clients.map((c) => `<li>${esc(c)}</li>`).join('')}</ul></dd></div>` : ''}
+          <div class="meta__row"><dt>Role</dt><dd>${esc(proj.role)}</dd></div>
+          <div class="meta__row"><dt>Scope</dt><dd>${esc(proj.scope)}</dd></div>
+          <div class="meta__row"><dt>Worked with</dt><dd>${esc(proj.team)}</dd></div>
+        </dl>
+      </div>
+      <div class="case-hero__media">${media(proj, 3, 'case-media', 'meet')}
+        <p class="case-note">Interfaces are reconstructed to respect client confidentiality.</p>
+      </div>
     </header>
-
-    <div class="wrap">${media(proj, 3, 'case-media', 'meet')}
-      <p class="case-note">Interfaces are reconstructed from memory to respect client confidentiality.</p>
-    </div>
 
     <div id="story" class="story wrap">
       <section class="blk"><h2 class="blk__h">The problem</h2><div class="prose">${para(proj.problem)}</div></section>

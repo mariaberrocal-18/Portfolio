@@ -99,6 +99,11 @@ export const contact = {
 export const projects = [
   {
     slug: 'target-tracking',
+    clients: [
+      'The world’s largest independent beverage bottler and a global FMCG leader.',
+      'The world’s largest brewer and a leading global beverage corporation.',
+      'A Fortune 500 consumer goods leader with omnipresent global brands.',
+    ],
     blurb: 'Targets lived in spreadsheets, so nobody knew if they were still reachable. I designed a view that shows the trajectory, the gap and the next action.',
     visual: 'targetTracking',
     tone: 'dark',
@@ -108,6 +113,7 @@ export const projects = [
     short: 'Waterplan Target Tracking',
     tags: ['Product Design', 'B2B SaaS', 'AI-driven'],
     company: 'Waterplan',
+    companyLogo: 'waterplan',
     role: 'Senior Product Designer',
     scope: 'Target tracking, status model, AI-suggested actions',
     team: 'Product, Engineering, Data',
@@ -169,6 +175,7 @@ export const projects = [
     short: 'Civarea Site Selection',
     tags: ['Product Design', 'Data Visualization', 'AI-driven'],
     company: 'Civarea',
+    companyLogo: null,
     role: 'Senior Product Designer',
     scope: 'Site comparison, scoring model, map and shortlist',
     team: 'Product, Engineering, Data',
@@ -229,6 +236,7 @@ export const projects = [
     short: 'EY Digital Banking',
     tags: ['UX/UI Design', 'Fintech'],
     company: 'EY Design Studio',
+    companyLogo: 'ey-design-studio',
     role: 'UX/UI Senior Designer',
     scope: 'Research synthesis, flows, UI, design system, handoff',
     team: 'Design, Engineering, Client stakeholders',
@@ -279,6 +287,11 @@ export const projects = [
   },
   {
     slug: 'platform-navigation',
+    clients: [
+      'The world’s largest independent beverage bottler and a global FMCG leader.',
+      'The world’s largest brewer and a leading global beverage corporation.',
+      'A Fortune 500 consumer goods leader with omnipresent global brands.',
+    ],
     blurb: 'A platform organised around how it was built. I redesigned the navigation around what people are trying to do, and rolled it out in steps.',
     visual: 'navigation',
     tone: 'light',
@@ -288,6 +301,7 @@ export const projects = [
     short: 'Waterplan Platform Navigation',
     tags: ['Product Design', 'UX-UI Design'],
     company: 'Waterplan',
+    companyLogo: 'waterplan',
     role: 'Senior Product Designer',
     scope: 'Information architecture, navigation model, rollout',
     team: 'Product, Engineering',

@@ -86,44 +86,58 @@ function targetTracking(stage) {
     return wrap(s, 'A line chart of water withdrawal against its target path');
   }
 
-  // stage 3: forecast, gap, status, drivers, action
-  const fore = `M${tx} ${ty} C${tx + 70} ${ty + 8} ${tx + 150} ${ty + 16} ${px + pw} ${py + 80}`;
-  const gap = `M${tx} ${ty} L${px + pw} ${py + 80} L${px + pw} ${py + ph - 24} L${tx} ${py + 20 + ((ph - 44) * (tx - px)) / pw} Z`;
-  s += `<path d="${gap}" fill="url(#hatch)" class="fade" style="--d:600ms"/>`;
-  s += draw(fore, { sw: 2.5, dash: '0.02 0.02', delay: 600 });
-  s += line(tx, py - 6, tx, py + ph, { dash: '2 4', stroke: 'var(--v-mute)' });
-  s += circle(tx, ty, 5, { fill: 'var(--v-ink)' });
-  s += text(tx, py - 14, 'Today', { size: 11, fill: 'var(--v-mute)', anchor: 'middle' });
-  // gap bracket
-  const bx = px + pw + 10;
-  s += line(bx, py + 80, bx, py + ph - 24, { stroke: 'var(--v-ink)', sw: 1.5 });
-  s += text(px + pw - 6, py + 62, 'Projected gap', { size: 11, weight: 600, anchor: 'end' });
-  // status chip
-  s += rect(cx + cw - 116, cy + 28, 86, 28, { rx: 14, fill: 'var(--v-ink)' });
-  s += circle(cx + cw - 100, cy + 42, 3.5, { fill: 'var(--v-card)' });
-  s += text(cx + cw - 90, cy + 46.5, 'At risk', { size: 12, weight: 600, fill: 'var(--v-card)' });
-  // drivers
-  s += line(px, py + ph + 40, px + pw, py + ph + 40);
-  s += text(px, py + ph + 66, 'Drivers', { size: 12, weight: 600 });
-  const drivers = [
-    ['Facility 04 · cooling', 0.84, '+18%'],
-    ['Facility 09 · process', 0.52, '+9%'],
-    ['Facility 02 · irrigation', 0.3, '+5%'],
-  ];
-  drivers.forEach(([n, v, d], i) => {
-    const y = py + ph + 90 + i * 24;
-    s += text(px, y + 4, n, { size: 12, fill: 'var(--v-mute2)' });
-    s += rect(px + 180, y - 5, 270, 8, { rx: 4, fill: 'var(--v-line)' });
-    s += rect(px + 180, y - 5, 270 * v, 8, { rx: 4, fill: i === 0 ? 'var(--v-accent)' : 'var(--v-ink)', op: i === 0 ? 1 : 0.8, cls: 'grow' });
-    s += text(px + pw, y + 4, d, { size: 12, weight: 600, anchor: 'end' });
+  return ttShipped();
+}
+
+// Shipped state, inspired by how the real tool is organised: KPI strip, one evolution
+// chart with Baseline / Last reported / Target markers, and per-target status rows.
+function ttShipped() {
+  let s = card(36, 26, 728, 448, 18);
+  // KPI strip
+  const kpis = [['Status to target', 'On track', 1], ['Target value', '0.246 hl/hl', 0], ['Expected impact', '5.1M hl', 0], ['Scenario cost', '$2.8M', 0]];
+  kpis.forEach(([k, v, hi], i) => {
+    const x = 56 + i * 172;
+    s += rect(x, 44, 160, 54, { rx: 10, fill: hi ? 'rgba(52,112,80,.10)' : '#fff', stroke: hi ? 'var(--v-accent)' : 'var(--v-card-line)' });
+    s += text(x + 12, 63, k, { size: 10.5, fill: 'var(--v-mute2)' });
+    s += text(x + 12, 85, v, { size: hi ? 15 : 14.5, weight: 650, fill: hi ? 'var(--v-accent)' : 'var(--v-ink)' });
   });
-  // suggested action
-  const ay = py + ph + 158;
-  s += rect(px, ay, pw, 30, { rx: 15, fill: 'none', stroke: 'var(--v-ink)', sw: 1.2 });
-  s += `<path d="M${px + 20} ${ay + 8}l1.8 4.6 4.6 1.8-4.6 1.8-1.8 4.6-1.8-4.6-4.6-1.8 4.6-1.8z" fill="var(--v-accent)"/>`;
-  s += text(px + 40, ay + 19.5, 'Review cooling cycles at Facility 04', { size: 12, weight: 600 });
-  s += text(px + pw - 16, ay + 19.5, 'Apply', { size: 12, weight: 600, anchor: 'end', fill: 'var(--v-accent)' });
-  return wrap(s, 'Target tracking: a trajectory chart with projected gap, at-risk status and ranked drivers');
+  // chart frame
+  const cx = 56, cy = 112, cw = 688, ch = 214;
+  s += rect(cx, cy, cw, ch, { rx: 12, fill: '#fff', stroke: 'var(--v-card-line)' });
+  s += text(cx + 16, cy + 24, 'Water usage efficiency', { size: 12.5, weight: 650 });
+  const px = cx + 56, pw = cw - 92, py = cy + 52, ph = ch - 86;
+  for (let i = 0; i < 4; i++) s += line(px, py + (ph / 3) * i, px + pw, py + (ph / 3) * i, { op: 0.7, dash: '2 4' });
+  ['FY22', 'FY24', 'FY26', 'FY28', 'FY30'].forEach((l, i) => (s += text(px + (pw / 4) * i, py + ph + 18, l, { size: 10, fill: 'var(--v-mute)', anchor: 'middle' })));
+  const X = (t) => px + pw * t; // t 0..1 across FY22..FY30
+  const Y = (v) => py + ph * (1 - v); // v 0..1
+  // markers
+  [[0.25, 'Baseline'], [0.375, 'Last reported'], [1, 'Target']].forEach(([t, l]) => {
+    s += line(X(t), py - 6, X(t), py + ph, { stroke: 'var(--v-mute)', op: 0.8 });
+    s += rect(X(t) - (l.length * 2.9 + 8), cy + 30, l.length * 5.8 + 16, 17, { rx: 5, fill: '#fff', stroke: 'var(--v-card-line)' });
+    s += text(X(t), cy + 42, l, { size: 9.5, fill: 'var(--v-mute2)', anchor: 'middle', weight: 500 });
+  });
+  // target path (dark) and reported (accent)
+  s += draw(`M${X(0.25)} ${Y(0.82)} C${X(0.4)} ${Y(0.6)} ${X(0.5)} ${Y(0.5)} ${X(0.62)} ${Y(0.44)} S${X(0.86)} ${Y(0.3)} ${X(1)} ${Y(0.25)}`, { sw: 2.6, delay: 150 });
+  s += draw(`M${X(0)} ${Y(0.79)} L${X(0.125)} ${Y(0.82)} L${X(0.25)} ${Y(0.82)} L${X(0.375)} ${Y(0.81)}`, { stroke: 'var(--v-accent)', sw: 2.4, delay: 50 });
+  s += draw(`M${X(0.375)} ${Y(0.81)} C${X(0.44)} ${Y(0.7)} ${X(0.52)} ${Y(0.4)} ${X(0.6)} ${Y(0.12)}`, { stroke: 'var(--v-accent)', sw: 2, dash: '0.03 0.02', delay: 700 });
+  [0, 0.125, 0.25, 0.375].forEach((t, i) => (s += circle(X(t), Y([0.79, 0.82, 0.82, 0.81][i]), 3.6, { fill: '#fff', stroke: 'var(--v-accent)', sw: 1.6 })));
+  [[0.25, 0.82], [0.5, 0.5], [0.75, 0.33], [1, 0.25]].forEach(([t, v]) => (s += circle(X(t), Y(v), 3.6, { fill: '#fff', stroke: 'var(--v-ink)', sw: 1.6 })));
+  // status rows
+  const rows = [['Water usage efficiency', 'On track', 1, ''], ['Total discharges', 'Off track', 0, 'Short by 2.6M m³'], ['Total withdrawals', 'Off track', 0, 'Short by 12.0M m³']];
+  rows.forEach(([n, st, ok, note], i) => {
+    const y = 338 + i * 44;
+    s += rect(56, y, 688, 36, { rx: 10, fill: '#fff', stroke: 'var(--v-card-line)' });
+    s += rect(68, y + 8, 20, 20, { rx: 6, fill: 'rgba(52,112,80,.12)' });
+    s += `<path d="M78 12.5c-2.6 3.2-4 5-4 6.8a4 4 0 0 0 8 0c0-1.8-1.4-3.6-4-6.8z" transform="translate(0 ${y - 4.5})" fill="none" stroke="var(--v-accent)" stroke-width="1.3" stroke-linejoin="round"/>`;
+    s += text(100, y + 22, n, { size: 12.5, weight: 600 });
+    if (note) s += text(560, y + 22, note, { size: 10.5, fill: '#b3332b', anchor: 'end' });
+    s += rect(574, y + 8, 78, 20, { rx: 10, fill: ok ? 'rgba(52,112,80,.12)' : 'rgba(179,51,43,.10)' });
+    s += circle(586, y + 18, 3, { fill: ok ? 'var(--v-accent)' : '#b3332b' });
+    s += text(594, y + 22, st, { size: 10.5, weight: 600, fill: ok ? 'var(--v-accent)' : '#b3332b' });
+    s += rect(664, y + 7, 68, 22, { rx: 6, fill: 'var(--v-ink)' });
+    s += text(698, y + 22, 'Scenario', { size: 10.5, weight: 600, fill: '#fff', anchor: 'middle' });
+  });
+  return wrap(s, 'Target tracking: KPI strip, an evolution chart with baseline, last reported value and target markers, and per-target on-track and off-track status rows');
 }
 
 // 2. Civarea site selection ---------------------------------------------------

@@ -482,21 +482,20 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
 .contact__base { position: relative; z-index: 2; display: flex; justify-content: space-between; align-items: center; width: calc(100% - min(46vw, 680px) - var(--pad)); padding-top: 18px; border-top: 1px solid var(--line); color: var(--ink-3); font-size: var(--fs-small); }
 
 /* ---------- case study ---------- */
-.case-hero { padding-top: clamp(112px, 12vw, 168px); display: grid; grid-template-columns: repeat(12, 1fr); column-gap: var(--gap); }
-.case-hero > * { grid-column: 1 / -1; }
-.case-hero__back { justify-self: start; display: inline-flex; align-items: center; gap: 8px; font-size: 0.9375rem; font-weight: 500; color: var(--ink-2); margin-bottom: clamp(28px, 4vw, 56px); }
-.case-hero__back .ico { transition: transform 0.5s var(--ease); }
-.case-hero__back:hover .ico { transform: translateX(-3px); }
-.case-hero__back:hover { color: var(--ink); }
-.case-hero__title {
-  grid-column: 1 / span 10; font-family: var(--sans); font-weight: 650;
-  font-size: clamp(2.5rem, 1.2rem + 5.2vw, 5.5rem); line-height: 0.98; letter-spacing: -0.04em; text-wrap: balance;
-}
-.case-hero__lede { grid-column: 1 / span 6; margin-top: clamp(20px, 2.6vw, 36px); font-size: clamp(1.125rem, 1rem + 0.5vw, 1.4375rem); line-height: 1.38; letter-spacing: -0.01em; color: var(--ink-2); text-wrap: pretty; }
-.meta { margin-top: clamp(40px, 5vw, 72px); display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--gap); border-top: 1px solid var(--line); padding-top: 16px; padding-bottom: clamp(28px, 4vw, 56px); }
-.meta dt { color: var(--ink-3); font-size: var(--fs-small); }
-.meta dd { margin-top: 4px; font-weight: 500; letter-spacing: -0.01em; text-wrap: balance; }
-.case-media { aspect-ratio: 2 / 1; border-radius: 22px; }
+.case-hero { padding-top: clamp(84px, 8vw, 104px); padding-bottom: clamp(40px, 5vw, 72px); display: grid; grid-template-columns: repeat(12, 1fr); column-gap: var(--gap); align-items: start; }
+.case-hero__copy { grid-column: 1 / span 5; display: grid; align-content: start; }
+.case-hero__media { grid-column: 6 / -1; position: sticky; top: 84px; }
+.case-hero__title { font-size: clamp(2rem, 1rem + 2.7vw, 3.5rem); line-height: 1; letter-spacing: -0.045em; font-weight: 650; text-wrap: balance; }
+.case-hero__lede { margin-top: clamp(14px, 1.8vw, 22px); font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem); line-height: 1.4; letter-spacing: -0.01em; color: var(--ink-2); text-wrap: pretty; }
+.meta { margin-top: clamp(24px, 3vw, 40px); display: grid; border-top: 1px solid var(--line); }
+.meta__row { display: grid; grid-template-columns: 7rem 1fr; gap: var(--gap); padding: 12px 0; border-bottom: 1px solid var(--line); align-items: center; }
+.meta dt { color: var(--ink-3); font-size: var(--fs-small); align-self: start; padding-top: 3px; }
+.meta dd { font-weight: 500; letter-spacing: -0.01em; text-wrap: balance; font-size: 0.9375rem; line-height: 1.4; }
+.meta .org-logo { max-height: 30px; object-position: left center; }
+.clients { display: grid; gap: 8px; }
+.clients li { display: grid; grid-template-columns: 5px 1fr; gap: 10px; align-items: start; color: var(--ink-2); font-weight: 450; }
+.clients li::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--sage); margin-top: 0.55em; }
+.case-media { aspect-ratio: 16 / 10; border-radius: 22px; }
 .case-note { margin-top: 12px; color: var(--ink-3); font-size: 0.8125rem; }
 
 .story { padding-top: clamp(72px, 10vw, 150px); display: grid; gap: clamp(64px, 9vw, 130px); }
@@ -627,8 +626,9 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
   .contact__copy { padding-bottom: 28px; }
   .contact__photo { position: relative; width: auto; height: min(118vw, 640px); margin-inline: calc(var(--pad) * -1); border-left: 0; border-top: 1px solid var(--line); }
   .contact__base { width: 100%; margin-top: 16px; }
-  .case-hero__title, .case-hero__lede { grid-column: 1 / -1; }
-  .meta { grid-template-columns: 1fr 1fr; row-gap: 20px; }
+  .case-hero__copy, .case-hero__media { grid-column: 1 / -1; position: static; }
+  .case-hero__media { margin-top: 28px; }
+  .meta__row { grid-template-columns: 6rem 1fr; }
   .blk { gap: 14px; }
   .blk__h { grid-column: 1 / -1; position: static; }
   .blk > :not(.blk__h) { grid-column: 1 / -1; }
