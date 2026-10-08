@@ -274,24 +274,25 @@ export const projects = [
     ],
     problem: [
       'Everyday banking was harder than it needed to be.',
-      'Customers needed to complete essential tasks — checking their finances, making payments, transferring money, and managing their accounts — through an experience that had accumulated friction and complexity.',
-      'The opportunity was to rethink those journeys as one coherent digital banking experience.',
+      'Customers needed to complete essential tasks — checking their finances, making payments, transferring money, and managing their accounts — that had traditionally been done in person at a bank branch. Now most of those tasks were digital and handled through the banking app.',
+      'The opportunity was to rethink those journeys as one coherent, easy-to-use digital banking experience.',
     ],
     hard: [
       'Simple for the customer didn’t mean simple to design.',
+      'The design was especially challenging because a large share of the bank’s customers were middle-aged and not used to digital experiences. We had to tread carefully and make every single flow as easy to understand as possible.',
       'Banking flows come with rules, validations, dependencies, edge cases, and technical constraints. The UX challenge was simplifying those journeys for customers without removing the information, controls, and feedback they needed to complete them confidently.',
     ],
     role_body: [
       'I joined after the discovery phase, translating research findings into the product architecture and core banking journeys.',
-      'I worked as part of the EY design team to define flows, design and prototype the new experience, test it with customers, and iterate based on what we learned.',
+      'I worked as part of EY’s multinational design team to define flows, design and prototype the new experience, test it with customers, and iterate based on what we learned.',
       'I also worked closely with the bank’s engineering team as the designs moved into development, adapting the experience to technical constraints and supporting the product through launch.',
     ],
     decisions: [
       {
-        title: 'Design around what customers came to do',
-        chose: 'Structure the experience around core banking tasks.',
-        over: 'Replicating the structure of the existing platform.',
-        why: 'The redesign was an opportunity to rethink the experience around customer goals rather than inherit the limitations of what existed before.',
+        title: 'Design for people who aren’t used to digital experiences',
+        chose: 'Give more weight to an intuitive experience.',
+        over: 'Innovation for its own sake.',
+        why: 'The redesign was an opportunity to rethink the experience around customer goals, not around being innovative or disruptive.',
       },
       {
         title: 'Make complex flows feel simple',
@@ -300,10 +301,10 @@ export const projects = [
         why: 'Transfers, payments, and other banking operations involved significant logic behind the scenes. The interface needed to make that complexity manageable.',
       },
       {
-        title: 'Validate before we shipped',
-        chose: 'Prototype and test key journeys with customers throughout the design process.',
+        title: 'Never-ending cycles of testing',
+        chose: 'Prototype and test key journeys with customers every single day.',
         over: 'Treating the initial research as enough validation.',
-        why: 'Research told us what needed to change; testing showed us whether the new experience actually worked.',
+        why: 'Research told us what needed to change; testing showed us whether the new experience actually worked. We even tested every design with our parents, uncles, and aunts. If they could understand the task, we knew we were on the right track.',
       },
     ],
     stages: [
