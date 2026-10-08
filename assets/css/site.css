@@ -861,16 +861,45 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
 .work__media.v--float { box-shadow: none !important; }
 .work__media.v--float rect.fl { filter: drop-shadow(0 10px 14px rgba(12, 12, 12, 0.07)) drop-shadow(0 1px 2px rgba(12, 12, 12, 0.08)); }
 
-/* mobile story: the hero's loop keeps going as a thread that lands on "Translated into" */
+/* mobile story: the hero's loop keeps going as a vertical thread that lands on "Translated into" */
 .strength__art { display: none; }
 @media (max-width: 959px) {
-  .strengths li { position: relative; padding-top: 22px; }
-  .strengths li::before { content: ''; position: absolute; left: 0; top: -4px; width: 7px; height: 7px; border-radius: 50%; background: var(--sage); box-shadow: 0 0 0 5px rgba(52, 105, 79, 0.12); }
+  .strengths { position: relative; gap: 40px; padding-left: 30px; padding-bottom: 56px; }
+  .strengths::before { content: ''; position: absolute; left: 3px; top: 52px; bottom: 56px; width: 1px; background: var(--sage); opacity: 0.55; }
+  .strengths::after { content: ''; position: absolute; left: 3px; width: calc(50% - 3px - var(--pad, 0px) * 0); bottom: 0; height: 56px; border-left: 1px solid rgba(52, 105, 79, 0.55); border-bottom: 1px solid rgba(52, 105, 79, 0.55); border-bottom-left-radius: 28px; box-sizing: border-box; }
+  .strengths li { position: relative; border-top: 0; padding-top: 0; }
+  .strengths li::before { content: ''; position: absolute; left: -30px; top: 2px; width: 7px; height: 7px; border-radius: 50%; background: var(--sage); box-shadow: 0 0 0 5px rgba(52, 105, 79, 0.14); }
   .strength__art { display: block; width: 100%; max-width: 340px; aspect-ratio: 240 / 140; margin-bottom: 14px; border-radius: 14px; overflow: hidden; background: #f1f1ed; border: 1px solid var(--line); }
   .strength__art svg { display: block; width: 100%; height: 100%; }
   .work-wrap { position: relative; padding-top: 150px; }
   .work-wrap::before { content: ''; position: absolute; left: 50%; top: 0; width: 1px; margin-left: -0.5px; height: var(--wl, 0px); background: var(--sage); z-index: 2; pointer-events: none; }
   .work-wrap::after { content: ''; position: absolute; left: 50%; top: var(--wl, 0px); width: 9px; height: 9px; margin: -4px 0 0 -4.5px; border-radius: 50%; background: var(--sage); box-shadow: 0 0 0 6px rgba(52, 105, 79, 0.14); z-index: 2; pointer-events: none; opacity: var(--wd, 0); }
-  .strengths { position: relative; padding-bottom: 36px; }
-  .strengths::after { content: ''; position: absolute; left: 50%; bottom: 0; width: 1px; height: 36px; background: var(--sage); opacity: 0.5; }
+
+  /* about: the fade from the journey must finish before the quote starts */
+  .journey::after { height: 220px; }
+  .about__stage { padding-top: 230px; }
+
+  /* case hero: text always above the mesh */
+  .case-hero__copy { position: relative; z-index: 2; }
+
+  /* decisions: roomier cards */
+  .decision { padding: 22px 20px 24px; border-radius: 22px; }
+  .decision__pair { margin-top: 18px; gap: 14px; }
+  .decision__pair .pair__a { padding: 16px 18px 18px; }
+  .decision__pair > div:last-child { padding: 2px 2px 0 2px; }
+  .decision__pair > div:last-child dd { margin-top: 4px; }
+  .decision__why { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); }
+}
+
+/* mobile evolution: the animation sticks to the top while the steps scroll behind it */
+@media (max-width: 959px) {
+  .evolve--m .evolve__track { padding-bottom: 60px; }
+  .evolve--m .evolve__pin { display: block; }
+  .evolve--m .evolve__stage { position: sticky; top: 60px; z-index: 3; width: 100%; box-shadow: 0 0 0 14px #0b0b0b, 0 30px 24px 10px #0b0b0b; }
+  .evolve--m .evolve__stage .layer[data-layer] { display: block; }
+  .evolve--m .evolve__stage .layer:not([data-layer='0']) { clip-path: inset(0 calc((1 - var(--r, 0)) * 100%) 0 0); }
+  .evolve--m .evolve__steps { margin-top: 36px; gap: 0; position: relative; z-index: 1; }
+  .evolve--m .evolve__steps li { min-height: 50vh; padding: 24px 0 30px; opacity: 0.3; transition: opacity 0.5s ease; }
+  .evolve--m .evolve__steps li.is-active { opacity: 1; }
+  .evolve--m .evolve__steps li:first-child { min-height: 40vh; }
 }

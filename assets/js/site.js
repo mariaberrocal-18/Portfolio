@@ -298,10 +298,12 @@
     steps = [...ev.querySelectorAll('.evolve__steps li')];
   }
   const pinned = () => ev && !reduce && wide.matches;
+  const mobileEv = () => ev && !reduce && !wide.matches;
   const syncPin = () => {
     if (!ev) return;
     ev.classList.toggle('evolve--pinned', pinned());
-    if (!pinned()) {
+    ev.classList.toggle('evolve--m', mobileEv());
+    if (!pinned() && !mobileEv()) {
       layers.forEach((l) => l.style.removeProperty('--r'));
       steps.forEach((s) => s.classList.remove('is-active'));
       if (stageTT) ['--t2', '--t2b', '--l1', '--l2', '--l3', '--c1', '--c2', '--c3'].forEach((k) => stageTT.style.removeProperty(k));
@@ -487,10 +489,18 @@
       [...tl.children].forEach((s) => s.classList.toggle('is-on', reduce || r.top + s.offsetTop + 40 < line));
     }
 
-    if (pinned()) {
-      const r = (track || ev).getBoundingClientRect();
-      const total = r.height - vh * 0.86;
-      const p = clamp(-r.top / total) * 2; // 0..2
+    if (pinned() || mobileEv()) {
+      let p;
+      if (pinned()) {
+        const r = (track || ev).getBoundingClientRect();
+        const total = r.height - vh * 0.86;
+        p = clamp(-r.top / total) * 2; // 0..2
+      } else {
+        // steps scroll behind the stuck animation; each one passing the line advances the frame
+        const line = vh * 0.78;
+        const seg = (li) => { const b = li.getBoundingClientRect(); return clamp((line - b.top) / Math.max(1, b.height * 0.9)); };
+        p = (steps[1] ? seg(steps[1]) : 0) + (steps[2] ? seg(steps[2]) : 0);
+      }
       layers.forEach((l, i) => { if (i > 0) l.style.setProperty('--r', clamp(p - (i - 1)).toFixed(3)); });
       const active = p < 0.55 ? 0 : p < 1.25 ? 1 : 2;
       steps.forEach((s, i) => s.classList.toggle('is-active', i === active));
