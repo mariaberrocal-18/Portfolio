@@ -122,7 +122,7 @@ function workCard(proj, i, all) {
       <ul class="tags" aria-label="Disciplines">${proj.tags.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
       <span class="work__go">View case study${arrow}</span>
     </div>
-    <div class="work__media v v--${proj.tone} v--loop" style="--ar:${ratio[proj.visual] || '16 / 10'}" data-reveal="stack">${render(proj.visual, 3).replace('xMidYMid slice', 'xMidYMid meet')}</div>
+    <div class="work__media v v--${proj.tone} v--loop v--float" style="--ar:${ratio[proj.visual] || '16 / 10'}" data-reveal="stack">${render(proj.visual, 3, true).replace('xMidYMid slice', 'xMidYMid meet')}</div>
   </a>`;
 }
 

@@ -371,7 +371,7 @@ button { font: inherit; color: inherit; }
   .work:last-child { padding-bottom: 0; }
   .work__text { grid-column: 1 / span 4; grid-row: 1; align-self: start; margin-top: 0; padding-top: 6px; gap: 18px; }
   .work__media { grid-column: 5 / -1; grid-row: 1; align-self: start; }
-  .work__title { font-size: clamp(1.625rem, 0.9rem + 1.5vw, 2.5rem); }
+  .work__title { font-size: clamp(2rem, 0.9rem + 2.5vw, 3.6rem); line-height: 1.02; }
   /* JS adds .is-stack: text and drawing stay pinned while the next project slides over */
   .work-grid.is-stack .work__media, .work-grid.is-stack .work__text { position: sticky; top: 96px; }
   .work-grid.is-stack .work__text { opacity: var(--tv, 1); translate: 0 var(--tt, 0px); }
@@ -858,3 +858,6 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
 .work__media.v--light { box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 24px 60px -28px rgba(12, 12, 12, 0.5); }
 /* soft-edged mesh: no hard crop where the glow meets the hero edge */
 .mesh { -webkit-mask-image: radial-gradient(ellipse 62% 62% at 50% 50%, #000 40%, transparent 100%); mask-image: radial-gradient(ellipse 62% 62% at 50% 50%, #000 40%, transparent 100%); }
+
+.work__media.v--float { box-shadow: none !important; }
+.work__media.v--float rect.fl { filter: drop-shadow(0 22px 28px rgba(12, 12, 12, 0.16)) drop-shadow(0 2px 5px rgba(12, 12, 12, 0.12)); }
