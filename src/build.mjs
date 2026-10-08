@@ -137,7 +137,7 @@ function chars(text) {
 
 function home() {
   const strengths = hero.strengths
-    .map(([t, d]) => `<li><h3>${esc(t)}</h3><p>${esc(d)}</p></li>`)
+    .map(([t, d], i) => `<li><div class="strength__art" aria-hidden="true">${mini[i]()}</div><h3>${esc(t)}</h3><p>${esc(d)}</p></li>`)
     .join('');
   const lcards = hero.strengths
     .map(([t, d], i) => `<div class="lcard" data-lcard="${i}"><div class="lcard__bob"><div class="lcard__in">

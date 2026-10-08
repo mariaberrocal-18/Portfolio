@@ -231,7 +231,7 @@
       const wr = workSection.getBoundingClientRect();
       const lead = parseFloat(getComputedStyle(workSection).paddingTop) || 200;
       const end = Math.max(0, lead - 22);
-      const wl = clamp(G.vh - wr.top + 40, 0, end);
+      const wl = clamp((G ? G.vh : innerHeight) - wr.top + 40, 0, end);
       workSection.style.setProperty('--wl', `${wl.toFixed(0)}px`);
       workSection.style.setProperty('--wd', wl >= end - 1 ? '1' : '0');
     }
@@ -473,6 +473,7 @@
     }
 
     updateBridge();
+    if (!fly) updateWork();
     updateCase();
     updateThread();
     updateCurtains();

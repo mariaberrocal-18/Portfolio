@@ -860,3 +860,17 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
 /* home work cards: floating prototypes on the light page, barely-there shadow */
 .work__media.v--float { box-shadow: none !important; }
 .work__media.v--float rect.fl { filter: drop-shadow(0 10px 14px rgba(12, 12, 12, 0.07)) drop-shadow(0 1px 2px rgba(12, 12, 12, 0.08)); }
+
+/* mobile story: the hero's loop keeps going as a thread that lands on "Translated into" */
+.strength__art { display: none; }
+@media (max-width: 959px) {
+  .strengths li { position: relative; padding-top: 22px; }
+  .strengths li::before { content: ''; position: absolute; left: 0; top: -4px; width: 7px; height: 7px; border-radius: 50%; background: var(--sage); box-shadow: 0 0 0 5px rgba(52, 105, 79, 0.12); }
+  .strength__art { display: block; width: 100%; max-width: 340px; aspect-ratio: 240 / 140; margin-bottom: 14px; border-radius: 14px; overflow: hidden; background: #f1f1ed; border: 1px solid var(--line); }
+  .strength__art svg { display: block; width: 100%; height: 100%; }
+  .work-wrap { position: relative; padding-top: 150px; }
+  .work-wrap::before { content: ''; position: absolute; left: 50%; top: 0; width: 1px; margin-left: -0.5px; height: var(--wl, 0px); background: var(--sage); z-index: 2; pointer-events: none; }
+  .work-wrap::after { content: ''; position: absolute; left: 50%; top: var(--wl, 0px); width: 9px; height: 9px; margin: -4px 0 0 -4.5px; border-radius: 50%; background: var(--sage); box-shadow: 0 0 0 6px rgba(52, 105, 79, 0.14); z-index: 2; pointer-events: none; opacity: var(--wd, 0); }
+  .strengths { position: relative; padding-bottom: 36px; }
+  .strengths::after { content: ''; position: absolute; left: 50%; bottom: 0; width: 1px; height: 36px; background: var(--sage); opacity: 0.5; }
+}
