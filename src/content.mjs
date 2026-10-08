@@ -62,7 +62,7 @@ export const journey = {
       org: 'EY Consulting',
       logo: 'ey',
       unit: 'Financial Services',
-      role: 'Consultant → Senior Consultant',
+      role: 'Senior Consultant',
       dates: '2018 – 2021',
       focus: 'Strategy, business & digital transformation',
       body: 'Worked on consulting projects across financial services, connecting business needs, processes, and technology to solve complex organizational challenges.',
