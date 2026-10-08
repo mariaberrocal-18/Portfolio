@@ -9,7 +9,7 @@ export const site = {
   role: 'Senior Product Designer',
   email: 'mariabeatrizber@gmail.com',
   whatsapp: 'https://wa.me/5491136802421',
-  linkedin: 'https://www.linkedin.com/notifications/', // NOTE: this is LinkedIn's notifications page, not a profile URL. Replace with https://www.linkedin.com/in/<handle>
+  linkedin: 'https://www.linkedin.com/in/maria-berrocal-olmos/',
   year: new Date().getFullYear(),
 };
 
