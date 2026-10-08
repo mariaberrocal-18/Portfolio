@@ -381,8 +381,30 @@ function banking(stage) {
 // 4. Waterplan platform navigation -------------------------------------------
 // The platform today: a grouped sidebar, a personalised home, and the admin controls that make it configurable.
 
+
+const IC = {
+  overview: 'M12 3 L20 7.5 V16.5 L12 21 L4 16.5 V7.5 Z M4 7.5 L12 12 L20 7.5 M12 12 V21',
+  map: 'M3 6 L9 4 L15 6 L21 4 V18 L15 20 L9 18 L3 20 Z M9 4 V18 M15 6 V20',
+  pin: 'M12 21 C12 21 5 14.5 5 9.5 A7 7 0 0 1 19 9.5 C19 14.5 12 21 12 21 Z M12 7 A2.5 2.5 0 1 1 12 12 A2.5 2.5 0 1 1 12 7',
+  risk: 'M12 3.5 L21.5 20 H2.5 Z M12 10 V14 M12 17 V17.4',
+  clip: 'M6 5 H18 V21 H6 Z M9 3 H15 V7 H9 Z M9 12 H15 M9 16 H15',
+  bars: 'M5 20 V12 M12 20 V5 M19 20 V15',
+  pie: 'M12 3 A9 9 0 1 0 21 12 H12 Z M15 3.4 A9 9 0 0 1 20.6 9 H15 Z',
+  gauge: 'M4 17 A9 9 0 1 1 20 17 M12 14 L16 8.5',
+  leaf: 'M12 21 V11 M12 11 C12 7 9 5 5 5 C5 9 8 11 12 11 M12 14.5 C12 11.5 15 9.5 19 9.5 C19 13.5 16 14.5 12 14.5',
+  list: 'M9 6 H20 M9 12 H20 M9 18 H20 M4 6 H5 M4 12 H5 M4 18 H5',
+  bolt: 'M13 3 L5 14 H11 L10 21 L19 9 H13 Z',
+  sliders: 'M4 7 H20 M4 17 H20 M9 4.5 V9.5 M15 14.5 V19.5',
+  folder: 'M3 7 H10 L12 9 H21 V19 H3 Z',
+  brief: 'M4 8 H20 V19 H4 Z M9 8 V5 H15 V8',
+  gear: 'M12 8.5 A3.5 3.5 0 1 1 12 15.5 A3.5 3.5 0 1 1 12 8.5 M12 3 V5.5 M12 18.5 V21 M3 12 H5.5 M18.5 12 H21 M5.6 5.6 L7.4 7.4 M16.6 16.6 L18.4 18.4 M18.4 5.6 L16.6 7.4 M7.4 16.6 L5.6 18.4',
+  panel: 'M4 5 H20 V19 H4 Z M9 5 V19',
+  drop: 'M12 3 C12 3 5.5 10 5.5 14.5 A6.5 6.5 0 0 0 18.5 14.5 C18.5 10 12 3 12 3 Z',
+};
+const icon = (name, x, y, size = 12, o = {}) => `<g transform="translate(${f(x)} ${f(y)}) scale(${f(size / 24)})" fill="none" stroke="${o.stroke ?? 'var(--v-ink)'}" stroke-width="${o.sw ?? 2}" stroke-linecap="round" stroke-linejoin="round" opacity="${o.op ?? 0.85}"><path d="${IC[name]}"/></g>`;
+
 const BLUE_A = '#d9e7fa', BLUE_B = '#f3f7fd';
-const SIDE = [['Monitor', ['Overview', 'Global Risks Map', 'Site Details', 'Risks By Site']], ['Measure', ['Dashboards', 'Scenario Analyses', 'Meters']], ['Respond', ['Water Stewardship', 'Projects']]];
+const SIDE = [['Monitor', [['Overview', 'overview'], ['Risk map', 'map'], ['Sites', 'pin'], ['Risks by site', 'risk']]], ['Measure', [['Dashboards', 'bars'], ['Scenarios', 'pie'], ['Meters', 'gauge']]], ['Respond', [['Programs', 'leaf'], ['Projects', 'list']]]];
 
 function sidebar(x, y, w, h, o = {}) {
   let s = `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${o.rx ?? 18}" fill="url(#navg)" stroke="var(--v-card-line)" ${o.fl === false ? '' : 'class="fl"'}/>`;
@@ -390,11 +412,11 @@ function sidebar(x, y, w, h, o = {}) {
   SIDE.forEach(([g, items]) => {
     s += text(x + 18, yy, g, { size: 8.5, weight: 600, fill: 'var(--v-mute2)' });
     yy += 10;
-    items.forEach((it) => {
+    items.forEach(([it, ic]) => {
       const act = it === 'Overview';
       if (act) s += rect(x + 10, yy - 2, w - 20, 24, { rx: 8, fill: '#fff', stroke: 'var(--v-card-line)' });
-      s += rect(x + 20, yy + 5, 11, 11, { rx: 3, fill: 'none', stroke: 'var(--v-ink)', sw: 1.3, op: 0.7 });
-      s += text(x + 38, yy + 15, it, { size: 10.5, weight: act ? 650 : 500 });
+      s += icon(ic, x + 19, yy + 3.5, 13);
+      s += text(x + 40, yy + 15, it, { size: 10.5, weight: act ? 650 : 500 });
       yy += 28;
     });
     yy += 12;
@@ -404,13 +426,13 @@ function sidebar(x, y, w, h, o = {}) {
 const navDefs = `<defs><linearGradient id="navg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${BLUE_A}"/><stop offset="1" stop-color="${BLUE_B}"/></linearGradient></defs>`;
 
 function homeTiles(x, y, w) {
-  const cols = [['CLIMATE ACTION', 'Energy & Net Zero Carbon'], ['WATER SECURITY', 'Global Risks Map'], ['WATER ACCOUNTING', 'Water Accounting Dashboard'], ['EFFICIENCY', 'Production']];
+  const cols = [['CLIMATE', 'Energy targets', 'bolt'], ['RISK', 'Risk map', 'map'], ['ACCOUNTING', 'Accounting', 'bars'], ['EFFICIENCY', 'Production', 'sliders']];
   let s = '';
   const tw = (w - 10) / 2;
-  cols.forEach(([c, n], i) => {
+  cols.forEach(([c, n, ic], i) => {
     const tx = x + (i % 2) * (tw + 10), ty = y + Math.floor(i / 2) * 60;
     s += rect(tx, ty, tw, 50, { rx: 10, fill: '#fff', stroke: 'var(--v-card-line)' });
-    s += text(tx + 12, ty + 19, c, { size: 7, weight: 650, fill: 'var(--v-mute)' }) + rect(tx + 12, ty + 27, 11, 11, { rx: 3, fill: 'none', stroke: 'var(--v-ink)', sw: 1.2 }) + text(tx + 29, ty + 37, n.length > 22 ? n.slice(0, 21) + '…' : n, { size: 9.5, weight: 600 });
+    s += text(tx + 12, ty + 19, c, { size: 7, weight: 650, fill: 'var(--v-mute)' }) + icon(ic, tx + 11, ty + 25, 14) + text(tx + 31, ty + 37, n, { size: 9.5, weight: 600 });
   });
   return s;
 }
@@ -427,7 +449,7 @@ function navigation(stage, float = false) {
   // appearance (centre bottom)
   s += card(270, 302, 340, 168, 18);
   s += text(290, 330, 'Appearance', { size: 12.5, weight: 650 }) + rect(364, 319, 58, 16, { rx: 8, fill: 'var(--v-line)' }) + text(393, 330.5, 'Admin only', { size: 7.5, weight: 600, anchor: 'middle', fill: 'var(--v-mute2)' });
-  [['Waterplan', '#cfe0fa'], ['Mist', '#e4e4e6'], ['Glacier', '#c9e8ee'], ['Lagoon', '#bfe9df'], ['Moss', '#d3e8c9'], ['Midnight', '#26272c']].forEach(([n, c], i) => {
+  [['Default', '#cfe0fa'], ['Mist', '#e4e4e6'], ['Glacier', '#c9e8ee'], ['Lagoon', '#bfe9df'], ['Moss', '#d3e8c9'], ['Midnight', '#26272c']].forEach(([n, c], i) => {
     const sx = 290 + i * 50;
     s += rect(sx, 346, 42, 44, { rx: 8, fill: c, stroke: i === 0 ? '#3566d6' : 'var(--v-card-line)', sw: i === 0 ? 1.8 : 1 }) + rect(sx + 6, 354, 14, 3, { rx: 1.5, fill: i === 5 ? '#fff' : 'var(--v-ink)', op: 0.5 }) + rect(sx + 6, 361, 11, 3, { rx: 1.5, fill: i === 5 ? '#fff' : 'var(--v-ink)', op: 0.3 }) + rect(sx + 22, 354, 14, 30, { rx: 3, fill: '#fff', op: i === 5 ? 0.9 : 0.75 });
     s += text(sx + 21, 403, n, { size: 6.5, weight: 600, anchor: 'middle', fill: 'var(--v-mute2)' });
@@ -437,7 +459,7 @@ function navigation(stage, float = false) {
   // custom names (right top)
   s += card(626, 40, 140, 222, 18);
   s += text(644, 68, 'Custom names', { size: 12, weight: 650 });
-  [['Sites', 'Facilities'], ['Meters', 'Gauges'], ['Risks By Site', 'Exposure'], ['Projects', 'Initiatives']].forEach(([o, n], i) => {
+  [['Sites', 'Facilities'], ['Meters', 'Gauges'], ['Risks by site', 'Exposure'], ['Projects', 'Initiatives']].forEach(([o, n], i) => {
     const yy = 92 + i * 40;
     s += text(644, yy, o, { size: 8.5, fill: 'var(--v-mute)' }) + line(644, yy - 3.5, 644 + o.length * 4.6, yy - 3.5, { stroke: 'var(--v-mute)' }) + rect(644, yy + 6, 104, 20, { rx: 6, fill: 'var(--v-bg)', op: 0.0 }) + rect(644, yy + 6, 104, 20, { rx: 6, fill: 'none', stroke: 'var(--v-card-line)' }) + text(652, yy + 20, n, { size: 10, weight: 600 });
   });
@@ -462,8 +484,8 @@ function navEvolve(stage) {
     // wide viewport: a topbar with too many items, misaligned
     s += rect(24, 22, 520, 300, { rx: 8, fill: '#f6f7f9', stroke: 'rgba(0,0,0,.18)' });
     s += rect(24, 22, 520, 46, { rx: 8, fill: '#fff', stroke: 'rgba(0,0,0,.14)' });
-    s += circle(44, 45, 9, { fill: 'none', stroke: INK, sw: 1.6 }) + text(58, 49, 'waterplan', { size: 11, weight: 650 });
-    const tabs = ['Overview', 'Catchments', 'Measure', 'Risks', 'Responses', 'Reporting', 'Sites', 'Targets', 'Projects', 'Meters', 'Dash'];
+    s += icon('drop', 35, 35, 18, { sw: 2.2, op: 1 }) + text(58, 49, 'Platform', { size: 11, weight: 650 });
+    const tabs = ['Overview', 'Sites', 'Measure', 'Risks', 'Actions', 'Reports', 'Targets', 'Programs', 'Projects', 'Meters', 'Dash'];
     let tx = 126;
     tabs.forEach((t, i) => {
       const w = t.length * 5.6 + 8, yy = 38 + (i % 3 === 1 ? 4 : i % 4 === 2 ? -3 : 0);
@@ -473,17 +495,17 @@ function navEvolve(stage) {
     s += text(470, 48, '…', { size: 14, weight: 700 }) + circle(534, 42, 7, { fill: '#2b2b2b' }) + rect(430, 28, 28, 18, { rx: 4, fill: 'none', stroke: 'rgba(0,0,0,.25)' }) + text(444, 40, '▾', { size: 9, anchor: 'middle' });
     // second row of tabs overlapping
     s += rect(24, 68, 520, 30, { fill: '#e8edf5' });
-    s += rect(30, 73, 96, 20, { rx: 4, fill: '#fff', stroke: 'rgba(0,0,0,.2)' }) + text(38, 87, 'Schrute Beets Farm', { size: 8 });
-    ['SWAT', 'Supply & Demand', 'IPCC Climate Proj', 'Complementary', 'Catchment Inf', 'Share'].forEach((t, i) => { s += text(138 + i * 66 - (i > 3 ? 14 : 0), 87 + (i % 2 ? 2 : 0), t, { size: 8, fill: '#555' }); });
+    s += rect(30, 73, 96, 20, { rx: 4, fill: '#fff', stroke: 'rgba(0,0,0,.2)' }) + text(38, 87, 'Site name', { size: 8 });
+    ['Analysis', 'Supply & Demand', 'Climate Proj', 'Complementary', 'Site Inf', 'Share'].forEach((t, i) => { s += text(138 + i * 66 - (i > 3 ? 14 : 0), 87 + (i % 2 ? 2 : 0), t, { size: 8, fill: '#555' }); });
     // clipped, uneven content
     s += rect(36, 112, 244, 80, { rx: 6, fill: '#fff', stroke: 'rgba(0,0,0,.14)' }) + rect(292, 108, 236, 90, { rx: 6, fill: '#fff', stroke: 'rgba(0,0,0,.14)' }) + rect(40, 206, 150, 100, { rx: 6, fill: '#fff', stroke: 'rgba(0,0,0,.14)' }) + rect(204, 212, 334, 96, { rx: 6, fill: '#fff', stroke: 'rgba(0,0,0,.14)' });
     for (let k = 0; k < 7; k++) s += rect(48 + k * 6, 232 + (k % 3) * 22, 80 - k * 4, 5, { rx: 2, fill: INK, op: 0.25 }) + rect(218, 228 + k * 11, 100 + (k * 37) % 150, 4, { rx: 2, fill: INK, op: 0.2 });
     // narrow viewport: breakpoint breaks
     s += rect(574, 22, 202, 300, { rx: 8, fill: '#f6f7f9', stroke: 'rgba(0,0,0,.18)' });
     s += rect(574, 22, 202, 74, { rx: 8, fill: '#fff', stroke: 'rgba(0,0,0,.14)' });
-    s += circle(592, 40, 8, { fill: 'none', stroke: INK, sw: 1.5 }) + text(604, 44, 'waterplan', { size: 10, weight: 650 }) + rect(726, 30, 40, 20, { rx: 4, fill: '#fff', stroke: 'rgba(0,0,0,.2)' });
-    ['Overview', 'Catchm', 'Measu', 'Risks', 'Resp', 'Repor'].forEach((t, i) => { s += text(584 + (i % 3) * 62, 66 + Math.floor(i / 3) * 14 + (i % 2) * 2, t, { size: 8, fill: '#555' }); });
-    s += rect(574, 96, 202, 20, { fill: '#e8edf5' }) + text(582, 109, 'Schrute Beets Fa  SWAT An  Repo…', { size: 7.5, fill: '#555' });
+    s += icon('drop', 584, 31, 16, { sw: 2.2, op: 1 }) + text(604, 44, 'Platform', { size: 10, weight: 650 }) + rect(726, 30, 40, 20, { rx: 4, fill: '#fff', stroke: 'rgba(0,0,0,.2)' });
+    ['Overview', 'Sites', 'Measu', 'Risks', 'Actio', 'Repor'].forEach((t, i) => { s += text(584 + (i % 3) * 62, 66 + Math.floor(i / 3) * 14 + (i % 2) * 2, t, { size: 8, fill: '#555' }); });
+    s += rect(574, 96, 202, 20, { fill: '#e8edf5' }) + text(582, 109, 'Site na  Analysis  Supp…', { size: 7.5, fill: '#555' });
     s += rect(560, 126, 150, 76, { rx: 6, fill: '#fff', stroke: 'rgba(0,0,0,.14)' }) + rect(584, 214, 210, 90, { rx: 6, fill: '#fff', stroke: 'rgba(0,0,0,.14)' });
     // annotations
     s += `<g stroke="#d6453d" stroke-width="1.6" fill="none" stroke-dasharray="4 3"><rect x="118" y="30" width="400" height="30" rx="4"/><rect x="578" y="56" width="190" height="34" rx="4"/></g>`;
@@ -531,15 +553,15 @@ function navEvolve(stage) {
   // stage 3: the platform today, configurable
   s += rect(0, 0, W, H, { fill: '#e6edf8' });
   s += rect(24, 20, 752, 460, { rx: 16, fill: '#f4f8fe', stroke: 'var(--v-card-line)', cls: 'fl' });
-  s += circle(50, 46, 11, { fill: 'none', stroke: INK, sw: 1.8 }) + text(68, 51, 'waterplan', { size: 14, weight: 650 });
-  s += rect(150, 38, 14, 12, { rx: 3, fill: 'none', stroke: INK, sw: 1.3, op: 0.6 });
-  [660, 690, 720].forEach((x) => { s += circle(x, 45, 7, { fill: 'none', stroke: INK, sw: 1.3, op: 0.7 }); });
-  s += text(748, 49, 'English', { size: 9.5, anchor: 'middle', fill: 'var(--v-mute2)' });
+  s += icon('drop', 40, 33, 20, { sw: 2.2, op: 1 }) + text(66, 51, 'Platform', { size: 14, weight: 650 });
+  s += icon('panel', 144, 38, 14);
+  s += icon('folder', 636, 36, 16) + icon('brief', 662, 36, 16) + icon('gear', 688, 36, 16);
+  s += text(734, 49, 'English', { size: 9.5, anchor: 'middle', fill: 'var(--v-mute2)' });
   s += rect(24, 70, 200, 410, { fill: 'none' });
   let yy = 92;
   SIDE.forEach(([g, items]) => {
     s += text(44, yy, g, { size: 8.5, weight: 600, fill: 'var(--v-mute2)' }); yy += 10;
-    items.forEach((it) => { const act = it === 'Overview'; if (act) s += rect(34, yy - 2, 176, 24, { rx: 8, fill: '#fff', stroke: 'var(--v-card-line)' }); s += rect(44, yy + 5, 11, 11, { rx: 3, fill: 'none', stroke: INK, sw: 1.3, op: 0.7 }) + text(62, yy + 15, it, { size: 10.5, weight: act ? 650 : 500 }); yy += 28; });
+    items.forEach(([it, ic]) => { const act = it === 'Overview'; if (act) s += rect(34, yy - 2, 176, 24, { rx: 8, fill: '#fff', stroke: 'var(--v-card-line)' }); s += icon(ic, 43, yy + 3.5, 13) + text(64, yy + 15, it, { size: 10.5, weight: act ? 650 : 500 }); yy += 28; });
     yy += 12;
   });
   s += rect(228, 62, 536, 406, { rx: 14, fill: '#fff' });
