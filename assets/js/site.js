@@ -225,6 +225,15 @@
     dropDot.style.opacity = sd.toFixed(3);
     dropHalo.style.opacity = (sd * 0.14 / 0.14).toFixed(3);
   };
+  // mobile: the strengths animate in as they reach the middle of the screen
+  const strengthEls = [...document.querySelectorAll('.strengths li')];
+  if (strengthEls.length) {
+    if (reduce || !('IntersectionObserver' in window)) strengthEls.forEach((el) => el.classList.add('is-active'));
+    else {
+      const sio = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('is-active'); sio.unobserve(e.target); } }), { rootMargin: '0px 0px -25% 0px', threshold: 0.3 });
+      strengthEls.forEach((el) => sio.observe(el));
+    }
+  }
   const updateWork = () => {
     // continuation: the same line keeps falling until it lands on the section title
     if (workSection) {

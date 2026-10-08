@@ -276,33 +276,33 @@ button { font: inherit; color: inherit; }
 
 /* the drawings wake up when their card takes focus */
 .m-strike { stroke-dasharray: 100; stroke-dashoffset: 0; }
-.lcard.is-active .m-strike { animation: strike 0.7s var(--ease) both; animation-delay: calc(var(--i) * 0.18s); }
+:is(.lcard, .strengths li).is-active .m-strike { animation: strike 0.7s var(--ease) both; animation-delay: calc(var(--i) * 0.18s); }
 @keyframes strike { from { stroke-dashoffset: 100; } to { stroke-dashoffset: 0; } }
-.lcard.is-active .m-real { animation: pop 0.8s var(--ease) 0.6s both; transform-box: fill-box; transform-origin: center; }
+:is(.lcard, .strengths li).is-active .m-real { animation: pop 0.8s var(--ease) 0.6s both; transform-box: fill-box; transform-origin: center; }
 @keyframes pop { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: none; } }
-.lcard.is-active .m-ch { animation: ch-in 0.01s linear both; animation-delay: calc(0.2s + var(--k) * 0.034s); }
+:is(.lcard, .strengths li).is-active .m-ch { animation: ch-in 0.01s linear both; animation-delay: calc(0.2s + var(--k) * 0.034s); }
 @keyframes ch-in { from { opacity: 0; } to { opacity: 1; } }
 @keyframes blink { 50% { opacity: 0; } }
 .m-caret { opacity: 0; }
-.lcard.is-active .m-caret { animation: blink 0.9s steps(1) 2.2s infinite; }
+:is(.lcard, .strengths li).is-active .m-caret { animation: blink 0.9s steps(1) 2.2s infinite; }
 .m-gen { transform-box: fill-box; transform-origin: center; }
-.lcard:not(.is-active) .m-gen { opacity: 1; }
-.lcard.is-active .m-gen { animation: pop 0.55s var(--ease) both; animation-delay: calc(2.1s + var(--i) * 0.16s); }
+:is(.lcard, .strengths li):not(.is-active) .m-gen { opacity: 1; }
+:is(.lcard, .strengths li).is-active .m-gen { animation: pop 0.55s var(--ease) both; animation-delay: calc(2.1s + var(--i) * 0.16s); }
 .m-streak { opacity: 0; }
-.lcard.is-active .m-streak { animation: streak 0.95s cubic-bezier(.3,.1,.2,1) infinite; animation-delay: calc(var(--i) * 0.13s); }
+:is(.lcard, .strengths li).is-active .m-streak { animation: streak 0.95s cubic-bezier(.3,.1,.2,1) infinite; animation-delay: calc(var(--i) * 0.13s); }
 @keyframes streak { 0% { opacity: 0; transform: translateX(-70px); } 25% { opacity: 1; } 100% { opacity: 0; transform: translateX(210px); } }
 .m-iter { transform-box: fill-box; }
-.lcard.is-active .m-iter { animation: iter-in 0.5s var(--ease) both; animation-delay: calc(0.1s + var(--i) * 0.32s); }
+:is(.lcard, .strengths li).is-active .m-iter { animation: iter-in 0.5s var(--ease) both; animation-delay: calc(0.1s + var(--i) * 0.32s); }
 @keyframes iter-in { from { opacity: 0; translate: -26px 0; } to { opacity: 1; translate: 0 0; } }
-.lcard:not(.is-active) .m-streak { opacity: 0.35; }
-.lcard.is-active .m-chev { animation: chev 0.8s ease-in-out infinite; animation-delay: calc(var(--i) * 0.14s); }
+:is(.lcard, .strengths li):not(.is-active) .m-streak { opacity: 0.35; }
+:is(.lcard, .strengths li).is-active .m-chev { animation: chev 0.8s ease-in-out infinite; animation-delay: calc(var(--i) * 0.14s); }
 @keyframes chev { 0%,100% { opacity: .25; translate: 0 0; } 50% { opacity: 1; translate: 4px 0; } }
 .m-shipped { transform-box: fill-box; transform-origin: center; }
-.lcard.is-active .m-shipped { animation: pop 0.6s var(--ease) 1.15s both; }
+:is(.lcard, .strengths li).is-active .m-shipped { animation: pop 0.6s var(--ease) 1.15s both; }
 .m-bar { transform-box: fill-box; transform-origin: bottom; }
-.lcard.is-active .m-bar { animation: grow-y 0.7s var(--ease) both; animation-delay: calc(var(--i) * 0.08s); }
+:is(.lcard, .strengths li).is-active .m-bar { animation: grow-y 0.7s var(--ease) both; animation-delay: calc(var(--i) * 0.08s); }
 @keyframes grow-y { from { transform: scaleY(0); } to { transform: none; } }
-.lcard.is-active .m-ship { animation: pop 0.6s var(--ease) both; animation-delay: calc(0.5s + var(--i) * 0.1s); transform-box: fill-box; transform-origin: center; }
+:is(.lcard, .strengths li).is-active .m-ship { animation: pop 0.6s var(--ease) both; animation-delay: calc(0.5s + var(--i) * 0.1s); transform-box: fill-box; transform-origin: center; }
 
 /* work section: the loop's line lands on the section title */
 .work-wrap { padding-top: clamp(56px, 8vw, 120px); }
@@ -861,16 +861,17 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
 .work__media.v--float { box-shadow: none !important; }
 .work__media.v--float rect.fl { filter: drop-shadow(0 10px 14px rgba(12, 12, 12, 0.07)) drop-shadow(0 1px 2px rgba(12, 12, 12, 0.08)); }
 
-/* mobile story: the hero's loop keeps going as a vertical thread that lands on "Translated into" */
+/* mobile story: the three strengths are full cards on one centred thread that lands on "Translated into" */
 .strength__art { display: none; }
 @media (max-width: 959px) {
-  .strengths { position: relative; gap: 40px; padding-left: 30px; padding-bottom: 56px; }
-  .strengths::before { content: ''; position: absolute; left: 3px; top: 52px; bottom: 56px; width: 1px; background: var(--sage); opacity: 0.55; }
-  .strengths::after { content: ''; position: absolute; left: 3px; width: calc(50% - 3px - var(--pad, 0px) * 0); bottom: 0; height: 56px; border-left: 1px solid rgba(52, 105, 79, 0.55); border-bottom: 1px solid rgba(52, 105, 79, 0.55); border-bottom-left-radius: 28px; box-sizing: border-box; }
-  .strengths li { position: relative; border-top: 0; padding-top: 0; }
-  .strengths li::before { content: ''; position: absolute; left: -30px; top: 2px; width: 7px; height: 7px; border-radius: 50%; background: var(--sage); box-shadow: 0 0 0 5px rgba(52, 105, 79, 0.14); }
-  .strength__art { display: block; width: 100%; max-width: 340px; aspect-ratio: 240 / 140; margin-bottom: 14px; border-radius: 14px; overflow: hidden; background: #f1f1ed; border: 1px solid var(--line); }
+  .strengths { position: relative; gap: 44px; padding-left: var(--pad); padding-right: var(--pad); padding-bottom: 0; margin-bottom: 0; }
+  .strengths::before { content: ''; position: absolute; left: 50%; top: 56px; bottom: 0; width: 1px; margin-left: -0.5px; background: var(--sage); }
+  .strengths li { position: relative; z-index: 1; border: 1px solid var(--ink); border-radius: 24px; padding: 20px 22px 24px; background: #fff; box-shadow: 0 24px 60px -30px rgba(12, 12, 12, 0.3); display: flex; flex-direction: column; }
+  .strengths li::before { display: none; }
+  .strength__art { display: flex; align-items: center; justify-content: center; width: 100%; aspect-ratio: 240 / 130; margin-bottom: 14px; color: var(--ink); }
   .strength__art svg { display: block; width: 100%; height: 100%; }
+  .strengths h3 { font-size: 1.4rem; font-weight: 650; letter-spacing: -0.04em; }
+  .strengths p { max-width: none; }
   .work-wrap { position: relative; padding-top: 150px; }
   .work-wrap::before { content: ''; position: absolute; left: 50%; top: 0; width: 1px; margin-left: -0.5px; height: var(--wl, 0px); background: var(--sage); z-index: 2; pointer-events: none; }
   .work-wrap::after { content: ''; position: absolute; left: 50%; top: var(--wl, 0px); width: 9px; height: 9px; margin: -4px 0 0 -4.5px; border-radius: 50%; background: var(--sage); box-shadow: 0 0 0 6px rgba(52, 105, 79, 0.14); z-index: 2; pointer-events: none; opacity: var(--wd, 0); }
