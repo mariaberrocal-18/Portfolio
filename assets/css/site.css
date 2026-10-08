@@ -601,7 +601,7 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
 .next__h { font-size: clamp(1.4rem, 1rem + 1.3vw, 2.15rem); font-weight: 650; line-height: 1.04; letter-spacing: -0.04em; margin-bottom: clamp(28px, 3.4vw, 48px); }
 .next__grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); }
 .next__card { display: block; }
-.next__media { border-radius: 18px; width: 100%; }
+.next__media { border-radius: 18px; width: 100%; aspect-ratio: 16 / 10 !important; }
 .next__title { margin-top: 18px; font-family: var(--sans); font-weight: 650; font-size: clamp(1.4rem, 1.05rem + 1.3vw, 2.1rem); line-height: 1.05; letter-spacing: -0.04em; text-wrap: balance; max-width: 22ch; }
 .next__sub { display: flex; align-items: center; gap: 6px; margin-top: 12px; font-weight: 500; color: var(--ink-2); }
 .next__card:hover .next__sub span { color: var(--ink); }

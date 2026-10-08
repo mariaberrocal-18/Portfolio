@@ -334,7 +334,7 @@ ${header(p, false)}
       <h2 id="next-h" class="next__h">More case studies</h2>
       <div class="next__grid">
         ${[1, 2].map((k) => projects[(i + k) % projects.length]).map((n) => `<a class="next__card" href="${n.slug}.html" data-cursor="View case study">
-          ${media(n, 3, 'next__media')}
+          ${media(n, 3, 'next__media', 'meet')}
           <p class="next__title">${esc(n.title)}</p>
           <p class="next__sub"><span>${esc(n.short)}</span>${arrow}</p>
         </a>`).join('')}
