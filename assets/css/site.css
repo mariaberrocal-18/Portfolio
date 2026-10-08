@@ -734,7 +734,7 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
 
 /* animated mesh gradient behind the prototype so the black frame always reads */
 .case-hero__media { isolation: isolate; }
-.mesh { position: absolute; inset: -70px -60px -70px -60px; z-index: -1; pointer-events: none; filter: blur(46px) saturate(1.05); opacity: 0.8; border-radius: 50%; }
+.mesh { position: absolute; inset: -70px -60px -70px -60px; z-index: -1; pointer-events: none; filter: blur(46px) saturate(1.05); opacity: 0.8; border-radius: 0; }
 .mesh i { position: absolute; width: 58%; height: 58%; border-radius: 50%; mix-blend-mode: screen; }
 .mesh i:nth-child(1) { left: -6%; top: -8%; background: radial-gradient(circle at 50% 50%, #4f8df0 0%, rgba(79, 141, 240, 0) 68%); animation: mesh-a 14s ease-in-out infinite alternate; }
 .mesh i:nth-child(2) { right: -8%; top: 0; background: radial-gradient(circle at 50% 50%, #3f7a5c 0%, rgba(63, 122, 92, 0) 68%); animation: mesh-b 17s ease-in-out infinite alternate; }
@@ -856,8 +856,3 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
 /* light prototypes sit on black frames */
 .work__media.v--light, .next__media.v--light { --v-bg: #0e0e0e; }
 .work__media.v--light { box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 24px 60px -28px rgba(12, 12, 12, 0.5); }
-/* soft-edged mesh: no hard crop where the glow meets the hero edge */
-.mesh { -webkit-mask-image: radial-gradient(ellipse 62% 62% at 50% 50%, #000 40%, transparent 100%); mask-image: radial-gradient(ellipse 62% 62% at 50% 50%, #000 40%, transparent 100%); }
-
-.work__media.v--float { box-shadow: none !important; }
-.work__media.v--float rect.fl { filter: drop-shadow(0 22px 28px rgba(12, 12, 12, 0.16)) drop-shadow(0 2px 5px rgba(12, 12, 12, 0.12)); }
