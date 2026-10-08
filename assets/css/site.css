@@ -903,3 +903,6 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
   .evolve--m .evolve__steps li.is-active { opacity: 1; }
   .evolve--m .evolve__steps li:first-child { min-height: 40vh; }
 }
+
+/* no mesh glow behind the hero prototype on tablet and mobile */
+@media (max-width: 959px) { .mesh { display: none; } }
