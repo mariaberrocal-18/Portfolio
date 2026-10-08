@@ -906,3 +906,13 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
 
 /* no mesh glow behind the hero prototype on tablet and mobile */
 @media (max-width: 959px) { .mesh { display: none; } }
+
+/* 404 */
+body.nf { background-color: #0b0b0b; background-image: var(--grain-light); color: #f4f4f1; }
+.nf__main { min-height: 100svh; display: grid; align-content: center; justify-items: start; gap: 18px; padding: 0 var(--pad); max-width: var(--max); margin-inline: auto; }
+.nf__code { color: #6fb08e; font-weight: 650; letter-spacing: -0.02em; }
+.nf__title { font-size: clamp(2.6rem, 1rem + 6vw, 6rem); line-height: 0.96; letter-spacing: -0.05em; font-weight: 650; }
+.nf__lede { color: #a9a8a3; font-size: 1.125rem; margin-bottom: 12px; }
+.nf .btn { background: #f4f4f1; color: #0b0b0b; }
+html:has(body.nf) { background: #0b0b0b; }
+.nf__main { background: #0b0b0b; max-width: none; padding-inline: max(var(--pad), calc((100vw - var(--max)) / 2 + var(--pad))); }

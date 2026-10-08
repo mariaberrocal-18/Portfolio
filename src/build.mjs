@@ -39,7 +39,9 @@ const lessonIcons = [
 ];
 const label = (t) => `<span class="roll" data-text="${esc(t)}"><span>${esc(t)}</span></span>`;
 
-function head({ title, desc, p, noindex }) {
+function head({ title, desc, p, noindex, path = '' }) {
+  const abs = (f) => (site.url ? `${site.url}/${f}` : `${p}${f}`);
+  const pageUrl = site.url ? `${site.url}/${path}` : '';
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -49,7 +51,22 @@ function head({ title, desc, p, noindex }) {
 <meta name="description" content="${esc(desc)}">
 <meta name="theme-color" content="#fefefe">
 ${noindex ? '<meta name="robots" content="noindex">\n' : ''}<link rel="preload" href="${p}assets/fonts/inter-tight-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230c0c0c'/%3E%3Ctext x='16' y='22.5' font-family='Helvetica,Arial,sans-serif' font-weight='700' font-size='19' text-anchor='middle' fill='%23fefefe'%3Em%3C/text%3E%3C/svg%3E">
+${pageUrl ? `<link rel="canonical" href="${pageUrl}">\n` : ''}<link rel="icon" href="${p}assets/brand/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" sizes="32x32" href="${p}assets/brand/favicon-32.png">
+<link rel="icon" type="image/png" sizes="512x512" href="${p}assets/brand/icon-512.png">
+<link rel="apple-touch-icon" href="${p}assets/brand/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="${esc(site.name)}">
+<meta property="og:title" content="${esc(title)}">
+<meta property="og:description" content="${esc(desc)}">
+${pageUrl ? `<meta property="og:url" content="${pageUrl}">\n` : ''}<meta property="og:image" content="${abs('assets/brand/og.png')}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="${esc(site.name)}, Senior Product Designer">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${esc(title)}">
+<meta name="twitter:description" content="${esc(desc)}">
+<meta name="twitter:image" content="${abs('assets/brand/og.png')}">
 <link rel="stylesheet" href="${p}assets/css/site.css?v=${V.css}">
 <script>document.documentElement.classList.add('js');setTimeout(function(){window.__ok||document.documentElement.classList.add('failsafe')},3500)</script>
 </head>`;
@@ -167,9 +184,10 @@ function home() {
   const heroLabel = `${hero.greeting} ${hero.name} ${hero.title}`;
 
   return `${head({
-    title: `${site.name}: ${site.role}`,
-    desc: `${site.name} is a Senior Product Designer with 8 years across consulting, UX/UI and product design. Selected work from Waterplan, Civarea and EY.`,
+    title: `${site.name.replace('í', 'i')}’s Portfolio | Product Designer`,
+    desc: hero.lede,
     p: '',
+    path: '',
   })}
 <body class="home">
 <a class="skip" href="#work">Skip to selected work</a>
@@ -268,6 +286,7 @@ function caseStudy(proj, i) {
     desc: proj.lede,
     p,
     noindex: proj.draft,
+    path: `work/${proj.slug}.html`,
   })}
 <body class="case">
 <a class="skip" href="#story">Skip to the story</a>
@@ -351,10 +370,22 @@ ${scripts(p)}`;
 
 // Write ---------------------------------------------------------------------
 
+function notFound() {
+  return `${head({ title: `Page not found | ${site.name}`, desc: hero.lede, p: '/', noindex: true, path: '404.html' })}
+<body class="nf">
+<main class="nf__main"><p class="nf__code">404</p><h1 class="nf__title">This page wandered off.</h1><p class="nf__lede">The link may be old or mistyped.</p><a class="btn" href="/">${label('Back to home')}</a></main>
+<script>window.__ok=1</script>
+</body>
+</html>`;
+}
+
 mkdirSync(join(root, 'work'), { recursive: true });
 writeFileSync(join(root, 'index.html'), home());
 projects.forEach((proj, i) => writeFileSync(join(root, 'work', `${proj.slug}.html`), caseStudy(proj, i)));
 
+writeFileSync(join(root, 'robots.txt'), `User-agent: *\nAllow: /\n${site.url ? `Sitemap: ${site.url}/sitemap.xml\n` : ''}`);
+if (site.url) writeFileSync(join(root, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${['', ...projects.filter((x) => !x.draft).map((x) => `work/${x.slug}.html`)].map((u) => `  <url><loc>${site.url}/${u}</loc></url>`).join('\n')}\n</urlset>\n`);
+writeFileSync(join(root, '404.html'), notFound());
 const drafts = projects.filter((x) => x.draft).map((x) => x.slug);
 console.log(`Built index.html + ${projects.length} case studies.`);
 if (drafts.length) console.warn(`DRAFT copy (noindex) needs María's review: ${drafts.join(', ')}`);

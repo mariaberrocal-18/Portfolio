@@ -5,6 +5,8 @@
 // publishing. Draft case-study pages are emitted with `noindex`.
 
 export const site = {
+  // Set to the final domain (no trailing slash), e.g. 'https://mariaberrocal.com', or build with SITE_URL=...
+  url: (process.env.SITE_URL || '').replace(/\/$/, ''),
   name: 'María Berrocal',
   role: 'Senior Product Designer',
   email: 'mariabeatrizber@gmail.com',
@@ -109,7 +111,6 @@ export const projects = [
     visual: 'targetTracking',
     tone: 'dark',
     card: 'a',
-    draft: true,
     title: 'From tracking sustainability targets to making better decisions',
     short: 'Waterplan Target Tracking',
     tags: ['Product Design', 'B2B SaaS', 'AI'],
@@ -185,7 +186,6 @@ export const projects = [
     evolveVisual: 'siteEvolve',
     tone: 'light',
     card: 'b',
-    draft: true,
     title: 'From weeks of data center due diligence to hours',
     short: 'Civarea Site Selection',
     tags: ['Product Design', 'Data Visualization', 'B2B SaaS'],
@@ -257,7 +257,6 @@ export const projects = [
     evolveVisual: 'bankEvolve',
     tone: 'dark',
     card: 'c',
-    draft: true,
     title: 'Redesigning a digital banking experience from the ground up',
     short: 'EY Digital Banking',
     tags: ['UX/UI Design', 'Fintech'],
@@ -331,7 +330,6 @@ export const projects = [
     evolveVisual: 'navEvolve',
     tone: 'light',
     card: 'd',
-    draft: true,
     title: 'Rethinking navigation for a growing, multi-product platform',
     short: 'Waterplan Platform Navigation',
     tags: ['Product Design', 'Information Architecture', 'B2B SaaS'],
