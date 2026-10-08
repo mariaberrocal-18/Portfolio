@@ -1,6 +1,6 @@
 // Static site generator: `node src/build.mjs` writes index.html and work/*.html.
 // No dependencies. Copy lives in content.mjs, drawings in visuals.mjs.
-import { mkdirSync, writeFileSync, readFileSync } from 'node:fs';
+import { mkdirSync, writeFileSync, readFileSync, cpSync, rmSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -389,3 +389,10 @@ writeFileSync(join(root, '404.html'), notFound());
 const drafts = projects.filter((x) => x.draft).map((x) => x.slug);
 console.log(`Built index.html + ${projects.length} case studies.`);
 if (drafts.length) console.warn(`DRAFT copy (noindex) needs María's review: ${drafts.join(', ')}`);
+
+// dist/: only what the public site needs (deploy this folder; the repo's working files stay private)
+rmSync(join(root, 'dist'), { recursive: true, force: true });
+mkdirSync(join(root, 'dist'), { recursive: true });
+for (const f of ['index.html', '404.html', 'robots.txt', 'sitemap.xml', 'work', 'assets']) {
+  if (existsSync(join(root, f))) cpSync(join(root, f), join(root, 'dist', f), { recursive: true, filter: (s) => !s.endsWith('README.md') });
+}
