@@ -549,66 +549,79 @@ function siteEvolve(stage) {
   return wrap(s, 'A report pops up with insights for the site evaluation, each explaining why it matters', H, W);
 }
 
-// EY Digital Banking, "The evolution": research notes → flow → polished screens → working product
+// EY Digital Banking, "The evolution": a messy FigJam of journeys → many wireframes → the app
 function bankEvolve(stage) {
-  const ACC = 'var(--v-accent)', INK = 'var(--v-ink)';
-  const phone = (x, y, w, h) => rect(x, y, w, h, { rx: 26, fill: 'var(--v-card)', stroke: 'var(--v-card-line)', cls: 'fl' });
-  const arrow = (x1, y1, x2, y2) => `<path d="M${x1} ${y1} L${x2} ${y2}" stroke="var(--v-mute)" stroke-width="1.6" fill="none" stroke-dasharray="4 4"/><circle cx="${x2}" cy="${y2}" r="3" fill="var(--v-mute)"/>`;
-  let s = '';
+  if (stage === 3) return banking(3);
+  const INK = '#141414';
+  const r = rng(stage === 1 ? 21 : 8);
+  let s = `<defs><pattern id="bedot" width="18" height="18" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.1" fill="#000" opacity=".16"/></pattern></defs>`;
+  s += rect(0, 0, W, H, { fill: '#f1f0ec' }) + rect(0, 0, W, H, { fill: 'url(#bedot)' });
+
   if (stage === 1) {
-    // insights become a flow: sticky notes linked into a journey
-    const notes = [
-      [40, 60, 'Can’t find “pay a bill”', 'Pain point'], [300, 40, 'Checks balance first, always', 'Insight'], [560, 70, 'Transfers feel risky', 'Pain point'],
-      [70, 270, 'Wants to know it went through', 'Need'], [330, 290, 'Too many menus', 'Pain point'], [580, 280, 'Mostly on mobile', 'Insight'],
-    ];
-    notes.forEach(([x, y, t, tag], i) => {
-      s += rect(x, y, 190, 100, { rx: 10, fill: 'var(--v-card)', stroke: 'var(--v-card-line)', cls: 'fl' });
-      s += rect(x + 14, y + 14, tag.length * 6 + 16, 20, { rx: 10, fill: tag === 'Pain point' ? 'rgba(214,69,61,.16)' : 'rgba(47,138,91,.18)' }) + text(x + 22, y + 28, tag, { size: 9.5, weight: 650, fill: tag === 'Pain point' ? '#d6453d' : ACC });
-      s += text(x + 14, y + 62, t, { size: 12, weight: 600 }) + rect(x + 14, y + 74, 110, 5, { rx: 2, fill: 'var(--v-line)' });
+    // a FigJam board: many sticky notes, grouped into customer journeys, messy
+    const COL = ['#ffe27a', '#ffb9c8', '#b8d8ff', '#c3eec0', '#ffc9a0', '#dcc8ff'];
+    const WORDS = ['Can’t find “pay a bill”', 'Checks balance first', 'Transfers feel risky', 'Wants a receipt', 'Too many menus', 'Calls the branch', 'Unsure it went through', 'Forgot password', 'Prefers going in person', 'Needs help with OTP', 'Mostly on mobile', 'Afraid of mistakes'];
+    const lanes = ['Check balance', 'Pay a bill', 'Transfer money', 'Manage account'];
+    // lane labels
+    lanes.forEach((n, i) => {
+      const y = 38 + i * 118;
+      s += rect(20, y - 8, n.length * 6.2 + 20, 22, { rx: 11, fill: INK }) + text(30, y + 7, n, { size: 9.5, weight: 650, fill: '#fff' });
     });
-    s += arrow(230, 110, 300, 90) + arrow(490, 90, 560, 112) + arrow(135, 160, 135, 270) + arrow(425, 140, 425, 290) + arrow(655, 170, 675, 280);
-    return wrap(s, 'Research notes: customer pain points and insights, starting to link into a journey', H, W);
-  }
-  if (stage === 2) {
-    // journey becomes polished mobile screens
-    const xs = [60, 300, 540];
-    xs.forEach((x, i) => {
-      s += phone(x, 30, 200, 440);
-      if (i === 0) {
-        s += text(x + 22, 76, 'Total balance', { size: 10.5, fill: 'var(--v-mute)' }) + text(x + 22, 110, '$12,480.20', { size: 24, weight: 600 });
-        ['Send', 'Pay', 'Move'].forEach((a, k) => { s += rect(x + 22 + k * 56, 132, 50, 30, { rx: 15, fill: k === 0 ? INK : 'none', stroke: k === 0 ? 'none' : INK }) + text(x + 47 + k * 56, 152, a, { size: 10.5, weight: 600, anchor: 'middle', fill: k === 0 ? 'var(--v-card)' : INK }); });
-        s += rect(x + 22, 176, 156, 70, { rx: 12, fill: INK, cls: 'fl' }) + text(x + 34, 198, 'VISA', { size: 10, weight: 700, fill: 'var(--v-card)', anchor: 'start' }) + text(x + 34, 232, '•••• 4821', { size: 11, fill: 'var(--v-card)', op: 0.85 }) + text(x + 166, 232, '$340', { size: 11, weight: 600, anchor: 'end', fill: 'var(--v-card)' });
-        s += text(x + 22, 272, 'Movements', { size: 11, weight: 600 });
-        [['Coffee Lab', '−4.80'], ['Salary', '+3,200.00'], ['Rent', '−1,150.00'], ['Transit pass', '−32.00']].forEach(([n, val], k) => { s += line(x + 22, 284 + k * 38, x + 178, 284 + k * 38) + circle(x + 36, 303 + k * 38, 11, { fill: INK, op: 0.1 }) + text(x + 56, 307 + k * 38, n, { size: 11, weight: 500 }) + text(x + 178, 307 + k * 38, val, { size: 11, weight: 600, anchor: 'end' }); });
-      } else if (i === 1) {
-        s += text(x + 22, 76, 'Send money', { size: 14, weight: 650 }) + text(x + 22, 108, 'To', { size: 10, fill: 'var(--v-mute)' }) + rect(x + 22, 116, 156, 36, { rx: 10, fill: 'none', stroke: 'var(--v-card-line)' }) + text(x + 34, 139, 'Ana Pérez', { size: 12 });
-        s += text(x + 22, 190, 'Amount', { size: 10, fill: 'var(--v-mute)' }) + text(x + 22, 232, '$250.00', { size: 28, weight: 600 }) + text(x + 22, 262, 'From Savings · available $4,210', { size: 10, fill: 'var(--v-mute)' });
-        s += rect(x + 22, 398, 156, 40, { rx: 20, fill: INK }) + text(x + 100, 423, 'Continue', { size: 12.5, weight: 600, anchor: 'middle', fill: 'var(--v-card)' });
-        s += text(x + 22, 296, 'Recent', { size: 10, fill: 'var(--v-mute)' });
-        ['A', 'L', 'D', 'M'].forEach((n, k) => { s += circle(x + 36 + k * 38, 322, 15, { fill: INK, op: k === 0 ? 0.9 : 0.1 }) + text(x + 36 + k * 38, 326, n, { size: 11, weight: 700, anchor: 'middle', fill: k === 0 ? 'var(--v-card)' : INK }); });
-        ['$50', '$100', '$250'].forEach((n, k) => { s += rect(x + 22 + k * 54, 352, 48, 26, { rx: 13, fill: k === 2 ? 'var(--v-accent)' : 'none', stroke: k === 2 ? 'none' : 'var(--v-card-line)' }) + text(x + 46 + k * 54, 369, n, { size: 10.5, weight: 600, anchor: 'middle', fill: k === 2 ? '#fff' : INK }); });
-      } else {
-        s += text(x + 22, 76, 'Review', { size: 14, weight: 650 });
-        [['To', 'Ana Pérez'], ['Amount', '$250.00'], ['Fee', 'Free'], ['Arrives', 'Today']].forEach(([k, val], n) => { s += line(x + 22, 100 + n * 44, x + 178, 100 + n * 44) + text(x + 22, 128 + n * 44, k, { size: 11, fill: 'var(--v-mute)' }) + text(x + 178, 128 + n * 44, val, { size: 12, weight: 600, anchor: 'end' }); });
-        s += text(x + 22, 312, 'Pay with', { size: 10, fill: 'var(--v-mute)' }) + rect(x + 22, 322, 156, 44, { rx: 10, fill: INK }) + text(x + 34, 349, 'VISA', { size: 10, weight: 700, fill: 'var(--v-card)' }) + text(x + 168, 349, '•••• 4821', { size: 11, anchor: 'end', fill: 'var(--v-card)', op: 0.85 });
-        s += circle(x + 30, 388, 5, { fill: ACC }) + text(x + 42, 391, 'Protected by 2-step verification', { size: 9, fill: 'var(--v-mute)' });
-        s += rect(x + 22, 398, 156, 40, { rx: 20, fill: ACC }) + text(x + 100, 423, 'Confirm transfer', { size: 12.5, weight: 600, anchor: 'middle', fill: '#fff' });
+    // notes along each lane, connected by curved arrows
+    let prev = null;
+    for (let i = 0; i < 4; i++) {
+      prev = null;
+      const n = 6 + (i % 2);
+      for (let k = 0; k < n; k++) {
+        const x = 24 + k * (n === 7 ? 108 : 124) + (r() - 0.5) * 22, y = 56 + i * 118 + (r() - 0.5) * 26, rot = (r() - 0.5) * 14;
+        const c = COL[Math.floor(r() * COL.length)], w = 74 + r() * 8, h = 60 + r() * 8;
+        if (prev) s += `<path d="M${f(prev[0] + 40)} ${f(prev[1] + 34)} C ${f(prev[0] + 70)} ${f(prev[1] + 10 + (r() - 0.5) * 40)} ${f(x - 20)} ${f(y + 30 + (r() - 0.5) * 40)} ${f(x + 6)} ${f(y + 32)}" fill="none" stroke="${INK}" stroke-opacity=".45" stroke-width="1.3" stroke-dasharray="4 3"/>`;
+        s += `<g transform="rotate(${f(rot)} ${f(x + w / 2)} ${f(y + h / 2)})">` + rect(x + 2, y + 3, w, h, { rx: 3, fill: '#000', op: 0.12 }) + rect(x, y, w, h, { rx: 3, fill: c });
+        const word = WORDS[Math.floor(r() * WORDS.length)], parts = word.split(' ');
+        const l1 = parts.slice(0, 2).join(' '), l2 = parts.slice(2).join(' ');
+        s += text(x + 7, y + 20, l1, { size: 8.5, weight: 650, fill: INK }) + (l2 ? text(x + 7, y + 32, l2, { size: 8.5, weight: 650, fill: INK }) : '') + rect(x + 7, y + h - 18, 30 + r() * 24, 4, { rx: 2, fill: INK, op: 0.28 }) + rect(x + 7, y + h - 10, 18 + r() * 20, 4, { rx: 2, fill: INK, op: 0.2 }) + `</g>`;
+        prev = [x, y];
       }
-    });
-    s += arrow(262, 250, 298, 250) + arrow(502, 250, 538, 250);
-    return wrap(s, 'The flow becomes polished mobile screens: home, send money and review', H, W);
+    }
+    // stray notes piled on top
+    for (let k = 0; k < 9; k++) {
+      const x = 30 + r() * 700, y = 30 + r() * 410, rot = (r() - 0.5) * 24, c = COL[Math.floor(r() * COL.length)], w = 66, h = 56;
+      s += `<g transform="rotate(${f(rot)} ${f(x + w / 2)} ${f(y + h / 2)})">` + rect(x + 2, y + 3, w, h, { rx: 3, fill: '#000', op: 0.14 }) + rect(x, y, w, h, { rx: 3, fill: c }) + rect(x + 7, y + 12, 40, 4, { rx: 2, fill: INK, op: 0.5 }) + rect(x + 7, y + 22, 50, 4, { rx: 2, fill: INK, op: 0.35 }) + rect(x + 7, y + 32, 28, 4, { rx: 2, fill: INK, op: 0.3 }) + `</g>`;
+    }
+    return wrap(s, 'A messy FigJam board: many customer journeys built from sticky notes', H, W);
   }
-  // stage 3: working product, tested and shipped
-  s += phone(300, 20, 200, 460);
-  s += rect(322, 48, 156, 400, { rx: 14, fill: 'none' });
-  s += circle(400, 150, 30, { fill: ACC }) + `<path d="M386 150 l10 10 l18 -20" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>`;
-  s += text(400, 214, 'Transfer sent', { size: 16, weight: 650, anchor: 'middle' }) + text(400, 238, '$250.00 to Ana Pérez', { size: 11.5, anchor: 'middle', fill: 'var(--v-mute)' });
-  s += rect(330, 270, 140, 90, { rx: 12, fill: 'var(--v-line)' }) + text(342, 296, 'Arrives', { size: 10, fill: 'var(--v-mute)' }) + text(342, 316, 'Today, 2:41 pm', { size: 12, weight: 600 }) + text(342, 346, 'Ref. 00482913', { size: 10, fill: 'var(--v-mute)' });
-  s += rect(330, 408, 140, 38, { rx: 19, fill: INK }) + text(400, 432, 'Done', { size: 12.5, weight: 600, anchor: 'middle', fill: 'var(--v-card)' });
-  const chip = (x, y, w, title, sub, ok) => rect(x, y, w, 64, { rx: 14, fill: 'var(--v-card)', stroke: 'var(--v-card-line)', cls: 'fl' }) + circle(x + 26, y + 32, 11, { fill: ok ? ACC : 'none', stroke: ok ? 'none' : 'var(--v-mute)', sw: 1.6 }) + (ok ? `<path d="M${x + 20.5} ${y + 32} l4 4 l7 -8" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>` : '') + text(x + 48, y + 29, title, { size: 12, weight: 650 }) + text(x + 48, y + 46, sub, { size: 10, fill: 'var(--v-mute)' });
-  s += chip(50, 110, 220, 'Tested with customers', 'Prototype · iterated', true) + chip(50, 190, 220, 'Edge cases covered', 'Errors, limits, retries', true) + chip(50, 270, 220, 'Handed to engineering', 'Specs · components', true);
-  s += chip(530, 150, 220, 'Built with the bank’s team', 'Adapted to constraints', true) + chip(530, 230, 220, 'In production', 'Live for customers', true);
-  return wrap(s, 'The finished product: a working transfer confirmation, tested with customers and handed to engineering', H, W);
+
+  // stage 2: many wireframes, from sketchy low-resolution to polished high-resolution
+  const kinds = [['lo', 'lo', 'lo', 'mid', 'hi', 'hi'], ['lo', 'mid', 'mid', 'hi', 'hi', 'hi']];
+  const pw = 96, ph = 200, gx = 124, x0 = 40;
+  const lo = (x, y, v) => {
+    let o = rect(x + 8, y + 12, pw - 16, 10, { rx: 2, fill: '#c9c8c2' });
+    if (v % 3 === 0) { o += rect(x + 8, y + 32, pw - 16, 46, { fill: 'none', stroke: '#9b9a94', sw: 1 }) + line(x + 8, y + 32, x + pw - 8, y + 78, { stroke: '#9b9a94' }) + line(x + pw - 8, y + 32, x + 8, y + 78, { stroke: '#9b9a94' }); }
+    for (let k = 0; k < 4; k++) o += rect(x + 8, y + (v % 3 === 0 ? 90 : 36) + k * 26, pw - 16, 18, { fill: 'none', stroke: '#9b9a94', sw: 1, rx: 1 }) + rect(x + 12, y + (v % 3 === 0 ? 96 : 42) + k * 26, 30 + (k * 11) % 26, 4, { fill: '#b9b8b2' });
+    return o + rect(x + 14, y + ph - 34, pw - 28, 20, { fill: '#c9c8c2', stroke: '#9b9a94', sw: 1 });
+  };
+  const mid = (x, y, v) => {
+    let o = text(x + 10, y + 26, ['Home', 'Pay', 'Send', 'Review', 'Cards', 'Accounts'][v % 6], { size: 9.5, weight: 650, fill: INK });
+    for (let k = 0; k < 4; k++) o += rect(x + 10, y + 40 + k * 28, pw - 20, 22, { rx: 5, fill: '#fff', stroke: '#b5b4ae', sw: 1 }) + circle(x + 21, y + 51 + k * 28, 5, { fill: '#cfcec8' }) + rect(x + 32, y + 48 + k * 28, 30 + (k * 9) % 22, 4, { rx: 2, fill: '#bdbcb6' });
+    return o + rect(x + 10, y + ph - 36, pw - 20, 24, { rx: 12, fill: '#8d8c86' });
+  };
+  const hi = (x, y, v) => {
+    let o = text(x + 10, y + 26, ['Total balance', 'Pay a bill', 'Send money', 'Review', 'My cards', 'Accounts'][v % 6], { size: 9.5, weight: 650, fill: INK });
+    if (v % 2 === 0) o += rect(x + 10, y + 36, pw - 20, 50, { rx: 8, fill: INK }) + text(x + 18, y + 58, 'VISA', { size: 8, weight: 700, fill: '#fff' }) + text(x + 18, y + 76, '•••• 4821', { size: 8, fill: '#fff', op: 0.8 });
+    else o += text(x + 10, y + 62, '$250.00', { size: 20, weight: 650, fill: INK });
+    for (let k = 0; k < 3; k++) o += line(x + 10, y + 100 + k * 28, x + pw - 10, y + 100 + k * 28, { stroke: 'rgba(0,0,0,.1)' }) + circle(x + 20, y + 114 + k * 28, 7, { fill: INK, op: 0.1 }) + rect(x + 34, y + 110 + k * 28, 34, 4, { rx: 2, fill: INK, op: 0.55 }) + rect(x + pw - 36, y + 110 + k * 28, 26, 4, { rx: 2, fill: k === 1 ? '#2f8a5b' : INK, op: 0.7 });
+    return o + rect(x + 10, y + ph - 36, pw - 20, 24, { rx: 12, fill: INK }) + text(x + pw / 2, y + ph - 20, 'Continue', { size: 8.5, weight: 650, anchor: 'middle', fill: '#fff' });
+  };
+  kinds.forEach((row, ri) => row.forEach((kind, ci) => {
+    const x = x0 + ci * gx + (r() - 0.5) * 4, y = 34 + ri * 232 + (r() - 0.5) * 6, v = ri * 6 + ci;
+    const rx = kind === 'lo' ? 8 : 14;
+    if (kind === 'hi') s += rect(x + 2, y + 6, pw, ph, { rx, fill: '#000', op: 0.14 });
+    s += kind === 'lo' ? `<rect x="${x}" y="${y}" width="${pw}" height="${ph}" rx="${rx}" fill="#f8f7f3" stroke="#8d8c86" stroke-width="1.4" stroke-dasharray="5 3"/>` : rect(x, y, pw, ph, { rx, fill: kind === 'mid' ? '#f6f5f1' : '#fff', stroke: kind === 'mid' ? '#9b9a94' : 'rgba(0,0,0,.14)', sw: 1.2 });
+    s += kind === 'lo' ? lo(x, y, v) : kind === 'mid' ? mid(x, y, v) : hi(x, y, v);
+    if (ci < 5) s += `<path d="M${x + pw + 6} ${y + ph / 2} h${gx - pw - 12}" stroke="${INK}" stroke-opacity=".4" stroke-width="1.3" stroke-dasharray="3 3" fill="none"/>`;
+  }));
+  s += rect(40, 8, 74, 18, { rx: 9, fill: INK }) + text(77, 20, 'Low-res', { size: 8.5, weight: 650, anchor: 'middle', fill: '#fff' }) + rect(686, 8, 74, 18, { rx: 9, fill: '#2f8a5b' }) + text(723, 20, 'High-res', { size: 8.5, weight: 650, anchor: 'middle', fill: '#fff' });
+  return wrap(s, 'Many wireframes, from sketchy low-resolution to polished high-resolution screens', H, W);
 }
 
 export const visuals = { targetTracking, siteSelection, siteEvolve, bankEvolve, banking, navigation };
