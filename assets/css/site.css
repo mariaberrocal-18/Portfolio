@@ -672,7 +672,7 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
   .contact__stage { min-height: 0; padding-top: 88px; grid-template-rows: auto auto auto; }
   .contact__copy { padding-bottom: 28px; }
   .contact__photo { position: relative; width: auto; height: min(118vw, 640px); margin-inline: calc(var(--pad) * -1); border-left: 0; border-top: 1px solid var(--line); }
-  .contact__base { width: 100%; margin-top: 16px; }
+  .contact__base { width: 100%; margin-top: 0; padding-top: 18px; }
   .case-hero__head, .case-hero__copy, .case-hero__media { grid-column: 1 / -1; position: static; }
   .case-hero__media { margin-top: 28px; }
   .meta__row { grid-template-columns: 6rem 1fr; }

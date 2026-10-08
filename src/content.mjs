@@ -8,6 +8,7 @@ export const site = {
   name: 'María Berrocal',
   role: 'Senior Product Designer',
   email: 'mariabeatrizber@gmail.com',
+  whatsapp: 'https://wa.me/5491136802421',
   linkedin: 'https://www.linkedin.com/notifications/', // NOTE: this is LinkedIn's notifications page, not a profile URL. Replace with https://www.linkedin.com/in/<handle>
   year: new Date().getFullYear(),
 };

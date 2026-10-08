@@ -86,7 +86,7 @@ function footer(p) {
         <div>
           <p class="contact__h">Elsewhere</p>
           <a href="${site.linkedin}" rel="noopener">LinkedIn</a>
-          <a href="mailto:${site.email}">Email</a>
+          <a href="${site.whatsapp}" rel="noopener" target="_blank">Message me</a>
         </div>
       </nav>
     </div>
