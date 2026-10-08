@@ -6,7 +6,7 @@
 
 export const site = {
   // Set to the final domain (no trailing slash), e.g. 'https://mariaberrocal.com', or build with SITE_URL=...
-  url: (process.env.SITE_URL || '').replace(/\/$/, ''),
+  url: (process.env.SITE_URL || 'https://www.mariaberrocal.com').replace(/\/$/, ''),
   name: 'María Berrocal',
   role: 'Senior Product Designer',
   email: 'mariabeatrizber@gmail.com',
