@@ -331,6 +331,7 @@ export const projects = [
     ],
     blurb: 'A platform organised around how it was built. I redesigned the navigation around what people are trying to do, and rolled it out in steps.',
     visual: 'navigation',
+    evolveVisual: 'navEvolve',
     tone: 'light',
     card: 'd',
     draft: true,
@@ -385,18 +386,18 @@ export const projects = [
       },
     ],
     stages: [
-      ['A sprawl of entry points', 'Mapping the existing product showed how many places a single task could start, and how few of them connected.'],
-      ['Grouped by intent', 'Collapsing the sprawl into a handful of groups, each named for a question people ask, gave the structure its first clear shape.'],
-      ['One persistent navigation', 'The final model keeps primary navigation stable and reveals secondary options in context.'],
-    ],
-    shipped: [
-      'New information architecture',
-      'Persistent primary navigation with contextual secondary',
-      'Workspace and facility switcher',
+      ['A platform running out of room', 'New products, features, and customer requests were pushing the existing navigation beyond its original limits.'],
+      ['Rethinking the architecture', 'Reorganizing the platform around a more scalable structure that could support multiple products and different customer needs.'],
+      ['One platform, more flexibility', 'Creating a shared navigation experience capable of accommodating growth and customer-specific configurations.'],
     ],
     outcome: [
-      'New users found their way without a guide.',
-      'The structure had room for new modules without a redesign.',
+      'A more flexible foundation for a growing platform.',
+      'I helped reshape Waterplan’s navigation and information architecture around a more scalable model — moving away from constantly finding space for new features toward a structure designed to accommodate multiple products and customer-specific needs.',
+    ],
+    lessons: [
+      ['Scalability starts with architecture.', 'A design that works for today’s product can become a limitation as new capabilities and customers are introduced.'],
+      ['Flexibility needs structure.', 'Customization only works sustainably when there’s a consistent foundation underneath it.'],
+      ['Design decisions create technical consequences.', 'Information architecture isn’t just about where things appear on screen. It directly affects how easily a product can evolve.'],
     ],
   },
 ];

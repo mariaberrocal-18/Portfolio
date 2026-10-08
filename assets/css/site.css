@@ -569,8 +569,9 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
 @media (min-width: 960px) {
   .evolve--pinned .evolve__track { height: calc(340vh + clamp(88px, 11vw, 170px)); }
   .evolve--pinned .evolve__track > .wrap { height: 100%; }
-  .evolve--pinned .evolve__h { position: sticky; top: 1.5vh; z-index: 3; margin-bottom: 18px; }
-  .evolve--pinned .evolve__pin { position: sticky; top: calc(1.5vh + 104px); grid-template-columns: repeat(12, 1fr); gap: var(--gap); align-items: center; }
+  .evolve--pinned .evolve__stick { position: sticky; top: 1.5vh; }
+  .evolve--pinned .evolve__h { margin-bottom: 18px; }
+  .evolve--pinned .evolve__pin { grid-template-columns: repeat(12, 1fr); gap: var(--gap); align-items: center; }
   .evolve--pinned .evolve__stage { grid-column: 1 / span 8; }
   .evolve--pinned .evolve__steps { grid-column: 9 / span 4; gap: 0; }
   .evolve--pinned .evolve__stage .layer[data-layer] { display: block; }

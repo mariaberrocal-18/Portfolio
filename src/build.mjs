@@ -307,12 +307,14 @@ ${header(p, false)}
     <section class="evolve" data-evolve aria-labelledby="evolve-h">
       <div class="evolve__track">
         <div class="wrap">
+          <div class="evolve__stick">
           <h2 id="evolve-h" class="h3 evolve__h"><span>The evolution</span></h2>
           <div class="evolve__pin">
             ${proj.visual === 'targetTracking'
               ? `<div class="evolve__stage evolve__stage--tt">${ttEvolve()}</div>`
               : `<div class="evolve__stage v v--${proj.tone}">${[1, 2, 3].map((s) => `<div class="layer" data-layer="${s - 1}">${render(proj.evolveVisual || proj.visual, s)}</div>`).join('')}</div>`}
             <ol class="evolve__steps">${steps}</ol>
+          </div>
           </div>
         </div>
       </div>
