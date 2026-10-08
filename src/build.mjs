@@ -59,14 +59,14 @@ ${pageUrl ? `<link rel="canonical" href="${pageUrl}">\n` : ''}<link rel="icon" h
 <meta property="og:site_name" content="${esc(site.name)}">
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(desc)}">
-${pageUrl ? `<meta property="og:url" content="${pageUrl}">\n` : ''}<meta property="og:image" content="${abs('assets/brand/og.png')}">
+${pageUrl ? `<meta property="og:url" content="${pageUrl}">\n` : ''}<meta property="og:image" content="${abs('assets/brand/og.jpg')}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="${esc(site.name)}, Product Designer">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="${esc(title)}">
 <meta name="twitter:description" content="${esc(desc)}">
-<meta name="twitter:image" content="${abs('assets/brand/og.png')}">
+<meta name="twitter:image" content="${abs('assets/brand/og.jpg')}">
 <link rel="stylesheet" href="${p}assets/css/site.css?v=${V.css}">
 <script>document.documentElement.classList.add('js');setTimeout(function(){window.__ok||document.documentElement.classList.add('failsafe')},3500)</script>
 </head>`;
