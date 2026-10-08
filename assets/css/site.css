@@ -895,10 +895,10 @@ img.org-logo--ey-design-studio { height: 52px; margin-block: -6px; }
 @media (max-width: 959px) {
   .evolve--m .evolve__track { padding-bottom: 60px; }
   .evolve--m .evolve__pin { display: block; }
-  .evolve--m .evolve__stage { position: sticky; top: 60px; z-index: 3; width: 100%; box-shadow: 0 0 0 14px #0b0b0b, 0 30px 24px 10px #0b0b0b; }
+  .evolve--m .evolve__stage { position: sticky; top: 60px; z-index: 3; width: 100%; }
   .evolve--m .evolve__stage .layer[data-layer] { display: block; }
   .evolve--m .evolve__stage .layer:not([data-layer='0']) { clip-path: inset(0 calc((1 - var(--r, 0)) * 100%) 0 0); }
-  .evolve--m .evolve__steps { margin-top: 36px; gap: 0; position: relative; z-index: 1; }
+  .evolve--m .evolve__steps { margin-top: 36px; gap: 0; position: relative; z-index: 1; -webkit-mask-image: linear-gradient(to bottom, transparent var(--cut, 0px), #000 calc(var(--cut, 0px) + 36px)); mask-image: linear-gradient(to bottom, transparent var(--cut, 0px), #000 calc(var(--cut, 0px) + 36px)); }
   .evolve--m .evolve__steps li { min-height: 50vh; padding: 24px 0 30px; opacity: 0.3; transition: opacity 0.5s ease; }
   .evolve--m .evolve__steps li.is-active { opacity: 1; }
   .evolve--m .evolve__steps li:first-child { min-height: 40vh; }

@@ -500,6 +500,12 @@
         const line = vh * 0.78;
         const seg = (li) => { const b = li.getBoundingClientRect(); return clamp((line - b.top) / Math.max(1, b.height * 0.9)); };
         p = (steps[1] ? seg(steps[1]) : 0) + (steps[2] ? seg(steps[2]) : 0);
+        // text slides behind the stuck animation: fade out whatever sits under it
+        const st = ev.querySelector('.evolve__stage'), ol = ev.querySelector('.evolve__steps');
+        if (st && ol) {
+          const cut = Math.max(0, st.getBoundingClientRect().bottom + 16 - ol.getBoundingClientRect().top);
+          ol.style.setProperty('--cut', `${cut.toFixed(0)}px`);
+        }
       }
       layers.forEach((l, i) => { if (i > 0) l.style.setProperty('--r', clamp(p - (i - 1)).toFixed(3)); });
       const active = p < 0.55 ? 0 : p < 1.25 ? 1 : 2;
