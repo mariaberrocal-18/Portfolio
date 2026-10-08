@@ -34,7 +34,7 @@
         <dl class="meta">
           <div class="meta__row"><dt>Company</dt><dd><img class="org-logo org-logo--waterplan" src="../assets/logos/waterplan.png" alt="Waterplan logo" loading="lazy"></dd></div>
           <div class="meta__row"><dt>Built for</dt><dd><ul class="clients"><li>The world’s largest independent beverage bottler and a global FMCG leader.</li><li>The world’s largest brewer and a leading global beverage corporation.</li><li>A Fortune 500 consumer goods leader with omnipresent global brands.</li></ul></dd></div>
-          <div class="meta__row"><dt>Scope</dt><dd>Information architecture, navigation model, rollout</dd></div>
+          <div class="meta__row"><dt>Scope</dt><dd>Navigation, information architecture, configurable framework</dd></div>
           <div class="meta__row"><dt>Worked with</dt><dd>Product, Engineering</dd></div>
         </dl>
         <p class="case-note">Interfaces are reconstructed to respect client confidentiality.</p>
@@ -46,31 +46,31 @@
       <div class="thread wrap" aria-hidden="true"><i class="thread__track"></i><i class="thread__fill"></i><i class="thread__dot"></i></div>
 
     <div id="story" class="story wrap">
-      
-      <section class="blk"><h2 class="blk__h">The problem</h2><div class="prose"><p>As the platform grew, navigation grew with it: one entry per module, added as each shipped. The structure mirrored how the product was built, not how people work.</p></div></section>
-      <section class="blk"><h2 class="blk__h">Why it was hard</h2><div class="prose"><p>Existing users had muscle memory. Roles used different parts of the product. Modules were at different levels of maturity. Any change had to help new users without losing the old ones.</p></div></section>
-      <section class="blk"><h2 class="blk__h">My role</h2><div class="prose"><p>I led the information architecture and the navigation model, and shaped the rollout with Product and Engineering so the change could land in steps.</p></div></section>
+      <section class="blk"><h2 class="blk__h">The context</h2><div class="prose"><p>A platform growing faster than its architecture could support.</p><p>As Waterplan grew, so did the number of customers, products, and features. What started as a shared platform was evolving into a much more complex ecosystem, with customers asking for increasingly tailored experiences.</p><p>The existing architecture hadn’t been designed for that level of growth or flexibility.</p></div></section>
+      <section class="blk"><h2 class="blk__h">The problem</h2><div class="prose"><p>One platform couldn’t keep working the same way for everyone.</p><p>Customers wanted Waterplan to feel more like their own environment — from terminology and branding to how information, metrics, and formulas were presented.</p><p>At the same time, new products and features were constantly being introduced, and the existing navigation was running out of room.</p><p>Every new request meant figuring out where things could fit, often adding complexity to both the user experience and development.</p></div></section>
+      <section class="blk"><h2 class="blk__h">Why it was hard</h2><div class="prose"><p>How do you make one platform feel like many, without building a different product for every customer?</p><p>The UX challenge went beyond reorganizing a sidebar. We needed an architecture that could accommodate more products, support different customer configurations, and remain intuitive regardless of how each organization used the platform.</p><p>The difficult part was finding the right balance between a consistent product experience and the flexibility customers expected.</p></div></section>
+      <section class="blk"><h2 class="blk__h">My role</h2><div class="prose"><p>I worked on rethinking Waterplan’s navigation and information architecture to support a more flexible, scalable platform.</p><p>My focus was understanding how the growing number of modules, customer-specific configurations, and workflows could coexist within a single experience.</p><p>That meant reconsidering how the platform was organized, how users moved between products, and how the interface could accommodate different needs without becoming increasingly complex.</p></div></section>
       <section class="blk"><h2 class="blk__h">The decisions that shaped the product</h2><ol class="decisions"><li class="decision">
-        <h3 class="decision__title">Organise around questions, not modules</h3>
+        <h3 class="decision__title">Build for growth, not just the next feature</h3>
         <dl class="decision__pair">
-          <div class="pair__a"><dt>Decision</dt><dd>Groups based on what people are doing</dd></div>
-          <div><dt>Over</dt><dd>One entry per module</dd></div>
+          <div class="pair__a"><dt>Decision</dt><dd>Create a navigation architecture that could accommodate new products and capabilities.</dd></div>
+          <div><dt>Over</dt><dd>Continuously adapting the existing menu to fit each new request.</dd></div>
         </dl>
-        <p class="decision__why">People arrive with a question, such as “where are we at risk?” or “what is our plan?”. The structure should meet them there.</p>
+        <p class="decision__why">The previous structure was reaching its limits, making every addition harder to integrate.</p>
       </li><li class="decision">
-        <h3 class="decision__title">Shallow and persistent</h3>
+        <h3 class="decision__title">Make room for customer-specific experiences</h3>
         <dl class="decision__pair">
-          <div class="pair__a"><dt>Decision</dt><dd>A persistent primary nav with contextual secondary</dd></div>
-          <div><dt>Over</dt><dd>A deep tree</dd></div>
+          <div class="pair__a"><dt>Decision</dt><dd>Design a shared navigation framework that could support different customer configurations.</dd></div>
+          <div><dt>Over</dt><dd>Maintaining one rigid experience or creating separate interfaces for individual customers.</dd></div>
         </dl>
-        <p class="decision__why">People always know where they are, and the deeper options only appear when they matter.</p>
+        <p class="decision__why">Customers needed flexibility, but the product still needed a consistent foundation that Design and Engineering could maintain.</p>
       </li><li class="decision">
-        <h3 class="decision__title">Ship in steps</h3>
+        <h3 class="decision__title">Separate the platform structure from its presentation</h3>
         <dl class="decision__pair">
-          <div class="pair__a"><dt>Decision</dt><dd>An incremental rollout</dd></div>
-          <div><dt>Over</dt><dd>A single big switch</dd></div>
+          <div class="pair__a"><dt>Decision</dt><dd>Explore how terminology, branding, and other configurable elements could vary without changing the underlying navigation logic.</dd></div>
+          <div><dt>Over</dt><dd>Treating every customization request as a separate design problem.</dd></div>
         </dl>
-        <p class="decision__why">Familiar paths stayed where people expected them while the new structure took hold.</p>
+        <p class="decision__why">A flexible platform needed to accommodate customer differences without fragmenting the overall experience.</p>
       </li></ol></section>
     </div>
 
