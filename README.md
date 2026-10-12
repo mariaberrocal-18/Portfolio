@@ -16,10 +16,10 @@ npm start       # serve on http://localhost:4173
 | `src/build.mjs` | Page templates. |
 | `assets/css/site.css` | Design tokens and styles (see `DESIGN.md`). |
 | `assets/js/site.js` | Smooth scroll (Lenis), load sequence, reveals, timeline, evolve wipe, cursor label. |
-| `assets/photos/` | `maria-hero.webp` is the hi-res cutout (transparent background). `maria-contact.jpg` is still cropped from a Framer screenshot: replace it with the original at the same filename. |
+| `assets/photos/` | `maria-hero.webp` and `maria-contact.webp` are the hi-res cutouts (transparent background). `maria-avatar.jpg` (nav) is cropped from the hero. |
 
 ## Before publishing
 
 1. Replace `site.email` and `site.linkedin` in `src/content.mjs`.
-2. Replace `maria-contact.jpg` with the full-resolution original.
+2. (done) hero and footer portraits are the hi-res cutouts.
 3. Verify every case-study claim; then set `draft: false`.
