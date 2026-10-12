@@ -18,6 +18,7 @@ export const hero = {
   title: 'a Product Designer.',
   lede: '8 years of experience designing digital products where understanding the system, questioning assumptions, and figuring out the real problem is half the work.',
   cta: 'View selected work',
+  cv: { label: 'Download CV', file: 'assets/cv/Maria-Berrocal-CV.pdf' },
   loop: {
     say: ['Frame it.', 'Craft it.', 'Ship it.', 'Repeat.'],
     lede: 'A loop I run every day. It never stops.',

@@ -17,6 +17,8 @@ const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, 
 const arrow = `<svg class="ico" width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M4.5 13.5l9-9M6 4.5h7.5V12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 const back = `<svg class="ico" width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M14 9H4m4.5-4.5L4 9l4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
+const download = `<svg class="ico" width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M9 3v8.5M5.5 8.5L9 12l3.5-3.5M4 14.5h10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
 const label = (t) => `<span class="roll" data-text="${esc(t)}"><span>${esc(t)}</span></span>`;
 
 function head({ title, desc, p, noindex }) {
@@ -162,7 +164,10 @@ ${header('', true)}
         <span class="line" aria-hidden="true"><span>${chars(hero.title)}</span></span>
       </h1>
       <p class="hero__lede">${esc(hero.lede)}</p>
-      <a class="btn" href="#work">${label(hero.cta)}</a>
+      <div class="hero__actions">
+        <a class="btn" href="#work">${label(hero.cta)}</a>
+        <a class="btn btn--ghost" href="${hero.cv.file}" download="Maria-Berrocal-CV.pdf">${label(hero.cv.label)}${download}</a>
+      </div>
     </div>
     <figure class="hero__photo"><img src="assets/photos/maria-hero.webp" alt="Black-and-white portrait of María Berrocal, smiling and looking to her left" width="1122" height="1262" fetchpriority="high"></figure>
     <span class="hero__rule" aria-hidden="true"></span>
