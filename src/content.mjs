@@ -35,6 +35,22 @@ export const hero = {
   ],
 };
 
+// Visual design gallery. Placeholders until María supplies the pieces:
+// add `src` (assets/visual/<file>) and `alt` to an item and it renders the image instead.
+export const visual = {
+  title: 'Visual design.',
+  lede: 'Pieces where the craft is the point.',
+  items: [
+    { label: 'Piece 01', span: 7, ar: '4 / 3' },
+    { label: 'Piece 02', span: 5, ar: '20 / 21' },
+    { label: 'Piece 03', span: 4, ar: '1 / 1' },
+    { label: 'Piece 04', span: 4, ar: '1 / 1' },
+    { label: 'Piece 05', span: 4, ar: '1 / 1' },
+    { label: 'Piece 06', span: 5, ar: '20 / 21' },
+    { label: 'Piece 07', span: 7, ar: '4 / 3' },
+  ],
+};
+
 export const journey = {
   title: 'My design journey so far.',
   lede: '8 years across consulting, UX/UI, and product design. I like getting to the root of complex problems, asking the right questions, and turning them into products people can actually use.',

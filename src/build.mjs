@@ -4,7 +4,7 @@ import { mkdirSync, writeFileSync, readFileSync, cpSync, rmSync } from 'node:fs'
 import { createHash } from 'node:crypto';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { site, hero, journey, toolkit, about, contact, projects } from './content.mjs';
+import { site, hero, visual, journey, toolkit, about, contact, projects } from './content.mjs';
 import { render, ratio, ttEvolve } from './visuals.mjs';
 import { mini } from './mini.mjs';
 import { marks } from './logos.mjs';
@@ -231,6 +231,26 @@ ${header('', true)}
       <div class="work-grid" id="projects" data-grid>
         ${projects.map(workCard).join('\n')}
       </div>
+    </div>
+  </section>
+
+  <section class="visual-section" id="visual" aria-labelledby="visual-h">
+    <div class="wrap">
+      <header class="sec-head work-head">
+        <h2 id="visual-h" class="h2">${esc(visual.title)}</h2>
+        <p class="sec-head__lede">${esc(visual.lede)}</p>
+      </header>
+      <ul class="vgrid">
+        ${visual.items
+          .map(
+            (it, i) => `<li class="vtile${it.src ? '' : ' vtile--empty'}" style="--span:${it.span};--ar:${it.ar}">${
+              it.src
+                ? `<img src="${it.src}" alt="${esc(it.alt || it.label)}" loading="lazy">`
+                : `<span class="vtile__n">${String(i + 1).padStart(2, '0')}</span><span class="vtile__t">Coming soon</span>`
+            }</li>`,
+          )
+          .join('\n        ')}
+      </ul>
     </div>
   </section>
 
