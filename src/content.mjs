@@ -35,19 +35,20 @@ export const hero = {
   ],
 };
 
-// Visual design gallery. Placeholders until María supplies the pieces:
-// add `src` (assets/visual/<file>) and `alt` to an item and it renders the image instead.
+// Visual Design: editorial pieces. The first is the full-width feature, the rest sit in a
+// staggered two-column rhythm (add Mafalda, Gabi López, Palmarium here later).
+// Media slot: set `media` to { src, alt } for an image or { video, poster, alt } for an animation.
 export const visual = {
-  title: 'Visual design.',
-  lede: 'Pieces where the craft is the point.',
-  items: [
-    { label: 'Piece 01', span: 7, ar: '4 / 3' },
-    { label: 'Piece 02', span: 5, ar: '20 / 21' },
-    { label: 'Piece 03', span: 4, ar: '1 / 1' },
-    { label: 'Piece 04', span: 4, ar: '1 / 1' },
-    { label: 'Piece 05', span: 4, ar: '1 / 1' },
-    { label: 'Piece 06', span: 5, ar: '20 / 21' },
-    { label: 'Piece 07', span: 7, ar: '4 / 3' },
+  title: 'Visual Design',
+  lede: 'Exploring how brands look, feel, and communicate — through art direction, web design, and AI-assisted image-making.',
+  projects: [
+    {
+      name: 'Waterplan',
+      descriptor: 'The AI-native platform for water-dependent industries.',
+      categories: ['Art direction', 'Web design', 'AI-assisted imagery'],
+      labels: ['Independent concept', 'My exploration'],
+      media: null,
+    },
   ],
 };
 

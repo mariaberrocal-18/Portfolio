@@ -145,6 +145,28 @@ function workCard(proj, i, all) {
   </a>`;
 }
 
+function visualProject(p, i) {
+  const m = p.media;
+  const inner = !m
+    ? `<span class="vmedia__slot" aria-hidden="true">Image or animation</span>`
+    : m.video
+      ? `<video src="${m.video}"${m.poster ? ` poster="${m.poster}"` : ''} autoplay muted loop playsinline aria-label="${esc(m.alt || p.name)}"></video>`
+      : `<img src="${m.src}" alt="${esc(m.alt || p.name)}" loading="lazy">`;
+  return `<article class="vproj ${i === 0 ? 'vproj--feature' : 'vproj--half'}">
+    <div class="vmedia${m ? '' : ' vmedia--empty'}" data-reveal>
+      ${inner}
+      <ul class="vlabels" aria-label="Project type">${p.labels.map((l) => `<li>${esc(l)}</li>`).join('')}</ul>
+    </div>
+    <div class="vproj__text">
+      <h3 class="vproj__name">${esc(p.name)}</h3>
+      <div class="vproj__side">
+        <p class="vproj__desc">${esc(p.descriptor)}</p>
+        <p class="vproj__cats">${p.categories.map(esc).join(' · ')}</p>
+      </div>
+    </div>
+  </article>`;
+}
+
 function chars(text) {
   // split into words → characters so the headline can animate letter by letter
   let i = 0;
@@ -236,21 +258,13 @@ ${header('', true)}
 
   <section class="visual-section" id="visual" aria-labelledby="visual-h">
     <div class="wrap">
-      <header class="sec-head work-head">
+      <header class="vhead">
         <h2 id="visual-h" class="h2">${esc(visual.title)}</h2>
         <p class="sec-head__lede">${esc(visual.lede)}</p>
       </header>
-      <ul class="vgrid">
-        ${visual.items
-          .map(
-            (it, i) => `<li class="vtile${it.src ? '' : ' vtile--empty'}" style="--span:${it.span};--ar:${it.ar}">${
-              it.src
-                ? `<img src="${it.src}" alt="${esc(it.alt || it.label)}" loading="lazy">`
-                : `<span class="vtile__n">${String(i + 1).padStart(2, '0')}</span><span class="vtile__t">Coming soon</span>`
-            }</li>`,
-          )
-          .join('\n        ')}
-      </ul>
+      <div class="vlist">
+        ${visual.projects.map(visualProject).join('\n        ')}
+      </div>
     </div>
   </section>
 
