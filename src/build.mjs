@@ -167,25 +167,42 @@ function visualProject(p, i) {
   </article>`;
 }
 
+// Dummy web-app window (fictional "Orbit"); `kind` picks the screen. Sizes use cqw so it scales anywhere.
+function appWin(kind) {
+  const nav = ['Overview', 'Projects', 'Timeline', 'Reports', 'Team'];
+  const act = { dash: 0, projects: 1, timeline: 2 }[kind];
+  const side = `<aside class="aw__side"><p class="aw__logo"><b></b>orbit</p><ul>${nav.map((n, i) => `<li${i === act ? ' class="on"' : ''}><i></i>${n}</li>`).join('')}</ul></aside>`;
+  const top = (t) => `<header class="aw__top"><h5>${t}</h5><span class="aw__search"></span><u class="aw__av"></u></header>`;
+  const status = ['On track', 'At risk', 'On track', 'Done', 'On track', 'At risk'];
+  let main = '';
+  if (kind === 'dash') {
+    main = top('Overview') + `<div class="aw__kpis">${[['Active projects', '24', '+3'], ['On track', '86%', '+4%'], ['At risk', '5', '−2'], ['Team load', '72%', '+1%']].map(([l, v, d]) => `<div class="aw__kpi"><span>${l}</span><b>${v}</b><em>${d}</em></div>`).join('')}</div>
+      <div class="aw__card aw__chart"><p>Delivery over time</p><svg viewBox="0 0 300 80" preserveAspectRatio="none"><path class="area" d="M0 62 C30 58 50 50 80 52 S130 34 160 36 S220 22 250 18 S285 12 300 8 L300 80 L0 80Z"/><path class="line" pathLength="1" d="M0 62 C30 58 50 50 80 52 S130 34 160 36 S220 22 250 18 S285 12 300 8"/></svg></div>
+      <ul class="aw__list">${['Website relaunch', 'Q4 planning', 'Onboarding revamp'].map((t, i) => `<li><span>${t}</span><i class="s${i % 2}"></i></li>`).join('')}</ul>`;
+  } else if (kind === 'projects') {
+    const rows = [['Website relaunch', 'Design', 78], ['Q4 planning', 'Ops', 54], ['Onboarding revamp', 'Product', 91], ['Billing migration', 'Eng', 100], ['Partner portal', 'Growth', 36], ['Research ops', 'Design', 62]];
+    main = top('Projects') + `<div class="aw__head"><span>Project</span><span>Owner</span><span>Status</span><span>Progress</span></div><ul class="aw__rows">${rows.map(([n, o, pr], i) => `<li><span class="n">${n}</span><span class="o"><u></u>${o}</span><span class="st st--${status[i] === 'On track' ? 'ok' : status[i] === 'Done' ? 'done' : 'risk'}">${status[i]}</span><span class="pb"><i style="--w:${pr}%"></i></span></li>`).join('')}</ul>`;
+  } else {
+    const bars = [['Discovery', 0, 26], ['Design', 14, 34], ['Build', 36, 40], ['Testing', 62, 20], ['Launch', 80, 16]];
+    main = top('Timeline') + `<div class="aw__months">${['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'].map((m) => `<span>${m}</span>`).join('')}</div><ul class="aw__gantt">${bars.map(([n, st, w], i) => `<li><span>${n}</span><div><i style="--s:${st}%;--w:${w}%;--k:${i}"></i></div></li>`).join('')}</ul><b class="aw__today"></b>`;
+  }
+  return `<div class="aw aw--${kind}"><div class="aw__body">${side}<main class="aw__main">${main}</main></div></div>`;
+}
+
 function pivotScene() {
   const v = visual.pivot;
-  const tabs = '<div class="ph__tabs"><u></u><u></u><u></u><u></u></div>';
-  const phones = [
-    `<div class="ph ph--1" data-ph="0"><div class="ph__body"><i class="ph__notch"></i>
-      <p class="ph__k">Tue, 14 Oct</p><p class="ph__t">Last night</p>
-      <div class="ph__ring"><svg viewBox="0 0 100 100"><circle class="trk" cx="50" cy="50" r="40"/><circle class="val" cx="50" cy="50" r="40" pathLength="1"/></svg><b>86</b><em>Good</em></div>
-      <ul class="ph__rows"><li><span>Deep</span><em>1h 48m</em></li><li><span>REM</span><em>1h 32m</em></li><li><span>Awake</span><em>12m</em></li></ul>${tabs}</div></div>`,
-    `<div class="ph ph--2" data-ph="1"><div class="ph__body"><i class="ph__notch"></i>
-      <p class="ph__k">Sleep score</p><p class="ph__t">This week</p>
-      <div class="ph__seg"><span>Day</span><span class="on">Week</span><span>Month</span></div>
-      <div class="ph__bars">${[62, 74, 58, 81, 70, 88, 86].map((h, i) => `<span style="--h:${h}%;--k:${i}"><b></b><em>${'MTWTFSS'[i]}</em></span>`).join('')}</div>
-      <div class="ph__badge"><i></i>+12% deep sleep</div>${tabs}</div></div>`,
-    `<div class="ph ph--3" data-ph="2"><div class="ph__body"><i class="ph__notch"></i>
-      <p class="ph__k">Tonight</p><p class="ph__t">Wind down</p>
-      <div class="ph__moon"></div>
-      <ul class="ph__steps"><li><i></i><span>Dim lights</span><em>22:30</em></li><li><i></i><span>Screens off</span><em>23:00</em></li><li><i class="off"></i><span>Lights out</span><em>23:30</em></li></ul>
-      <span class="ph__go">Start routine</span>${tabs}</div></div>`,
-  ].join('\n        ');
+  const logos = ['circle', 'square', 'tri', 'bars', 'ring'].map((k) => `<span class="lg lg--${k}"><i></i><u></u></span>`).join('');
+  const rows = v.rows
+    .map((r, i) => `<section class="pg-row${i % 2 ? ' pg-row--flip' : ''}">
+            <div class="pg-row__t" data-rv><span class="pg-kicker">${esc(r.eyebrow)}</span><h4>${esc(r.title)}</h4><p>${esc(r.text)}</p><span class="pg-link">Explore ${esc(r.eyebrow.toLowerCase())} →</span></div>
+            <div class="pg-row__w" data-rv>${appWin(r.win)}</div>
+          </section>`)
+    .join('\n          ');
+  const mini = [
+    `<div class="mn mn--auto"><span class="on"></span><span class="on"></span><span></span></div>`,
+    `<div class="mn mn--donut"><svg viewBox="0 0 100 100"><circle class="trk" cx="50" cy="50" r="38"/><circle class="val" cx="50" cy="50" r="38" pathLength="1"/></svg><b>38%</b></div>`,
+    `<div class="mn mn--grid">${'<i></i>'.repeat(12)}</div>`,
+  ];
   return `<div class="pv" data-pv aria-hidden="true">
       <div class="pv__frame">
         <div class="pv__chrome"></div>
@@ -201,15 +218,17 @@ function pivotScene() {
             <h3 class="pg-h">${v.headline.map((t) => `<span><b>${esc(t)}</b></span>`).join('')}</h3>
             <p class="pg-sub">${esc(v.sub)}</p>
             <div class="pg-btns"><span class="pg-btn">${esc(v.cta)}</span><span class="pg-ghost">${esc(v.ghost)}</span></div>
-            <p class="pg-proof"><span class="pg-av"><u></u><u></u><u></u></span>${esc(v.proof)}</p>
+            <div class="hw hw--l" data-hw="1">${appWin('projects')}</div>
+            <div class="hw hw--r" data-hw="2">${appWin('timeline')}</div>
+            <div class="hw hw--c" data-hw="0">${appWin('dash')}</div>
           </section>
-          <section class="pg-feats">${v.features.map(([t, d], i) => `<div class="pg-feat" style="--k:${i}"><i>0${i + 1}</i><h4>${esc(t)}</h4><p>${esc(d)}</p></div>`).join('')}</section>
-          <section class="pg-stats">${v.stats.map(([n, l]) => `<div><b>${esc(n)}</b><span>${esc(l)}</span></div>`).join('')}</section>
-          <section class="pg-close"><h4>${esc(v.closing)}</h4><span class="pg-btn pg-btn--end">${esc(v.cta)}</span></section>
+          <section class="pg-logos" data-rv><p>${esc(v.logosLabel)}</p><div>${logos}</div></section>
+          ${rows}
+          <section class="pg-bento"><h4 data-rv>${esc(v.bentoTitle)}</h4><div>${v.bento.map(([t, d], i) => `<article class="pg-card" data-rv>${mini[i]}<h5>${esc(t)}</h5><p>${esc(d)}</p></article>`).join('')}</div></section>
+          <section class="pg-quote" data-rv><blockquote>${esc(v.quote)}</blockquote><p>${esc(v.quoteBy)}</p><div class="pg-stats">${v.stats.map(([n, l]) => `<div><b>${esc(n)}</b><span>${esc(l)}</span></div>`).join('')}</div></section>
+          <section class="pg-close" data-rv><h4>${esc(v.closing)}</h4><span class="pg-btn pg-btn--end">${esc(v.cta)}</span></section>
+          <footer class="pg-foot"><span class="pv__logo"><b></b>${esc(v.brand)}</span><span>${v.footer.map((t) => `<em>${esc(t)}</em>`).join('')}</span></footer>
         </div>
-        ${phones}
-        <span class="pg-chip pg-chip--1"><i></i>Deep sleep +12%</span>
-        <span class="pg-chip pg-chip--2"><i></i>Score 86</span>
         <span class="pv__sheen"></span>
       </div>
     </div>`;
@@ -304,11 +323,14 @@ ${header('', true)}
     </div>
   </section>
 
-  <section class="pivot" data-pivot aria-label="From product to marketing site">
+  <section class="pivot" data-pivot aria-label="From product to brand">
     <div class="pivot__stage">
-      <p class="pivot__back" aria-hidden="true">${visual.pivot.backdrop.map((t) => `<span>${esc(t)}</span>`).join('')}</p>
       ${pivotScene()}
-      <ol class="pivot__rail" aria-hidden="true">${visual.pivot.chapters.map((t, i) => `<li><span>0${i + 1}</span>${esc(t)}</li>`).join('')}<i class="pivot__fill"></i></ol>
+      <div class="pivot__cap">
+        <i class="pivot__fill" aria-hidden="true"></i>
+        <p class="pivot__n" aria-hidden="true"><span>01</span> / 03</p>
+        <div class="pivot__texts">${visual.pivot.captions.map((t) => `<p class="pivot__text">${esc(t)}</p>`).join('')}</div>
+      </div>
     </div>
   </section>
 

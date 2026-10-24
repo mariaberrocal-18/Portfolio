@@ -462,70 +462,80 @@
 
   const nav = document.querySelector('.nav');
   let lastY = scrollY, hx = 0;
-  // pivot: three dummy app screens fan out, then fly into a marketing website that builds itself
-  // around them (nav, hero text, chips), the page scrolls on to features and a close, then it shines
+  // pivot: three dummy web-app screens fan out, fly into a browser that builds a whole marketing home
+  // (hero copy, then the page scrolls through logos, features, bento, quote, close), then it shines
   const pivot = document.querySelector('[data-pivot]');
   const pv = pivot && pivot.querySelector('[data-pv]');
-  const pvPh = pv ? [...pv.querySelectorAll('.ph')] : [];
-  const pvRail = pivot && pivot.querySelector('.pivot__rail');
-  const pvChapters = pvRail ? [...pvRail.querySelectorAll('li')] : [];
+  const pvWin = pv ? [...pv.querySelectorAll('.hw')] : [];
+  const pvRv = pv ? [...pv.querySelectorAll('[data-rv]')] : [];
+  const pvTexts = pivot ? [...pivot.querySelectorAll('.pivot__text')] : [];
+  const pvCap = pivot && pivot.querySelector('.pivot__cap');
+  const pvNum = pivot && pivot.querySelector('.pivot__n span');
+  const pvMQ = matchMedia('(min-width: 720px)');
   let pvGeo = null;
-  if (pivot && !reduce) root.classList.add('is-pivot');
+  const setPivot = () => { root.classList.toggle('is-pivot', !!pivot && !reduce && pvMQ.matches); pvGeo = null; };
+  setPivot();
+  pvMQ.addEventListener('change', () => { setPivot(); update(); });
+  addEventListener('resize', () => { pvGeo = null; });
   const layoutPivot = () => {
-    if (!pv || reduce) return;
     const frame = pv.querySelector('.pv__frame');
     const page = pv.querySelector('.pv__page');
     pvGeo = {
-      W: frame.offsetWidth, H: frame.offsetHeight,
-      fin: pvPh.map((el) => [el.offsetLeft + el.offsetWidth / 2, el.offsetTop + el.offsetHeight / 2, el.offsetWidth, el.offsetHeight]),
+      W: frame.offsetWidth, H: frame.offsetHeight, top: page.offsetTop,
+      fin: pvWin.map((el) => [el.offsetLeft + el.offsetWidth / 2, el.offsetTop + el.offsetHeight / 2, el.offsetWidth]),
       dist: Math.max(0, page.offsetHeight - (frame.offsetHeight - page.offsetTop)),
     };
   };
   const updatePivot = () => {
-    if (!pivot || reduce) return;
+    if (!pivot || reduce || !root.classList.contains('is-pivot')) return;
     if (!pvGeo) layoutPivot();
     const r = pivot.getBoundingClientRect();
     const p = clamp(-r.top / Math.max(1, r.height - innerHeight));
-    const { W, H, fin, dist } = pvGeo;
-    const narrow = W < 520;
+    const { W, H, top, fin, dist } = pvGeo;
     const seg = (a, len) => easeOut(clamp((p - a) / len));
     const set = (k, v) => pv.style.setProperty(k, typeof v === 'number' ? v.toFixed(3) : v);
-    // 1 · the product: phones open into a fan, bars and ring fill in
-    const spread = seg(0, 0.14);
+    // 1 · the product: three web-app screens fan out and come alive
+    const spread = seg(0, 0.1);
     set('--ph', seg(0.02, 0.16));
-    pvPh.forEach((el, k) => {
-      const c = k - 1;
-      const [fx, fy, fw, fh] = fin[k];
-      const cx = W / 2 + c * (narrow ? 0.27 : 0.21) * W * spread;
-      const cy = H / 2 + (k === 1 ? 0.02 : -0.03) * H * spread;
-      const targetH = (narrow ? 0.5 : 0.62) * H;
-      el.style.setProperty('--tx', `${(cx - fx).toFixed(1)}px`);
-      el.style.setProperty('--ty', `${(cy - fy).toFixed(1)}px`);
-      el.style.setProperty('--r', `${(c * 8 * spread).toFixed(2)}deg`);
-      el.style.setProperty('--s', (targetH / fh - 1).toFixed(3));
-      el.style.setProperty('--q', easeInOut(clamp((p - 0.2 - k * 0.04) / 0.3)).toFixed(3));
+    pvWin.forEach((el, k) => {
+      const c = el.classList.contains('hw--l') ? -1 : el.classList.contains('hw--r') ? 1 : 0;
+      const [fx, fy, fw] = fin[k];
+      el.style.setProperty('--tx', `${(W / 2 + c * 0.245 * W * spread - fx).toFixed(1)}px`);
+      el.style.setProperty('--ty', `${((H - top) / 2 + (c ? 0.035 : 0) * H * spread - fy).toFixed(1)}px`);
+      el.style.setProperty('--r', `${(c * 6 * spread).toFixed(2)}deg`);
+      el.style.setProperty('--s', ((0.48 * W) / fw - 1).toFixed(3));
+      el.style.setProperty('--q', easeInOut(clamp((p - 0.17 - (c ? 0.035 : 0) - (c > 0 ? 0.035 : 0)) / 0.26)).toFixed(3));
     });
-    set('--bw', 1 - seg(0.13, 0.08));
-    // 2 · the front door: frame, nav, then hero copy word by word, then the chips
-    set('--fq', seg(0.2, 0.18));
-    set('--nq', seg(0.34, 0.08));
-    [['--h1', 0.38], ['--h2', 0.4], ['--h3', 0.44], ['--h4', 0.49], ['--h5', 0.53], ['--h6', 0.57]].forEach(([k, a]) => set(k, seg(a, 0.07)));
-    set('--c1', seg(0.58, 0.06)); set('--c2', seg(0.62, 0.06));
-    // 3 · the page scrolls on (features, numbers, close) inside the browser
-    const sc = easeInOut(clamp((p - 0.68) / 0.24));
+    // 2 · the front door: browser frame, nav, then the hero copy line by line
+    set('--fq', seg(0.2, 0.12));
+    set('--nq', seg(0.3, 0.08));
+    [['--h1', 0.32], ['--h2', 0.34], ['--h3', 0.37], ['--h4', 0.41], ['--h5', 0.45]].forEach(([k, a]) => set(k, seg(a, 0.06)));
+    // 3 · the whole home: the page scrolls inside the browser, sections reveal as they arrive
+    const t = clamp((p - 0.5) / 0.38);
+    const sc = lerp(t, t * t * (3 - 2 * t), 0.45);
     set('--pgy', `${(-sc * dist).toFixed(1)}px`);
-    set('--nb', clamp(sc * 6));
+    set('--nb', clamp(sc * 10));
+    const fr = pv.querySelector('.pv__frame').getBoundingClientRect();
+    pvRv.forEach((el) => {
+      const er = el.getBoundingClientRect();
+      el.style.setProperty('--in', easeOut(clamp((fr.bottom - er.top) / (fr.height * 0.34))).toFixed(3));
+    });
     // 4 · the shine
     const ps = clamp((p - 0.9) / 0.1);
     set('--ps', ps); set('--po', Math.sin(ps * Math.PI) * 0.9);
-    set('--hl', seg(0.9, 0.06));
-    if (pvRail) {
-      pvRail.style.setProperty('--p', p.toFixed(3));
-      const active = p < 0.18 ? 0 : p < 0.66 ? 1 : 2;
-      pvChapters.forEach((li, i) => li.classList.toggle('is-on', i === active));
-    }
+    set('--hl', seg(0.9, 0.05));
+    set('--zs', 1 - 0.05 * seg(0.9, 0.08));
+    // captions: one at a time, then the hand-off to Visual Design
+    const idx = p < 0.16 ? 0 : p < 0.84 ? 1 : 2;
+    const edges = [0, 0.16, 0.84, 2];
+    pvTexts.forEach((el, i) => {
+      const inn = i === 0 ? 1 : easeOut(clamp((p - edges[i]) / 0.04));
+      const out = i === pvTexts.length - 1 ? 0 : easeOut(clamp((p - edges[i + 1] + 0.03) / 0.03));
+      el.style.setProperty('--ca', (inn * (1 - out)).toFixed(3));
+    });
+    if (pvNum) pvNum.textContent = `0${idx + 1}`;
+    pvCap.style.setProperty('--p', p.toFixed(3));
   };
-  addEventListener('resize', () => { pvGeo = null; });
   function update() {
     const vh = innerHeight;
     if (nav) {
