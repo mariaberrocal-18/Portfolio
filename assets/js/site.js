@@ -462,6 +462,27 @@
 
   const nav = document.querySelector('.nav');
   let lastY = scrollY, hx = 0;
+  // pivot: product → brand. Three beats; the card wipes from a product screen to a brand piece, then shines
+  const pivot = document.querySelector('[data-pivot]');
+  const pivotLines = pivot ? [...pivot.querySelectorAll('.pivot__line')] : [];
+  const pivotCard = pivot && pivot.querySelector('.pivot__card');
+  if (pivot && !reduce) root.classList.add('is-pivot');
+  const updatePivot = () => {
+    if (!pivot || reduce) return;
+    const r = pivot.getBoundingClientRect();
+    const p = clamp(-r.top / Math.max(1, r.height - innerHeight));
+    const n = pivotLines.length;
+    pivotLines.forEach((el, i) => {
+      const start = (i / n) * 0.9;
+      const a = easeOut(clamp((p - start) / 0.1));
+      const passed = i < n - 1 && p > ((i + 1) / n) * 0.9 + 0.04;
+      el.style.setProperty('--a', (a * (passed ? 0.22 : 1)).toFixed(3));
+    });
+    pivotCard.style.setProperty('--pr', easeInOut(clamp((p - 0.4) / 0.38)).toFixed(3));
+    const ps = clamp((p - 0.72) / 0.26);
+    pivotCard.style.setProperty('--ps', ps.toFixed(3));
+    pivotCard.style.setProperty('--po', (Math.sin(ps * Math.PI) * 0.9).toFixed(3));
+  };
   function update() {
     const vh = innerHeight;
     if (nav) {
@@ -484,6 +505,7 @@
     }
 
     updateBridge();
+    updatePivot();
     if (!fly) updateWork();
     updateCase();
     updateThread();

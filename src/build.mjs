@@ -256,6 +256,28 @@ ${header('', true)}
     </div>
   </section>
 
+  <section class="pivot" data-pivot aria-label="From product to brand">
+    <div class="pivot__stage wrap">
+      <ol class="pivot__lines">
+        ${visual.pivot.map((t) => `<li class="pivot__line">${esc(t)}</li>`).join('')}
+      </ol>
+      <div class="pivot__card" aria-hidden="true">
+        <div class="pivot__layer pivot__ui"><svg viewBox="0 0 320 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"><rect width="320" height="400" fill="#fbfaf8"/>
+      <circle cx="34" cy="34" r="10" fill="none" stroke="#0c0c0c" stroke-opacity=".7" stroke-width="1.4"/><rect x="54" y="29" width="88" height="10" rx="5" fill="#0c0c0c" fill-opacity=".14"/><rect x="262" y="26" width="24" height="16" rx="8" fill="none" stroke="#0c0c0c" stroke-opacity=".4" stroke-width="1.4"/>
+      <rect x="24" y="72" width="170" height="16" rx="5" fill="#0c0c0c" fill-opacity=".8"/><rect x="24" y="98" width="120" height="8" rx="4" fill="#0c0c0c" fill-opacity=".14"/>
+      <polyline points="24,200 74,176 124,186 174,150 224,158 296,124" fill="none" stroke="#0c0c0c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><line x1="24" y1="220" x2="296" y2="220" stroke="#0c0c0c" stroke-opacity=".12"/><line x1="24" y1="140" x2="296" y2="140" stroke="#0c0c0c" stroke-opacity=".08"/>
+      ${[0, 1, 2].map((i) => `<g transform="translate(0 ${244 + i * 38})"><rect x="24" y="0" width="22" height="22" rx="6" fill="none" stroke="#0c0c0c" stroke-opacity=".45" stroke-width="1.4"/><rect x="58" y="3" width="${110 - i * 14}" height="8" rx="4" fill="#0c0c0c" fill-opacity=".6"/><rect x="58" y="15" width="${70 + i * 10}" height="6" rx="3" fill="#0c0c0c" fill-opacity=".14"/><rect x="246" y="2" width="50" height="18" rx="9" fill="none" stroke="#0c0c0c" stroke-opacity=".4" stroke-width="1.4"/></g>`).join('')}
+      <rect x="24" y="358" width="120" height="26" rx="8" fill="#0c0c0c"/></svg></div>
+        <div class="pivot__layer pivot__brand"><svg viewBox="0 0 320 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"><rect width="320" height="400" fill="#0a0a0a"/>
+      ${[44, 84, 124, 164, 204].map((r, i) => `<circle cx="160" cy="176" r="${r}" fill="none" stroke="#fff" stroke-opacity="${(0.24 - i * 0.035).toFixed(3)}" stroke-width="1.2"/>`).join('')}
+      <circle cx="160" cy="176" r="30" fill="#3f7a5c"/><circle cx="160" cy="176" r="30" fill="none" stroke="#7fb89a" stroke-opacity=".55" stroke-width="1.2"/>
+      <text x="26" y="352" font-family="Inter Tight, Inter, sans-serif" font-size="92" font-weight="650" letter-spacing="-4" fill="#f4f4f3">Aa</text>
+      <rect x="196" y="316" width="98" height="6" rx="3" fill="#fff" fill-opacity=".5"/><rect x="196" y="332" width="70" height="6" rx="3" fill="#fff" fill-opacity=".22"/><rect x="196" y="348" width="84" height="6" rx="3" fill="#fff" fill-opacity=".22"/></svg></div>
+        <span class="pivot__sheen"></span>
+      </div>
+    </div>
+  </section>
+
   <section class="visual-section" id="visual" aria-labelledby="visual-h">
     <div class="wrap">
       <header class="vhead">
