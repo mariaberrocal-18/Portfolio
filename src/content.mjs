@@ -39,12 +39,26 @@ export const hero = {
 // staggered two-column rhythm (add Mafalda, Gabi López, Palmarium here later).
 // Media slot: set `media` to { src, alt } for an image or { video, poster, alt } for an animation.
 export const visual = {
-  // scroll moment between the product work and this section: product screens become a website
+  // scroll moment between the product work and this section: dummy product screens become a website.
+  // Everything here is a fictional product ("Lumo"), only there to show the product → marketing idea.
   pivot: {
-    captions: ['The product works.', 'Now it needs a front door.', 'Let’s make it shine.'],
-    headline: ['Your product,', 'in its best light.'],
-    cta: 'Get started',
-    nav: ['Product', 'Pricing', 'About'],
+    backdrop: ['The product', 'works.'],
+    chapters: ['The product', 'The front door', 'The shine'],
+    brand: 'lumo',
+    nav: ['Product', 'Stories', 'Pricing'],
+    eyebrow: 'New · Sleep score 2.0',
+    headline: ['Sleep that', 'adds up.'],
+    sub: 'Lumo turns every night into one clear score and one small thing to try tomorrow.',
+    cta: 'Start free',
+    ghost: 'See how it works',
+    proof: '4.9 · 12,000 reviews',
+    features: [
+      ['Track', 'Automatic. No wearable needed.'],
+      ['Understand', 'One score, in plain language.'],
+      ['Improve', 'A small nudge, every night.'],
+    ],
+    stats: [['4.9', 'App Store rating'], ['+18%', 'More deep sleep'], ['12k', 'Five-star reviews']],
+    closing: 'Ready to wake up better?',
   },
   title: 'Visual Design',
   lede: 'Exploring how brands look, feel, and communicate — through art direction, web design, and AI-assisted image-making.',

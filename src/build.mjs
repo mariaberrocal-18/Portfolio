@@ -167,6 +167,54 @@ function visualProject(p, i) {
   </article>`;
 }
 
+function pivotScene() {
+  const v = visual.pivot;
+  const tabs = '<div class="ph__tabs"><u></u><u></u><u></u><u></u></div>';
+  const phones = [
+    `<div class="ph ph--1" data-ph="0"><div class="ph__body"><i class="ph__notch"></i>
+      <p class="ph__k">Tue, 14 Oct</p><p class="ph__t">Last night</p>
+      <div class="ph__ring"><svg viewBox="0 0 100 100"><circle class="trk" cx="50" cy="50" r="40"/><circle class="val" cx="50" cy="50" r="40" pathLength="1"/></svg><b>86</b><em>Good</em></div>
+      <ul class="ph__rows"><li><span>Deep</span><em>1h 48m</em></li><li><span>REM</span><em>1h 32m</em></li><li><span>Awake</span><em>12m</em></li></ul>${tabs}</div></div>`,
+    `<div class="ph ph--2" data-ph="1"><div class="ph__body"><i class="ph__notch"></i>
+      <p class="ph__k">Sleep score</p><p class="ph__t">This week</p>
+      <div class="ph__seg"><span>Day</span><span class="on">Week</span><span>Month</span></div>
+      <div class="ph__bars">${[62, 74, 58, 81, 70, 88, 86].map((h, i) => `<span style="--h:${h}%;--k:${i}"><b></b><em>${'MTWTFSS'[i]}</em></span>`).join('')}</div>
+      <div class="ph__badge"><i></i>+12% deep sleep</div>${tabs}</div></div>`,
+    `<div class="ph ph--3" data-ph="2"><div class="ph__body"><i class="ph__notch"></i>
+      <p class="ph__k">Tonight</p><p class="ph__t">Wind down</p>
+      <div class="ph__moon"></div>
+      <ul class="ph__steps"><li><i></i><span>Dim lights</span><em>22:30</em></li><li><i></i><span>Screens off</span><em>23:00</em></li><li><i class="off"></i><span>Lights out</span><em>23:30</em></li></ul>
+      <span class="ph__go">Start routine</span>${tabs}</div></div>`,
+  ].join('\n        ');
+  return `<div class="pv" data-pv aria-hidden="true">
+      <div class="pv__frame">
+        <div class="pv__chrome"></div>
+        <div class="pv__bar"><i></i><i></i><i></i><span class="pv__url"></span></div>
+        <div class="pv__nav">
+          <span class="pv__logo"><b></b>${esc(v.brand)}</span>
+          <span class="pv__links">${v.nav.map((t) => `<em>${esc(t)}</em>`).join('')}</span>
+          <span class="pv__pill">${esc(v.cta)}</span>
+        </div>
+        <div class="pv__page">
+          <section class="pg-hero">
+            <span class="pg-eyebrow"><i></i>${esc(v.eyebrow)}</span>
+            <h3 class="pg-h">${v.headline.map((t) => `<span><b>${esc(t)}</b></span>`).join('')}</h3>
+            <p class="pg-sub">${esc(v.sub)}</p>
+            <div class="pg-btns"><span class="pg-btn">${esc(v.cta)}</span><span class="pg-ghost">${esc(v.ghost)}</span></div>
+            <p class="pg-proof"><span class="pg-av"><u></u><u></u><u></u></span>${esc(v.proof)}</p>
+          </section>
+          <section class="pg-feats">${v.features.map(([t, d], i) => `<div class="pg-feat" style="--k:${i}"><i>0${i + 1}</i><h4>${esc(t)}</h4><p>${esc(d)}</p></div>`).join('')}</section>
+          <section class="pg-stats">${v.stats.map(([n, l]) => `<div><b>${esc(n)}</b><span>${esc(l)}</span></div>`).join('')}</section>
+          <section class="pg-close"><h4>${esc(v.closing)}</h4><span class="pg-btn pg-btn--end">${esc(v.cta)}</span></section>
+        </div>
+        ${phones}
+        <span class="pg-chip pg-chip--1"><i></i>Deep sleep +12%</span>
+        <span class="pg-chip pg-chip--2"><i></i>Score 86</span>
+        <span class="pv__sheen"></span>
+      </div>
+    </div>`;
+}
+
 function chars(text) {
   // split into words → characters so the headline can animate letter by letter
   let i = 0;
@@ -256,33 +304,11 @@ ${header('', true)}
     </div>
   </section>
 
-  <section class="pivot" data-pivot aria-label="From product to brand">
+  <section class="pivot" data-pivot aria-label="From product to marketing site">
     <div class="pivot__stage">
-      <div class="pivot__caps">
-        ${visual.pivot.captions.map((t) => `<p class="pivot__cap">${esc(t)}</p>`).join('')}
-      </div>
-      <div class="pv" data-pv aria-hidden="true">
-        <div class="pv__frame">
-          <div class="pv__bar"><i></i><i></i><i></i><span class="pv__url"></span></div>
-          <div class="pv__page">
-            <div class="pv__nav">
-              <span class="pv__logo"><b></b><u></u></span>
-              <span class="pv__links">${visual.pivot.nav.map((t) => `<em>${esc(t)}</em>`).join('')}</span>
-              <span class="pv__pill">${esc(visual.pivot.cta)}</span>
-            </div>
-            <div class="pv__hero">
-              <h3 class="pv__h">${visual.pivot.headline.map((t) => `<span>${esc(t)}</span>`).join('')}</h3>
-              <p class="pv__sub"><u></u><u></u></p>
-              <span class="pv__btn">${esc(visual.pivot.cta)}</span>
-            </div>
-          </div>
-        </div>
-        ${projects
-          .slice(0, 4)
-          .map((pr, i) => `<div class="pv__scr v v--loop v--float is-in" style="--ar:${ratio[pr.visual] || '16 / 10'}" data-scr="${i}">${render(pr.visual, 3, true).replace('xMidYMid slice', 'xMidYMid meet')}</div>`)
-          .join('\n        ')}
-        <span class="pv__sheen"></span>
-      </div>
+      <p class="pivot__back" aria-hidden="true">${visual.pivot.backdrop.map((t) => `<span>${esc(t)}</span>`).join('')}</p>
+      ${pivotScene()}
+      <ol class="pivot__rail" aria-hidden="true">${visual.pivot.chapters.map((t, i) => `<li><span>0${i + 1}</span>${esc(t)}</li>`).join('')}<i class="pivot__fill"></i></ol>
     </div>
   </section>
 

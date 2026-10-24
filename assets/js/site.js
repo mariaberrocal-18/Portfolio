@@ -462,19 +462,23 @@
 
   const nav = document.querySelector('.nav');
   let lastY = scrollY, hx = 0;
-  // pivot: product screens fan out, then fly into a website that builds itself around them, then shine
+  // pivot: three dummy app screens fan out, then fly into a marketing website that builds itself
+  // around them (nav, hero text, chips), the page scrolls on to features and a close, then it shines
   const pivot = document.querySelector('[data-pivot]');
   const pv = pivot && pivot.querySelector('[data-pv]');
-  const pvScr = pv ? [...pv.querySelectorAll('.pv__scr')] : [];
-  const pvCaps = pivot ? [...pivot.querySelectorAll('.pivot__cap')] : [];
+  const pvPh = pv ? [...pv.querySelectorAll('.ph')] : [];
+  const pvRail = pivot && pivot.querySelector('.pivot__rail');
+  const pvChapters = pvRail ? [...pvRail.querySelectorAll('li')] : [];
   let pvGeo = null;
   if (pivot && !reduce) root.classList.add('is-pivot');
   const layoutPivot = () => {
     if (!pv || reduce) return;
-    const live = pvScr.filter((el) => el.offsetParent !== null);
+    const frame = pv.querySelector('.pv__frame');
+    const page = pv.querySelector('.pv__page');
     pvGeo = {
-      W: pv.offsetWidth, H: pv.offsetHeight, live,
-      fin: live.map((el) => [el.offsetLeft + el.offsetWidth / 2, el.offsetTop + el.offsetHeight / 2, el.offsetWidth]),
+      W: frame.offsetWidth, H: frame.offsetHeight,
+      fin: pvPh.map((el) => [el.offsetLeft + el.offsetWidth / 2, el.offsetTop + el.offsetHeight / 2, el.offsetWidth, el.offsetHeight]),
+      dist: Math.max(0, page.offsetHeight - (frame.offsetHeight - page.offsetTop)),
     };
   };
   const updatePivot = () => {
@@ -482,36 +486,44 @@
     if (!pvGeo) layoutPivot();
     const r = pivot.getBoundingClientRect();
     const p = clamp(-r.top / Math.max(1, r.height - innerHeight));
-    const { W, H, live, fin } = pvGeo;
+    const { W, H, fin, dist } = pvGeo;
     const narrow = W < 520;
-    const spread = easeOut(clamp(p / 0.2));
-    const n = live.length;
-    live.forEach((el, k) => {
-      const c = k - (n - 1) / 2;
-      const [fx, fy, fw] = fin[k];
-      // the fan: screens stacked in the middle, opening as you start to scroll
-      const cx = W / 2 + (narrow ? c * 0.05 * W : c * 0.17 * W) * spread;
-      const cy = H / 2 + (narrow ? c * 0.13 * H : (k % 2 ? -1 : 1) * 0.04 * H) * spread;
-      const target = (narrow ? 0.7 : 0.46) * W;
+    const seg = (a, len) => easeOut(clamp((p - a) / len));
+    const set = (k, v) => pv.style.setProperty(k, typeof v === 'number' ? v.toFixed(3) : v);
+    // 1 · the product: phones open into a fan, bars and ring fill in
+    const spread = seg(0, 0.14);
+    set('--ph', seg(0.02, 0.16));
+    pvPh.forEach((el, k) => {
+      const c = k - 1;
+      const [fx, fy, fw, fh] = fin[k];
+      const cx = W / 2 + c * (narrow ? 0.27 : 0.21) * W * spread;
+      const cy = H / 2 + (k === 1 ? 0.02 : -0.03) * H * spread;
+      const targetH = (narrow ? 0.5 : 0.62) * H;
       el.style.setProperty('--tx', `${(cx - fx).toFixed(1)}px`);
       el.style.setProperty('--ty', `${(cy - fy).toFixed(1)}px`);
-      el.style.setProperty('--r', `${(c * 7 * spread).toFixed(2)}deg`);
-      el.style.setProperty('--s', (target / fw - 1).toFixed(3));
-      el.style.setProperty('--q', easeInOut(clamp((p - 0.26 - k * 0.05) / 0.3)).toFixed(3));
+      el.style.setProperty('--r', `${(c * 8 * spread).toFixed(2)}deg`);
+      el.style.setProperty('--s', (targetH / fh - 1).toFixed(3));
+      el.style.setProperty('--q', easeInOut(clamp((p - 0.2 - k * 0.04) / 0.3)).toFixed(3));
     });
-    pv.style.setProperty('--fq', easeOut(clamp((p - 0.34) / 0.3)).toFixed(3));
-    pv.style.setProperty('--cq', easeOut(clamp((p - 0.56) / 0.25)).toFixed(3));
-    const ps = clamp((p - 0.8) / 0.18);
-    pv.style.setProperty('--ps', ps.toFixed(3));
-    pv.style.setProperty('--po', (Math.sin(ps * Math.PI) * 0.9).toFixed(3));
-    pv.style.setProperty('--hl', easeOut(clamp((p - 0.8) / 0.12)).toFixed(3));
-    // captions: one at a time
-    const at = [0, 0.3, 0.72];
-    pvCaps.forEach((el, i) => {
-      const inn = i === 0 ? 1 : easeOut(clamp((p - at[i]) / 0.06));
-      const out = i === pvCaps.length - 1 ? 0 : easeOut(clamp((p - at[i + 1] + 0.04) / 0.06));
-      el.style.setProperty('--ca', (inn * (1 - out)).toFixed(3));
-    });
+    set('--bw', 1 - seg(0.13, 0.08));
+    // 2 · the front door: frame, nav, then hero copy word by word, then the chips
+    set('--fq', seg(0.2, 0.18));
+    set('--nq', seg(0.34, 0.08));
+    [['--h1', 0.38], ['--h2', 0.4], ['--h3', 0.44], ['--h4', 0.49], ['--h5', 0.53], ['--h6', 0.57]].forEach(([k, a]) => set(k, seg(a, 0.07)));
+    set('--c1', seg(0.58, 0.06)); set('--c2', seg(0.62, 0.06));
+    // 3 · the page scrolls on (features, numbers, close) inside the browser
+    const sc = easeInOut(clamp((p - 0.68) / 0.24));
+    set('--pgy', `${(-sc * dist).toFixed(1)}px`);
+    set('--nb', clamp(sc * 6));
+    // 4 · the shine
+    const ps = clamp((p - 0.9) / 0.1);
+    set('--ps', ps); set('--po', Math.sin(ps * Math.PI) * 0.9);
+    set('--hl', seg(0.9, 0.06));
+    if (pvRail) {
+      pvRail.style.setProperty('--p', p.toFixed(3));
+      const active = p < 0.18 ? 0 : p < 0.66 ? 1 : 2;
+      pvChapters.forEach((li, i) => li.classList.toggle('is-on', i === active));
+    }
   };
   addEventListener('resize', () => { pvGeo = null; });
   function update() {
