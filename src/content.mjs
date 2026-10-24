@@ -39,8 +39,13 @@ export const hero = {
 // staggered two-column rhythm (add Mafalda, Gabi López, Palmarium here later).
 // Media slot: set `media` to { src, alt } for an image or { video, poster, alt } for an animation.
 export const visual = {
-  // scroll moment between the product work and this section
-  pivot: ['Now you’ve built a product.', 'But how do we market it?', 'How do we make it shine?'],
+  // scroll moment between the product work and this section: product screens become a website
+  pivot: {
+    captions: ['The product works.', 'Now it needs a front door.', 'Let’s make it shine.'],
+    headline: ['Your product,', 'in its best light.'],
+    cta: 'Get started',
+    nav: ['Product', 'Pricing', 'About'],
+  },
   title: 'Visual Design',
   lede: 'Exploring how brands look, feel, and communicate — through art direction, web design, and AI-assisted image-making.',
   projects: [

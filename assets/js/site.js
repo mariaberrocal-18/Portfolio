@@ -462,27 +462,58 @@
 
   const nav = document.querySelector('.nav');
   let lastY = scrollY, hx = 0;
-  // pivot: product → brand. Three beats; the card wipes from a product screen to a brand piece, then shines
+  // pivot: product screens fan out, then fly into a website that builds itself around them, then shine
   const pivot = document.querySelector('[data-pivot]');
-  const pivotLines = pivot ? [...pivot.querySelectorAll('.pivot__line')] : [];
-  const pivotCard = pivot && pivot.querySelector('.pivot__card');
+  const pv = pivot && pivot.querySelector('[data-pv]');
+  const pvScr = pv ? [...pv.querySelectorAll('.pv__scr')] : [];
+  const pvCaps = pivot ? [...pivot.querySelectorAll('.pivot__cap')] : [];
+  let pvGeo = null;
   if (pivot && !reduce) root.classList.add('is-pivot');
+  const layoutPivot = () => {
+    if (!pv || reduce) return;
+    const live = pvScr.filter((el) => el.offsetParent !== null);
+    pvGeo = {
+      W: pv.offsetWidth, H: pv.offsetHeight, live,
+      fin: live.map((el) => [el.offsetLeft + el.offsetWidth / 2, el.offsetTop + el.offsetHeight / 2, el.offsetWidth]),
+    };
+  };
   const updatePivot = () => {
     if (!pivot || reduce) return;
+    if (!pvGeo) layoutPivot();
     const r = pivot.getBoundingClientRect();
     const p = clamp(-r.top / Math.max(1, r.height - innerHeight));
-    const n = pivotLines.length;
-    pivotLines.forEach((el, i) => {
-      const start = (i / n) * 0.9;
-      const a = easeOut(clamp((p - start) / 0.1));
-      const passed = i < n - 1 && p > ((i + 1) / n) * 0.9 + 0.04;
-      el.style.setProperty('--a', (a * (passed ? 0.22 : 1)).toFixed(3));
+    const { W, H, live, fin } = pvGeo;
+    const narrow = W < 520;
+    const spread = easeOut(clamp(p / 0.2));
+    const n = live.length;
+    live.forEach((el, k) => {
+      const c = k - (n - 1) / 2;
+      const [fx, fy, fw] = fin[k];
+      // the fan: screens stacked in the middle, opening as you start to scroll
+      const cx = W / 2 + (narrow ? c * 0.05 * W : c * 0.17 * W) * spread;
+      const cy = H / 2 + (narrow ? c * 0.13 * H : (k % 2 ? -1 : 1) * 0.04 * H) * spread;
+      const target = (narrow ? 0.7 : 0.46) * W;
+      el.style.setProperty('--tx', `${(cx - fx).toFixed(1)}px`);
+      el.style.setProperty('--ty', `${(cy - fy).toFixed(1)}px`);
+      el.style.setProperty('--r', `${(c * 7 * spread).toFixed(2)}deg`);
+      el.style.setProperty('--s', (target / fw - 1).toFixed(3));
+      el.style.setProperty('--q', easeInOut(clamp((p - 0.26 - k * 0.05) / 0.3)).toFixed(3));
     });
-    pivotCard.style.setProperty('--pr', easeInOut(clamp((p - 0.4) / 0.38)).toFixed(3));
-    const ps = clamp((p - 0.72) / 0.26);
-    pivotCard.style.setProperty('--ps', ps.toFixed(3));
-    pivotCard.style.setProperty('--po', (Math.sin(ps * Math.PI) * 0.9).toFixed(3));
+    pv.style.setProperty('--fq', easeOut(clamp((p - 0.34) / 0.3)).toFixed(3));
+    pv.style.setProperty('--cq', easeOut(clamp((p - 0.56) / 0.25)).toFixed(3));
+    const ps = clamp((p - 0.8) / 0.18);
+    pv.style.setProperty('--ps', ps.toFixed(3));
+    pv.style.setProperty('--po', (Math.sin(ps * Math.PI) * 0.9).toFixed(3));
+    pv.style.setProperty('--hl', easeOut(clamp((p - 0.8) / 0.12)).toFixed(3));
+    // captions: one at a time
+    const at = [0, 0.3, 0.72];
+    pvCaps.forEach((el, i) => {
+      const inn = i === 0 ? 1 : easeOut(clamp((p - at[i]) / 0.06));
+      const out = i === pvCaps.length - 1 ? 0 : easeOut(clamp((p - at[i + 1] + 0.04) / 0.06));
+      el.style.setProperty('--ca', (inn * (1 - out)).toFixed(3));
+    });
   };
+  addEventListener('resize', () => { pvGeo = null; });
   function update() {
     const vh = innerHeight;
     if (nav) {
