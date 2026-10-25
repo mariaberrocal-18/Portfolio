@@ -488,10 +488,11 @@
   // brace drawn at pixel size so the stroke stays uniform at every width
   const bracePath = () => {
     if (!brace) return;
-    const w = brace.clientWidth || 1000, h = brace.clientHeight || 120;
-    const r = Math.min(h * 0.7, w * 0.07), cx = w / 2, yb = h * 0.8;
-    const left = `M1.5 0C1.5 ${(yb * 0.55).toFixed(1)} ${(1.5 + r * 0.45).toFixed(1)} ${(yb - 3).toFixed(1)} ${(1.5 + r * 2.1).toFixed(1)} ${yb.toFixed(1)}L${(cx - r * 2.1).toFixed(1)} ${(yb + h * 0.03).toFixed(1)}C${(cx - r * 0.6).toFixed(1)} ${(yb + h * 0.045).toFixed(1)} ${cx} ${(yb + (h - yb) * 0.45).toFixed(1)} ${cx} ${h}`;
-    const right = `M${(w - 1.5).toFixed(1)} 0C${(w - 1.5).toFixed(1)} ${(yb * 0.55).toFixed(1)} ${(w - 1.5 - r * 0.45).toFixed(1)} ${(yb - 3).toFixed(1)} ${(w - 1.5 - r * 2.1).toFixed(1)} ${yb.toFixed(1)}L${(cx + r * 2.1).toFixed(1)} ${(yb + h * 0.03).toFixed(1)}C${(cx + r * 0.6).toFixed(1)} ${(yb + h * 0.045).toFixed(1)} ${cx} ${(yb + (h - yb) * 0.45).toFixed(1)} ${cx} ${h}`;
+    const w = brace.clientWidth || 1000, h = brace.clientHeight || 100;
+    const r = Math.min(h * 0.5, 40), cx = w / 2, yb = h * 0.78, x0 = 1.5, f = (n) => n.toFixed(1);
+    // a clean curly brace: short stems, round shoulders, a long level run, a soft point meeting at the centre
+    const left = `M${x0} 0L${x0} ${f(yb - r)}C${x0} ${f(yb - r * 0.4)} ${f(x0 + r * 0.4)} ${f(yb)} ${f(x0 + r)} ${f(yb)}L${f(cx - r * 1.5)} ${f(yb)}C${f(cx - r * 0.5)} ${f(yb)} ${f(cx)} ${f(yb + (h - yb) * 0.3)} ${f(cx)} ${f(h)}`;
+    const right = `M${f(w - x0)} 0L${f(w - x0)} ${f(yb - r)}C${f(w - x0)} ${f(yb - r * 0.4)} ${f(w - x0 - r * 0.4)} ${f(yb)} ${f(w - x0 - r)} ${f(yb)}L${f(cx + r * 1.5)} ${f(yb)}C${f(cx + r * 0.5)} ${f(yb)} ${f(cx)} ${f(yb + (h - yb) * 0.3)} ${f(cx)} ${f(h)}`;
     brace.setAttribute('viewBox', `0 0 ${w} ${h}`);
     brace.setAttribute('preserveAspectRatio', 'none');
     const ps = brace.querySelectorAll('path');
@@ -511,9 +512,9 @@
     const dOut = bxb ? easeInOut(clamp((vh * 0.98 - bxb.getBoundingClientRect().bottom) / (vh * 0.5))) : 0;
     const dk = dIn * (1 - dOut);
     const mix = (a, b, t) => a.map((v, i) => Math.round(lerpN(v, b[i], t))).join(',');
-    root.style.setProperty('--bxbg', `rgb(${mix([254, 254, 254], [11, 8, 24], dk)})`);
-    root.style.setProperty('--bxfg', `rgb(${mix([12, 12, 12], [246, 240, 228], dk)})`);
-    root.style.setProperty('--bxline', `rgb(${mix([52, 105, 79], [214, 245, 90], dk)})`);
+    root.style.setProperty('--bxbg', `rgb(${mix([254, 254, 254], [8, 17, 13], dk)})`);
+    root.style.setProperty('--bxfg', `rgb(${mix([12, 12, 12], [245, 242, 234], dk)})`);
+    root.style.setProperty('--bxline', `rgb(${mix([52, 105, 79], [200, 241, 105], dk)})`);
     bx.style.setProperty('--bxd', dk.toFixed(3));
     bx.style.setProperty('--fxo', clamp(dk * 1.1).toFixed(3));
     bdraw.forEach((el) => {
@@ -522,12 +523,12 @@
       el.style.setProperty('--dp', dp.toFixed(3));
       const paths = el.querySelectorAll('path'), dots = el.querySelectorAll('.bxdot');
       if (el.dataset.thread === '2' && r.bottom > -40 && r.top < vh + 40) {
-        // a vibrating string: amplitude grows towards the second phrase, phase travels with the scroll
+        // a meandering river: the line winds more and more towards the second phrase, drifting with the scroll
         const w = el.clientWidth || 120, h = el.clientHeight || 160, amp = Math.min(w * 0.36, 30);
         let d = '';
         for (let i = 0; i <= 56; i++) {
           const t = i / 56, y = t * h;
-          const x = w / 2 + amp * Math.pow(t, 1.15) * Math.sin(t * 17 - scrollY * 0.014) * (0.7 + 0.3 * Math.sin(t * 5 + 1));
+          const x = w / 2 + amp * Math.pow(t, 1.1) * Math.sin(t * 11 - scrollY * 0.009) * (0.75 + 0.25 * Math.sin(t * 4 + 1));
           d += `${i ? 'L' : 'M'}${x.toFixed(1)} ${y.toFixed(1)}`;
         }
         el.setAttribute('viewBox', `0 0 ${w} ${h}`);
@@ -580,7 +581,6 @@
     // depth of field while the collection arrives: nearer pieces drift and sharpen as the stage settles
     const par = clamp(r.top / innerHeight);
     bitems.forEach((el) => el.style.setProperty('--par', par.toFixed(3)));
-    bx.style.setProperty('--hue', (p * 70).toFixed(1));
     bf.style.setProperty('--pq', seg(0.18, 0.18).toFixed(3));
     bf.style.setProperty('--bq', seg(0.4, 0.2).toFixed(3));
     bf.style.setProperty('--eq', seg(0.5, 0.15).toFixed(3));

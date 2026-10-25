@@ -38,26 +38,29 @@ export const hero = {
 // Visual Design: editorial pieces. The first is the full-width feature, the rest sit in a
 // staggered two-column rhythm (add Mafalda, Gabi López, Palmarium here later).
 // Media slot: set `media` to { src, alt } for an image or { video, poster, alt } for an animation.
-// Bridge animation between Product Design and Visual Design. FICTIONAL product ("Resona"): it only exists
+// Bridge animation between Product Design and Visual Design. FICTIONAL platform ("Basin"): it only exists
 // for the transition (product interface → hero of its landing page) and is not a project.
 export const bridge = {
   // the two phrases of the narrative (from the sketch), outside the fictional materials
   text: ['Every product has a purpose.', 'And a story to tell.'],
-  brand: 'resona',
-  nav: ['Listen', 'Library', 'Artists', 'Pricing'],
-  navCta: 'Get started',
-  headline: ['Every sound,', 'in full color.'],
-  sub: 'Resona is the home for the albums you love. Play, discover and share in high fidelity.',
-  cta: 'Start listening',
-  ghost: 'See plans',
-  art: { kicker: 'Cover stories', title: 'Artwork that sounds like the music.', text: 'Every release gets a world of its own: color, shape and rhythm.', link: 'Meet the artists' },
-  features: { title: 'Play. Discover. Share.', captions: ['Your library, always in tune.', 'Find what to play next.'] },
-  identity: { title: 'One sound, one look.', text: 'Type, color and shape, applied everywhere.' },
-  footer: ['Listen', 'Library', 'Artists', 'Pricing'],
-  albums: [
-    ['Golden Hour', 'Mara Voss'], ['Paper Moons', 'The Lowlands'], ['Night Drive', 'Kito'], ['Low Tide', 'Sela'],
-    ['Halcyon', 'Ivo Reed'], ['Soft Static', 'Nami'], ['Violet Hours', 'Juno Park'], ['After Rain', 'Okta'],
-  ],
+  // "Basin": a FICTIONAL B2B platform for environmental intelligence and operational risk. It exists only for this
+  // transition (product → brand) and shares no name, logo, copy or screens with any real product.
+  brand: 'basin',
+  nav: ['Platform', 'Solutions', 'Resources', 'Company'],
+  navCta: 'Request a demo',
+  headline: ['See risk clearly.', 'Plan what comes next.'],
+  sub: 'Basin connects environmental and operational data for every site, so teams can compare scenarios and decide what to do first.',
+  cta: 'Request a demo',
+  ghost: 'See the platform',
+  art: { kicker: 'Context', title: 'Every site sits inside a landscape.', text: 'Terrain, climate and operations in one view, so risk has a place and a reason.', link: 'Explore the platform' },
+  features: { title: 'From signals to decisions.', captions: ['Understand each site.', 'Compare what could happen.'] },
+  identity: { title: 'One system, from data to brand.', text: 'Type, color and contour, applied everywhere.' },
+  footer: ['Platform', 'Solutions', 'Resources', 'Company'],
+  // illustrative data, consistent across screens: Halden Plant is 78 (High) on the current trajectory, 49 in scenario B
+  kpis: [['Sites', '24'], ['High exposure', '6'], ['Avg. index', '47']],
+  sites: [['Halden Plant', 'Flood', 78, 'High'], ['Rivermouth Terminal', 'Sea level', 74, 'High'], ['Kestrel Mill', 'Heat', 71, 'High'], ['Marrow Quarry', 'Water supply', 66, 'Medium'], ['Ostia Depot', 'Wildfire', 61, 'Medium']],
+  factors: [['Flood', 78], ['Heat stress', 54], ['Water supply', 41], ['Wildfire', 22]],
+  actions: [['', 'Elevate main substation', '−12 pts'], ['', 'Add a retention basin', '−10 pts'], ['', 'Reroute inbound logistics', '−7 pts']],
 };
 
 // Visual Design section: real projects only. The first is Waterplan (media is a placeholder until final assets).
