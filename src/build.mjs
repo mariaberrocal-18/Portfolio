@@ -5,10 +5,10 @@ import { createHash } from 'node:crypto';
 import { execSync } from 'node:child_process';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { site, hero, visual, journey, toolkit, about, contact, projects } from './content.mjs';
+import { site, hero, bridge, visual, journey, toolkit, about, contact, projects } from './content.mjs';
 import { render, ratio, ttEvolve } from './visuals.mjs';
 import { mini } from './mini.mjs';
-import { waterplanScene } from './waterplan.mjs';
+import { bridgeScene } from './bridge.mjs';
 import { marks } from './logos.mjs';
 import { existsSync } from 'node:fs';
 
@@ -264,28 +264,20 @@ ${header('', true)}
     </div>
   </section>
 
-  <section class="visual-section" id="visual" aria-labelledby="visual-h" data-vscene>
-    <div class="vscene">
-      <div class="vstage">
-        <div class="vtop">
-          <p class="vmsg">${visual.message.map((t, i) => `<span class="vmsg__l" style="--i:${i}"><b>${esc(t)}</b></span>`).join('')}</p>
-          <header class="vhead">
-            <h2 id="visual-h" class="h2">${esc(visual.title)}</h2>
-            <p class="sec-head__lede">${esc(visual.lede)}</p>
-          </header>
-        </div>
-        ${waterplanScene(visual, visual.projects[0])}
-        <div class="vfinal">
-          <h3 class="vproj__name">${esc(visual.projects[0].name)}</h3>
-          <div class="vproj__side">
-            <p class="vproj__desc">${esc(visual.projects[0].descriptor)}</p>
-            <p class="vproj__cats">${visual.projects[0].categories.map(esc).join(' · ')}</p>
-            <ul class="vlabels" aria-label="Project type">${visual.projects[0].labels.map((l) => `<li>${esc(l)}</li>`).join('')}</ul>
-          </div>
-        </div>
+  <section class="bx" data-bx aria-label="From product interface to landing page">
+    <div class="bxs"><div class="bxstage">${bridgeScene(bridge)}</div></div>
+  </section>
+
+  <section class="visual-section" id="visual" aria-labelledby="visual-h">
+    <div class="wrap">
+      <div class="vhead-wrap"><header class="vhead" data-reveal>
+        <h2 id="visual-h" class="h2">${esc(visual.title)}</h2>
+        <p class="sec-head__lede">${esc(visual.lede)}</p>
+      </header></div>
+      <div class="vlist">
+        ${visual.projects.map(visualProject).join('\n        ')}
       </div>
     </div>
-    ${visual.projects.length > 1 ? `<div class="wrap vrest"><div class="vlist">${visual.projects.slice(1).map((pr, i) => visualProject(pr, i + 1)).join('\n')}</div></div>` : ''}
   </section>
 
   <section class="journey curtain" id="journey" aria-labelledby="journey-h">

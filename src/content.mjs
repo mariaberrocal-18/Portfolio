@@ -38,30 +38,34 @@ export const hero = {
 // Visual Design: editorial pieces. The first is the full-width feature, the rest sit in a
 // staggered two-column rhythm (add Mafalda, Gabi López, Palmarium here later).
 // Media slot: set `media` to { src, alt } for an image or { video, poster, alt } for an animation.
+// Bridge animation between Product Design and Visual Design. FICTIONAL product ("Resona"): it only exists
+// for the transition (product interface → hero of its landing page) and is not a project.
+export const bridge = {
+  brand: 'resona',
+  nav: ['Listen', 'Library', 'Artists', 'Pricing'],
+  navCta: 'Get started',
+  headline: ['Every sound,', 'in full color.'],
+  sub: 'Resona is the home for the albums you love. Play, discover and share in high fidelity.',
+  cta: 'Start listening',
+  ghost: 'See plans',
+  albums: [
+    ['Golden Hour', 'Mara Voss'], ['Paper Moons', 'The Lowlands'], ['Night Drive', 'Kito'], ['Low Tide', 'Sela'],
+    ['Halcyon', 'Ivo Reed'], ['Soft Static', 'Nami'], ['Violet Hours', 'Juno Park'], ['After Rain', 'Okta'],
+  ],
+};
+
+// Visual Design section: real projects only. The first is Waterplan (media is a placeholder until final assets).
+// More (Mafalda, Gabi López, Palmarium) go in this array. Media slot: { src, alt } image or { video, poster, alt }.
 export const visual = {
   title: 'Visual Design',
   lede: 'Exploring how brands look, feel, and communicate — through art direction, web design, and AI-assisted image-making.',
-  // narrative thread of the scroll scene: first line while we see the product, second when the website appears
-  message: ['I can build it.', 'I can make you care.'],
-  // The first project is the scroll scene (product screen → website). More projects (Mafalda, Gabi López,
-  // Palmarium) go after it in this array and render as editorial pieces below. Media slot for those:
-  // media: { src, alt } for an image or { video, poster, alt } for an animation.
   projects: [
     {
       name: 'Waterplan',
       descriptor: 'The AI-native platform for water-dependent industries.',
       categories: ['Art direction', 'Web design', 'AI-assisted imagery'],
       labels: ['Independent concept', 'My exploration'],
-      scene: {
-        brand: 'waterplan',
-        nav: ['Platform', 'Solutions', 'Resources', 'About'],
-        navCta: 'Book a demo',
-        headline: ['Read the water', 'before it moves.'],
-        cta: 'Explore the platform',
-        ghost: 'See how it works',
-        signals: ['Water stress · High', 'Rainfall anomaly', 'Aquifer signal'],
-        photo: null, // PLACEHOLDER: e.g. 'assets/visual/waterplan-hero.jpg' replaces the drawn terrain
-      },
+      media: null,
     },
   ],
 };
