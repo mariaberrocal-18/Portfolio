@@ -41,13 +41,27 @@ export const hero = {
 export const visual = {
   title: 'Visual Design',
   lede: 'Exploring how brands look, feel, and communicate — through art direction, web design, and AI-assisted image-making.',
+  // narrative thread of the scroll scene: first line while we see the product, second when the website appears
+  message: ['I can build it.', 'I can make you care.'],
+  // The first project is the scroll scene (product screen → website). More projects (Mafalda, Gabi López,
+  // Palmarium) go after it in this array and render as editorial pieces below. Media slot for those:
+  // media: { src, alt } for an image or { video, poster, alt } for an animation.
   projects: [
     {
       name: 'Waterplan',
       descriptor: 'The AI-native platform for water-dependent industries.',
       categories: ['Art direction', 'Web design', 'AI-assisted imagery'],
       labels: ['Independent concept', 'My exploration'],
-      media: null,
+      scene: {
+        brand: 'waterplan',
+        nav: ['Platform', 'Solutions', 'Resources', 'About'],
+        navCta: 'Book a demo',
+        headline: ['Read the water', 'before it moves.'],
+        cta: 'Explore the platform',
+        ghost: 'See how it works',
+        signals: ['Water stress · High', 'Rainfall anomaly', 'Aquifer signal'],
+        photo: null, // PLACEHOLDER: e.g. 'assets/visual/waterplan-hero.jpg' replaces the drawn terrain
+      },
     },
   ],
 };

@@ -470,6 +470,74 @@
 
   const nav = document.querySelector('.nav');
   let lastY = scrollY, hx = 0;
+  // Visual Design scene: a Waterplan product screen becomes the hero of a website, then the section title.
+  // One continuous camera move (scale + translate on the "world") plus a mask that opens around the screen.
+  // Everything is a pure function of scroll progress, so it plays backwards too.
+  const vs = document.querySelector('[data-vscene]');
+  const vsc = vs && vs.querySelector('.vscene');
+  const vf = vs && vs.querySelector('[data-vframe]');
+  const vworld = vf && vf.querySelector('.vworld');
+  const vsite = vf && vf.querySelector('.vsite');
+  const vps = vf && vf.querySelector('[data-vps]');
+  let vgeo = null;
+  const setVs = () => { root.classList.toggle('is-vscene', !!vs && !reduce); vgeo = null; };
+  setVs();
+  addEventListener('resize', () => { vgeo = null; });
+  const updateVisual = () => {
+    if (!vs || reduce) return;
+    if (!vgeo) {
+      const W = vf.offsetWidth, H = vf.offsetHeight;
+      const pl = vps.offsetLeft, pt = vps.offsetTop, pw = vps.offsetWidth, ph = vps.offsetHeight;
+      const narrow = W < 520;
+      vgeo = { W, H, pl, pt, pw, ph, narrow, S0: narrow ? Math.min(1.12, (0.94 * innerWidth) / pw) : Math.min((0.94 * H) / ph, (0.86 * innerWidth) / pw) };
+    }
+    const { W, H, pl, pt, pw, ph, narrow, S0 } = vgeo;
+    const r = vsc.getBoundingClientRect();
+    const p = clamp(-r.top / Math.max(1, r.height - innerHeight));
+    const enter = clamp((innerHeight * 0.6 - r.top) / (innerHeight * 0.4));
+    const seg = (a, len) => easeOut(clamp((p - a) / len));
+    const set = (el, k, v) => el.style.setProperty(k, typeof v === 'number' ? v.toFixed(3) : v);
+    // timeline (fractions of the pinned scroll); mobile skips the detail flight and runs a little earlier
+    const T = narrow
+      ? { det: 0, cam: 0.1, camLen: 0.4, mask: 0.14, maskLen: 0.34, msg2: 0.38, nav: 0.44, h: 0.44, sub: 0.52, cta: 0.56, l1: 0.48, l2: 0.56, l3: 0.64, chip: 0.7, out: 0.88 }
+      : { det: 0.08, cam: 0.3, camLen: 0.34, mask: 0.36, maskLen: 0.28, msg2: 0.5, nav: 0.58, h: 0.58, sub: 0.66, cta: 0.7, l1: 0.62, l2: 0.7, l3: 0.78, chip: 0.74, out: 0.9 };
+    // 1 · the product: details approach and snap into the main screen
+    set(vf, '--d1', narrow ? 1 : easeInOut(clamp((p - T.det) / 0.14)));
+    set(vf, '--d2', narrow ? 1 : easeInOut(clamp((p - T.det - 0.05) / 0.14)));
+    // 2 · the camera pulls back from the screen to the whole website
+    const e = easeInOut(clamp((p - T.cam) / T.camLen));
+    const S = lerp(S0, 1, e);
+    const fx = lerp(pl + pw / 2, W / 2, e), fy = lerp(pt + ph / 2, H / 2, e);
+    set(vworld, '--cs', S);
+    set(vworld, '--cx', `${(W / 2 - S * fx).toFixed(1)}px`);
+    set(vworld, '--cy', `${(H / 2 - S * fy).toFixed(1)}px`);
+    set(vps, '--ry', `${(-7 * (1 - e)).toFixed(2)}deg`);
+    set(vps, '--rx', `${(2.5 * (1 - e)).toFixed(2)}deg`);
+    // 3 · the mask opens around the screen: the website is revealed
+    const m = easeOut(clamp((p - T.mask) / T.maskLen));
+    set(vsite, '--mt', `${(pt * (1 - m)).toFixed(1)}px`);
+    set(vsite, '--ml', `${(pl * (1 - m)).toFixed(1)}px`);
+    set(vsite, '--mr', `${((W - pl - pw) * (1 - m)).toFixed(1)}px`);
+    set(vsite, '--mb', `${((H - pt - ph) * (1 - m)).toFixed(1)}px`);
+    set(vf, '--bq', seg(T.mask, 0.3));
+    set(vf, '--eq', seg(T.mask + 0.14, 0.14));
+    set(vf, '--nq', seg(T.nav, 0.08));
+    set(vf, '--hq', seg(T.h, 0.09));
+    set(vf, '--hq2', seg(T.h + 0.04, 0.09));
+    set(vf, '--sq', seg(T.sub, 0.07));
+    set(vf, '--cq', seg(T.cta, 0.07));
+    // 4 · the analysis comes alive over the territory, signals and scenarios in sequence
+    set(vf, '--l1', seg(T.l1, 0.14));
+    set(vf, '--l2', seg(T.l2, 0.14));
+    set(vf, '--l3', seg(T.l3, 0.08));
+    [0, 1, 2].forEach((i) => { set(vf, `--c${i + 1}`, seg(T.chip + i * 0.05, 0.06)); set(vf, `--t${i + 1}`, seg(T.chip + 0.04 + i * 0.03, 0.05)); });
+    // message: line one over the product, line two when the website appears; then the title takes over
+    set(vs, '--mm', easeOut(enter));
+    set(vs, '--mm2', seg(T.msg2, 0.07));
+    set(vs, '--mo', 1 - seg(T.out, 0.05));
+    set(vs, '--hd', seg(T.out + 0.02, 0.06));
+    set(vs, '--fx', seg(T.out + 0.04, 0.06));
+  };
   function update() {
     const vh = innerHeight;
     if (nav) {
@@ -492,6 +560,7 @@
     }
 
     updateBridge();
+    updateVisual();
     if (!fly) updateWork();
     updateCase();
     updateThread();
