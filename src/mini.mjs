@@ -26,26 +26,26 @@ const thinking = () =>
     'Three noisy starting points struck through, leading to one highlighted real problem',
   );
 
-// Visual Design: a longer prompt is typed, then a whole interface assembles
-const craft = () =>
-  wrap(
-    `<rect x="6" y="-8" width="228" height="36" rx="12" fill="none" stroke="currentColor" stroke-opacity=".3"/>
-    <path d="M19 1l1.4 3.6 3.6 1.4-3.6 1.4L19 11l-1.4-3.6L14 6l3.6-1.4z" fill="var(--sage-hi)"/>
-    <text x="30" y="5" font-size="8.4" font-weight="500" fill="currentColor" xml:space="preserve"><tspan class="m-ch" style="--k:0">D</tspan><tspan class="m-ch" style="--k:1">a</tspan><tspan class="m-ch" style="--k:2">s</tspan><tspan class="m-ch" style="--k:3">h</tspan><tspan class="m-ch" style="--k:4">b</tspan><tspan class="m-ch" style="--k:5">o</tspan><tspan class="m-ch" style="--k:6">a</tspan><tspan class="m-ch" style="--k:7">r</tspan><tspan class="m-ch" style="--k:8">d</tspan><tspan class="m-ch" style="--k:9"> </tspan><tspan class="m-ch" style="--k:10">f</tspan><tspan class="m-ch" style="--k:11">o</tspan><tspan class="m-ch" style="--k:12">r</tspan><tspan class="m-ch" style="--k:13"> </tspan><tspan class="m-ch" style="--k:14">w</tspan><tspan class="m-ch" style="--k:15">a</tspan><tspan class="m-ch" style="--k:16">t</tspan><tspan class="m-ch" style="--k:17">e</tspan><tspan class="m-ch" style="--k:18">r</tspan><tspan class="m-ch" style="--k:19"> </tspan><tspan class="m-ch" style="--k:20">r</tspan><tspan class="m-ch" style="--k:21">i</tspan><tspan class="m-ch" style="--k:22">s</tspan><tspan class="m-ch" style="--k:23">k</tspan><tspan class="m-ch" style="--k:24">,</tspan></text>
-    <text x="30" y="17" font-size="8.4" font-weight="500" fill="currentColor" xml:space="preserve"><tspan class="m-ch" style="--k:25">K</tspan><tspan class="m-ch" style="--k:26">P</tspan><tspan class="m-ch" style="--k:27">I</tspan><tspan class="m-ch" style="--k:28"> </tspan><tspan class="m-ch" style="--k:29">c</tspan><tspan class="m-ch" style="--k:30">a</tspan><tspan class="m-ch" style="--k:31">r</tspan><tspan class="m-ch" style="--k:32">d</tspan><tspan class="m-ch" style="--k:33">s</tspan><tspan class="m-ch" style="--k:34">,</tspan><tspan class="m-ch" style="--k:35"> </tspan><tspan class="m-ch" style="--k:36">t</tspan><tspan class="m-ch" style="--k:37">r</tspan><tspan class="m-ch" style="--k:38">e</tspan><tspan class="m-ch" style="--k:39">n</tspan><tspan class="m-ch" style="--k:40">d</tspan><tspan class="m-ch" style="--k:41"> </tspan><tspan class="m-ch" style="--k:42">c</tspan><tspan class="m-ch" style="--k:43">h</tspan><tspan class="m-ch" style="--k:44">a</tspan><tspan class="m-ch" style="--k:45">r</tspan><tspan class="m-ch" style="--k:46">t</tspan><tspan class="m-ch" style="--k:47">,</tspan><tspan class="m-ch" style="--k:48"> </tspan><tspan class="m-ch" style="--k:49">s</tspan><tspan class="m-ch" style="--k:50">i</tspan><tspan class="m-ch" style="--k:51">t</tspan><tspan class="m-ch" style="--k:52">e</tspan><tspan class="m-ch" style="--k:53"> </tspan><tspan class="m-ch" style="--k:54">t</tspan><tspan class="m-ch" style="--k:55">a</tspan><tspan class="m-ch" style="--k:56">b</tspan><tspan class="m-ch" style="--k:57">l</tspan><tspan class="m-ch" style="--k:58">e</tspan></text>
-    <rect class="m-caret m-caret--end" x="152" y="10.5" width="1.2" height="8" fill="var(--sage-hi)"/>
-    <g class="m-gen" style="--i:0"><rect x="8" y="38" width="224" height="88" rx="9" fill="#fff" stroke="currentColor" stroke-opacity=".28"/></g>
-    <g class="m-gen" style="--i:1"><rect x="8" y="38" width="42" height="88" rx="9" fill="currentColor" fill-opacity=".05"/>
-      <rect x="15" y="46" width="12" height="5" rx="2.5" fill="var(--sage-hi)"/>
-      ${[60, 70, 80, 90].map((y, j) => `<rect x="15" y="${y}" width="${j === 0 ? 28 : 22 + (j % 2) * 5}" height="4" rx="2" fill="currentColor" fill-opacity="${j === 0 ? 0.55 : 0.2}"/>`).join('')}</g>
-    ${[0, 1, 2].map((j) => `<g class="m-gen" style="--i:${2 + j}"><rect x="${58 + j * 58}" y="46" width="52" height="24" rx="6" fill="#fff" stroke="currentColor" stroke-opacity=".25"/><rect x="${64 + j * 58}" y="52" width="20" height="3.5" rx="1.75" fill="currentColor" fill-opacity=".3"/><rect x="${64 + j * 58}" y="59" width="${j === 1 ? 30 : 24}" height="6" rx="2.5" fill="${j === 1 ? 'var(--sage-hi)' : 'currentColor'}" fill-opacity="${j === 1 ? 1 : 0.8}"/></g>`).join('')}
-    <g class="m-gen" style="--i:5"><rect x="58" y="76" width="110" height="46" rx="6" fill="#fff" stroke="currentColor" stroke-opacity=".25"/>
-      <path d="M64 110 C78 106 84 99 96 100 S116 90 128 92 S150 84 162 82" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-      <path d="M64 114 L162 100" fill="none" stroke="currentColor" stroke-opacity=".3" stroke-dasharray="2 3"/></g>
-    <g class="m-gen" style="--i:6"><rect x="174" y="76" width="52" height="46" rx="6" fill="#fff" stroke="currentColor" stroke-opacity=".25"/>
-      ${[0, 1, 2, 3].map((j) => `<rect x="180" y="${83 + j * 9.5}" width="${34 - j * 5}" height="3.5" rx="1.75" fill="currentColor" fill-opacity="${0.55 - j * 0.1}"/><circle cx="220" cy="${84.8 + j * 9.5}" r="1.8" fill="${j === 0 ? 'var(--sage-hi)' : 'currentColor'}" fill-opacity="${j === 0 ? 1 : 0.25}"/>`).join('')}</g>`,
-    'A longer AI prompt being typed, followed by a complete dashboard interface assembling itself: sidebar, KPI cards, trend chart and site table',
+// UI & Interaction Design: an interface refines itself (hierarchy sharpens, components fall into order) and
+// responds to a selection (a cursor picks Q3, the chart updates). The still frame is the refined state.
+const craft = () => {
+  const kpis = [['Flood', '78', 'var(--sage-hi)'], ['Heat', '54', 'currentColor'], ['Supply', '41', 'currentColor']];
+  const offs = [[-12, 8, -5], [10, -9, 4], [-8, 12, 6]];
+  const old = [14, 26, 12, 30, 16, 22], now = [26, 18, 32, 22, 38, 30];
+  return wrap(
+    `<rect x="8" y="6" width="224" height="108" rx="10" fill="#fff" stroke="currentColor" stroke-opacity=".28"/>
+    <g class="m-hier"><text x="20" y="27" font-size="12" font-weight="700" fill="currentColor">Exposure</text><text x="20" y="37" font-size="5.8" fill="currentColor" fill-opacity=".5">Portfolio · 2040</text></g>
+    <rect x="150" y="14" width="72" height="14" rx="7" fill="currentColor" fill-opacity=".07"/>
+    <rect class="m-pill" x="198" y="15.5" width="22" height="11" rx="5.5" fill="var(--sage-hi)" fill-opacity=".22" stroke="var(--sage-hi)" stroke-width=".8"/>
+    ${['Q1', 'Q2', 'Q3'].map((q, i) => `<text x="${162 + i * 24}" y="23" font-size="6.2" font-weight="600" text-anchor="middle" fill="currentColor" fill-opacity="${i === 2 ? 0.85 : 0.5}">${q}</text>`).join('')}
+    ${kpis.map(([l, v, col], i) => `<g class="m-ord" style="--i:${i};--dx:${offs[i][0]}px;--dy:${offs[i][1]}px;--r:${offs[i][2]}deg"><rect x="20" y="${44 + i * 22}" width="64" height="18" rx="5" fill="#fff" stroke="currentColor" stroke-opacity=".25"/><text x="26" y="${55.6 + i * 22}" font-size="5.6" fill="currentColor" fill-opacity=".55">${l}</text><text x="78" y="${57 + i * 22}" font-size="9" font-weight="700" text-anchor="end" fill="${col}">${v}</text></g>`).join('')}
+    <g class="m-ord" style="--i:3;--dx:12px;--dy:8px;--r:0deg"><rect x="94" y="44" width="130" height="62" rx="6" fill="#fff" stroke="currentColor" stroke-opacity=".25"/>
+      <line x1="102" y1="98" x2="216" y2="98" stroke="currentColor" stroke-opacity=".2"/>
+      ${now.map((h, j) => `<rect class="m-bar2" x="${104 + j * 18.5}" y="${98 - h}" width="11" height="${h}" rx="2.5" fill="${j === 5 ? 'var(--sage-hi)' : 'currentColor'}" fill-opacity="${j === 5 ? 1 : 0.72}" style="--a:${(old[j] / h).toFixed(3)};--i:${j}"/>`).join('')}</g>
+    <path class="m-cur" d="M0 0 L0 10 L2.8 7.6 L4.6 11.6 L6.2 10.9 L4.4 7 L8 7Z" fill="currentColor" stroke="#fff" stroke-width=".7" stroke-linejoin="round" transform="translate(208 22)"/>`,
+    'A dashboard interface refining itself: the title gains hierarchy, components fall into order, and selecting Q3 updates the chart',
   );
+};
 
 // High-pressure, fast-paced: quick iterations streaking toward a shipped release
 const pace = () =>

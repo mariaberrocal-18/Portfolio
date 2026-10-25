@@ -129,6 +129,8 @@ button { font: inherit; color: inherit; }
 }
 .btn:hover { transform: translateY(-2px); background: #1d1d1d; }
 .btn:active { transform: translateY(0); }
+.btn { gap: 8px; }
+.btn:hover .ico { transform: translate(2px, -2px); }
 .btn--ghost { gap: 8px; background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1px rgba(12, 12, 12, 0.28); }
 .btn--ghost:hover { background: rgba(12, 12, 12, 0.06); box-shadow: inset 0 0 0 1px var(--ink); }
 .btn--ghost:hover .ico { transform: translateY(2px); }
@@ -307,6 +309,21 @@ button { font: inherit; color: inherit; }
 @keyframes grow-y { from { transform: scaleY(0); } to { transform: none; } }
 :is(.lcard, .strengths li).is-active .m-ship { animation: pop 0.6s var(--ease) both; animation-delay: calc(0.5s + var(--i) * 0.1s); transform-box: fill-box; transform-origin: center; }
 
+/* UI & Interaction Design drawing: hierarchy sharpens, components fall into order, a selection updates the chart */
+.m-hier, .m-ord, .m-bar2 { transform-box: fill-box; }
+.m-hier { transform-origin: left center; } .m-ord { transform-origin: center; } .m-bar2 { transform-origin: bottom center; }
+.m-cur { opacity: 0; }
+:is(.lcard, .strengths li).is-active .m-hier { animation: m-hier 0.9s var(--ease) 0.1s both; }
+@keyframes m-hier { from { opacity: 0.4; scale: 0.74; } to { opacity: 1; scale: 1; } }
+:is(.lcard, .strengths li).is-active .m-ord { animation: m-ord 0.95s var(--ease) both; animation-delay: calc(0.35s + var(--i) * 0.14s); }
+@keyframes m-ord { from { opacity: 0.35; translate: var(--dx) var(--dy); rotate: var(--r); } to { opacity: 1; translate: 0 0; rotate: 0deg; } }
+:is(.lcard, .strengths li).is-active .m-pill { animation: m-pill 4.2s var(--ease) both; }
+@keyframes m-pill { 0%, 56% { translate: -48px 0; } 72%, 100% { translate: 0 0; } }
+:is(.lcard, .strengths li).is-active .m-bar2 { animation: m-bar2 4.2s var(--ease) both; animation-delay: calc(var(--i) * 0.05s); }
+@keyframes m-bar2 { 0% { scale: 1 0; } 18%, 56% { scale: 1 var(--a); } 74%, 100% { scale: 1 1; } }
+:is(.lcard, .strengths li).is-active .m-cur { animation: m-cur 4.2s var(--ease) both; }
+@keyframes m-cur { 0%, 34% { opacity: 0; translate: 16px 64px; scale: 1; } 40% { opacity: 1; } 54% { opacity: 1; translate: 0 0; scale: 1; } 58% { scale: 0.78; } 63% { scale: 1; } 84% { opacity: 1; } 100% { opacity: 0; translate: 0 0; } }
+
 /* work section: the loop's line lands on the section title */
 .work-wrap { padding-top: clamp(56px, 8vw, 120px); }
 .work-head { margin-bottom: clamp(40px, 6vw, 80px); text-align: center; justify-items: center; }
@@ -394,6 +411,7 @@ button { font: inherit; color: inherit; }
 .bxp1 b, .bxt2 b { display: inline-block; font-weight: inherit; opacity: calc(0.15 + var(--in, 1) * 0.85); filter: blur(calc((1 - var(--in, 1)) * 16px)); letter-spacing: calc((1 - var(--in, 1)) * 0.07em); transform: translateY(calc((1 - var(--in, 1)) * 26px)) scale(calc(1.06 - var(--in, 1) * 0.06)); }
 /* ambient light: a fixed, viewport-sized layer (so it never has a hard edge); it only exists while the page is "dark" */
 .bxfx { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; opacity: var(--fxo, 0); }
+.bxfx::after { content: ''; position: absolute; inset: 0; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' seed='11' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1.6 -.5'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); background-size: 300px; opacity: 0.4; mix-blend-mode: overlay; }
 .bxfx i { position: absolute; border-radius: 50%; filter: blur(110px); will-change: transform; }
 .bxfx__a { left: -12vw; top: 40%; width: 50vw; aspect-ratio: 1; background: #2f7a5a; opacity: 0.55; animation: bxdrift 14s ease-in-out infinite alternate; }
 .bxfx__b { right: -14vw; top: -14%; width: 56vw; aspect-ratio: 1; background: #1d5c47; opacity: 0.7; animation: bxdrift 18s ease-in-out infinite alternate-reverse; }
@@ -436,17 +454,21 @@ button { font: inherit; color: inherit; }
 .bxctas { position: absolute; z-index: 2; left: 4cqw; top: 32cqw; display: flex; gap: 1cqw; }
 .bxcta, .bxghost { display: inline-flex; align-items: center; font-size: 1.25cqw; font-weight: 650; padding: 1cqw 2cqw; border-radius: 99px; color: var(--bc); }
 .bxcta { background: var(--bl); color: var(--bi); } .bxghost { box-shadow: inset 0 0 0 1px rgba(245, 242, 234, 0.4); }
-.bxat { position: absolute; left: 50cqw; top: 59cqw; width: 42cqw; color: var(--bi); }
+.bxat { position: absolute; left: 54cqw; top: 59cqw; width: 38cqw; color: var(--bi); }
 .bxk { font-size: 1.4cqw; font-weight: 700; color: var(--bm); }
 .bxh2 { margin: 1.2cqw 0 1.4cqw; font-size: 4.2cqw; line-height: 0.98; font-weight: 650; letter-spacing: -0.05em; }
 .bxp { width: 34cqw; font-size: 1.5cqw; line-height: 1.4; color: #44574d; }
 .bxlink { display: inline-block; margin-top: 2cqw; font-size: 1.5cqw; font-weight: 650; box-shadow: 0 0.15cqw 0 var(--bi); }
 .bxft { position: absolute; left: 0; right: 0; top: 96.5cqw; text-align: center; font-size: 4.4cqw; font-weight: 650; letter-spacing: -0.05em; color: var(--bi); }
 .bxcap { position: absolute; top: 133.4cqw; width: 41cqw; font-size: 1.55cqw; font-weight: 600; letter-spacing: -0.01em; color: var(--bi); } .bxcap--1 { left: 6cqw; } .bxcap--2 { left: 53cqw; }
-.bxit { position: absolute; left: 4cqw; top: 146cqw; width: 22cqw; font-size: 3.1cqw; line-height: 1; font-weight: 650; letter-spacing: -0.045em; color: var(--bc); }
-.bxip { position: absolute; left: 76cqw; top: 146.6cqw; width: 19cqw; font-size: 1.4cqw; line-height: 1.4; color: rgba(245, 242, 234, 0.75); }
-.bxfoot { position: absolute; left: 4cqw; right: 4cqw; top: 171cqw; display: flex; align-items: center; justify-content: space-between; color: var(--bc); }
-.bxfoot em { font-style: normal; font-size: 1.15cqw; color: rgba(245, 242, 234, 0.7); margin-left: 2.4cqw; }
+.bxit { position: absolute; left: 5cqw; top: 147cqw; width: 52cqw; font-size: 4.8cqw; line-height: 0.98; font-weight: 650; letter-spacing: -0.05em; color: var(--bc); }
+.bxfcta { position: absolute; left: 76cqw; top: 150cqw; display: inline-flex; align-items: center; padding: 1.2cqw 2.6cqw; border-radius: 99px; background: var(--bl); color: var(--bi); font-size: 1.5cqw; font-weight: 650; }
+.bxfdiv { position: absolute; left: 5cqw; right: 5cqw; top: 165.5cqw; height: 1px; background: rgba(245, 242, 234, 0.16); }
+.bxfoot { position: absolute; left: 5cqw; right: 5cqw; top: 169cqw; display: flex; align-items: center; color: var(--bc); }
+.bxfoot__l { display: flex; gap: 2.6cqw; margin-left: 8cqw; } .bxfoot em { font-style: normal; font-size: 1.2cqw; color: rgba(245, 242, 234, 0.7); }
+.bxfoot__c { margin-left: auto; font-size: 1.1cqw; color: rgba(245, 242, 234, 0.5); }
+.bxs4::after { content: ''; position: absolute; left: 62cqw; top: 112cqw; width: 70cqw; aspect-ratio: 1; border-radius: 50%; background: repeating-radial-gradient(circle, transparent 0 2.4%, rgba(200, 241, 105, 0.16) 2.4% 2.7%); -webkit-mask-image: radial-gradient(circle, #000 20%, transparent 68%); mask-image: radial-gradient(circle, #000 20%, transparent 68%); }
+.bxs4 { overflow: hidden; }
 /* materials: they travel from the collection (a) to their place in the website (b); --q is set per item (0 → 1) */
 .bxi { --q: 0; --ax: var(--dax); --ay: var(--day); --aw: var(--daw); --r0: var(--dr0); --bx: var(--dbx); --by: var(--dby); --bw: var(--dbw); position: absolute; z-index: var(--z); container-type: inline-size;
   left: calc((var(--ax) + (var(--bx) - var(--ax)) * var(--q)) * 1cqw); top: calc((var(--ay) + (var(--by) - var(--ay)) * var(--q)) * 1cqw); width: calc((var(--aw) + (var(--bw) - var(--aw)) * var(--q)) * 1cqw);
@@ -554,18 +576,21 @@ button { font: inherit; color: inherit; }
 @media (max-width: 719px) {
   .bxstage { --VW: min(92vw, calc((100vh - 196px) * 0.8)); }
   .bxf { aspect-ratio: 4 / 5; }
-  .bxf--w { aspect-ratio: 100 / 302; width: min(92vw, 460px); }
-  .bxpage { height: calc(302 * 1cqw); }
+  .bxf--w { aspect-ratio: 100 / 282; width: min(92vw, 460px); }
+  .bxpage { height: calc(282 * 1cqw); }
   .bxi { --ax: var(--max); --ay: var(--may); --aw: var(--maw); --r0: var(--mr0); --bx: var(--mbx); --by: var(--mby); --bw: var(--mbw); }
-  .bxi--d, .bxs3, .bxat, .bxft, .bxcap, .bxit, .bxip { display: none; }
-  .bxs1 { height: 134cqw; } .bxs2 { top: 134cqw; height: 98cqw; } .bxs4 { top: 232cqw; height: 70cqw; }
+  .bxi--d, .bxs3, .bxat, .bxft, .bxcap { display: none; }
+  .bxs1 { height: 134cqw; } .bxs2 { top: 134cqw; height: 98cqw; } .bxs4 { top: 232cqw; height: 50cqw; }
   .bxnav { left: 5cqw; right: 5cqw; top: 3.5cqw; } .bxnav__logo { font-size: 4.6cqw; } .bxnav__logo .bmark { width: 4.6cqw; } .bxnav__links { display: none; } .bxnav__cta { font-size: 3cqw; padding: 1.6cqw 3.6cqw; }
   .bxh { left: 6cqw; top: 16cqw; width: 88cqw; font-size: 10cqw; } .bxh__l { padding-bottom: 2cqw; margin-bottom: -2cqw; }
   .bxsub { left: 6cqw; top: 41cqw; width: 80cqw; font-size: 3.7cqw; }
   .bxctas { left: 6cqw; top: 58cqw; gap: 2cqw; } .bxcta, .bxghost { font-size: 3.3cqw; padding: 2.4cqw 5cqw; }
   .bxglow { left: 30cqw; top: 50cqw; width: 100cqw; } .bxrings { left: 34cqw; top: 54cqw; width: 90cqw; }
-  .bxfoot { top: 294cqw; } .bxfoot .bxnav__logo { font-size: 4.2cqw; } .bxfoot em { font-size: 3cqw; margin-left: 3cqw; }
-  .bxfoot em:nth-child(n + 3) { display: none; }
+  .bxit { left: 6cqw; top: 238cqw; width: 88cqw; font-size: 7.6cqw; }
+  .bxfcta { left: 6cqw; top: 256cqw; font-size: 3.4cqw; padding: 2.4cqw 5cqw; }
+  .bxfdiv { left: 6cqw; right: 6cqw; top: 270cqw; }
+  .bxfoot { left: 6cqw; right: 6cqw; top: 273cqw; } .bxfoot .bxnav__logo { font-size: 4.4cqw; } .bxfoot__l { margin-left: 5cqw; gap: 3cqw; } .bxfoot em { font-size: 3cqw; } .bxfoot__c, .bxfoot em:nth-child(n + 3) { display: none; }
+  .bxs4::after { left: 20cqw; top: 214cqw; width: 110cqw; }
   .is-bx .bxb { height: calc(100vh + 300vh); }
   .is-bx .bxstage { padding-top: 80px; }
   .vhead .sec-head__lede { font-size: 0.9375rem; }

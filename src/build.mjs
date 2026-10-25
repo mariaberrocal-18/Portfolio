@@ -229,7 +229,7 @@ ${header('', true)}
       </h1>
       <p class="hero__lede">${esc(hero.lede)}</p>
       <div class="hero__actions">
-        <a class="btn" href="#work">${label(hero.cta)}</a>
+        ${hero.ctas.map((c) => `<a class="btn" href="${c.href}">${label(c.label)}${arrow}</a>`).join('\n        ')}
         <a class="btn btn--ghost" href="${hero.cv.file}" download="Maria-Berrocal-CV.pdf">${label(hero.cv.label)}${download}</a>
       </div>
     </div>

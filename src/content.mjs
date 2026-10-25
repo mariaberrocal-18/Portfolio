@@ -21,6 +21,8 @@ export const hero = {
   title: 'a Product Designer.',
   lede: '8 years of experience designing digital products where understanding the system, questioning assumptions, and figuring out the real problem is half the work.',
   cta: 'View my work',
+  // the two entry points of the hero, same hierarchy
+  ctas: [{ label: 'Product Design', href: '#work' }, { label: 'Web & Visual Design', href: '#visual' }],
   cv: { label: 'Download CV', file: 'assets/cv/Maria-Berrocal-CV.pdf' },
   loop: {
     say: ['Frame it.', 'Craft it.', 'Ship it.', 'On repeat.'],
@@ -30,7 +32,7 @@ export const hero = {
   },
   strengths: [
     ['Product thinking', 'Framing the right problem before drawing the first screen.'],
-    ['Visual Design', 'Interfaces held to a level of detail you can feel.'],
+    ['UI & Interaction Design', 'Interfaces held to a level of detail you can feel.'],
     ['High-pressure, fast-paced', 'Shipping inside fast-moving teams, next to Product and Engineering.'],
   ],
 };
@@ -54,7 +56,8 @@ export const bridge = {
   ghost: 'See the platform',
   art: { kicker: 'Context', title: 'Every site sits inside a landscape.', text: 'Terrain, climate and operations in one view, so risk has a place and a reason.', link: 'Explore the platform' },
   features: { title: 'From signals to decisions.', captions: ['Understand each site.', 'Compare what could happen.'] },
-  identity: { title: 'One system, from data to brand.', text: 'Type, color and contour, applied everywhere.' },
+  footerCta: { title: 'Ready to see risk clearly?', cta: 'Request a demo' },
+  legal: '© 2026 Basin · Illustrative concept',
   footer: ['Platform', 'Solutions', 'Resources', 'Company'],
   // illustrative data, consistent across screens: Halden Plant is 78 (High) on the current trajectory, 49 in scenario B
   kpis: [['Sites', '24'], ['High exposure', '6'], ['Avg. index', '47']],
@@ -69,9 +72,9 @@ export const bridge = {
 // "what I can do now" (placeholder until the real before/after assets exist). Replace the `Description coming
 // soon.` / `Category` placeholders when each project is defined. No links yet: none of these has a destination.
 export const visual = {
-  kicker: 'Visual Design',
-  title: 'I can help shape that story into a real piece of communication.',
-  lede: 'Take a look at how I explore how brands look, feel, and communicate, through art direction, web design, and AI-assisted image-making.',
+  kicker: 'Web & Visual Design',
+  title: 'I help bring that story to life through websites and visual communication.',
+  lede: 'Explore how I shape the way brands look, feel, and communicate through art direction, web design, and AI-assisted imagery.',
   stateLabels: ['What was shipped', 'What I can do now'],
   projects: [
     { name: 'Waterplan', descriptor: 'The AI-native platform for water-dependent industries.', tags: ['Art direction', 'Web design', 'AI-assisted imagery'], labels: ['Independent concept', 'My exploration'] },

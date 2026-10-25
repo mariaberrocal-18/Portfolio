@@ -144,7 +144,7 @@ const items = (b, k) => [
   { id: 'art', ar: 1, z: 4, a: [41, 2.5, 19, 4], b: [6, 51.5, 36], m: { a: [56, 36, 38, 4], b: [6, 140, 88] }, html: territory(b, k) },
   { id: 'sc', ar: 1.6, z: 3, a: [63, 3.5, 33, 2], b: [53, 106, 41], m: null, html: scenarios(b) },
   { id: 'sa', ar: 1.6, z: 4, a: [26, 24, 31, -1.5], b: [6, 106, 41], m: null, html: analysis(b, k) },
-  { id: 'id', ar: 1.6, z: 5, a: [62, 25.5, 31, 1.5], b: [28, 143, 44], m: { a: [8, 70, 62, 1.5], b: [6, 238, 88] }, html: identity(b) },
+  { id: 'id', ar: 1.6, z: 5, a: [62, 25.5, 31, 1.5], b: [31, 77, 21], m: { a: [8, 70, 62, 1.5], b: [40, 198, 54] }, html: identity(b) },
 ];
 
 const itemHtml = (c) => {
@@ -169,8 +169,10 @@ function frame(kind, b) {
           <div class="bxat"><p class="bxk" ${rv(0.6)}>${esc(b.art.kicker)}</p><h4 class="bxh2" ${rv(0.6)}>${esc(b.art.title)}</h4><p class="bxp" ${rv(0.6)}>${esc(b.art.text)}</p><span class="bxlink" ${rv(0.6)}>${esc(b.art.link)} →</span></div>
           <h4 class="bxft" ${rv(0.6)}>${esc(b.features.title)}</h4>
           <p class="bxcap bxcap--1" ${rv(0.6)}>${esc(b.features.captions[0])}</p><p class="bxcap bxcap--2" ${rv(0.6)}>${esc(b.features.captions[1])}</p>
-          <h4 class="bxit" ${rv(0.6)}>${esc(b.identity.title)}</h4><p class="bxip" ${rv(0.6)}>${esc(b.identity.text)}</p>
-          <div class="bxfoot" ${rv(0.6)}><span class="bxnav__logo">${mark}${esc(b.brand)}</span><span>${b.footer.map((t) => `<em>${esc(t)}</em>`).join('')}</span></div>
+          <h4 class="bxit" ${rv(0.6)}>${esc(b.footerCta.title)}</h4>
+          <span class="bxfcta" ${rv(0.6)}>${esc(b.footerCta.cta)}</span>
+          <i class="bxfdiv" ${rv(0.6)}></i>
+          <div class="bxfoot" ${rv(0.6)}><span class="bxnav__logo">${mark}${esc(b.brand)}</span><span class="bxfoot__l">${b.footer.map((t) => `<em>${esc(t)}</em>`).join('')}</span><span class="bxfoot__c">${esc(b.legal)}</span></div>
         </div>
         ${items(b, kind).map(itemHtml).join('')}
       </div>
