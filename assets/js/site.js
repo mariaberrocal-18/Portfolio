@@ -501,12 +501,56 @@
   addEventListener('resize', () => { bgeo = null; bracePath(); });
   const updateBx = () => {
     if (!bx || reduce) return;
-    // act A: draw the thread as each piece is reached
+    // act A: the thread is light. It draws itself as each piece is reached; line 1 is straight (the purpose),
+    // line 2 vibrates like an audio waveform (the story). The page goes dark while the thread descends.
+    const vh = innerHeight;
+    const lerpN = (a, b, t) => a + (b - a) * t;
+    const rect1 = bp1 ? bp1.getBoundingClientRect() : null;
+    const l1 = bdraw[1] ? bdraw[1].getBoundingClientRect() : null;
+    const dIn = l1 ? easeInOut(clamp((vh * 0.36 - l1.top) / (vh * 0.42))) : 0;
+    const dOut = bxb ? easeInOut(clamp((vh * 0.98 - bxb.getBoundingClientRect().bottom) / (vh * 0.5))) : 0;
+    const dk = dIn * (1 - dOut);
+    const mix = (a, b, t) => a.map((v, i) => Math.round(lerpN(v, b[i], t))).join(',');
+    root.style.setProperty('--bxbg', `rgb(${mix([254, 254, 254], [11, 8, 24], dk)})`);
+    root.style.setProperty('--bxfg', `rgb(${mix([12, 12, 12], [246, 240, 228], dk)})`);
+    root.style.setProperty('--bxline', `rgb(${mix([52, 105, 79], [214, 245, 90], dk)})`);
+    bx.style.setProperty('--bxd', dk.toFixed(3));
+    bx.style.setProperty('--fxo', clamp(dk * 1.1).toFixed(3));
     bdraw.forEach((el) => {
       const r = el.getBoundingClientRect();
-      el.style.setProperty('--dp', easeInOut(clamp((innerHeight * 0.88 - r.top) / (r.height + innerHeight * 0.06))).toFixed(3));
+      const dp = easeInOut(clamp((vh * 0.88 - r.top) / (r.height + vh * 0.06)));
+      el.style.setProperty('--dp', dp.toFixed(3));
+      const paths = el.querySelectorAll('path'), dots = el.querySelectorAll('.bxdot');
+      if (el.dataset.thread === '2' && r.bottom > -40 && r.top < vh + 40) {
+        // a vibrating string: amplitude grows towards the second phrase, phase travels with the scroll
+        const w = el.clientWidth || 120, h = el.clientHeight || 160, amp = Math.min(w * 0.36, 30);
+        let d = '';
+        for (let i = 0; i <= 56; i++) {
+          const t = i / 56, y = t * h;
+          const x = w / 2 + amp * Math.pow(t, 1.15) * Math.sin(t * 17 - scrollY * 0.014) * (0.7 + 0.3 * Math.sin(t * 5 + 1));
+          d += `${i ? 'L' : 'M'}${x.toFixed(1)} ${y.toFixed(1)}`;
+        }
+        el.setAttribute('viewBox', `0 0 ${w} ${h}`);
+        paths[0].setAttribute('d', d);
+      } else if (el.dataset.thread === '1') {
+        const w = el.clientWidth || 120, h = el.clientHeight || 160;
+        el.setAttribute('viewBox', `0 0 ${w} ${h}`);
+        paths[0].setAttribute('d', `M${w / 2} 0V${h}`);
+      }
+      // the glowing head of the line
+      paths.forEach((pt, i) => {
+        const dot = dots[i];
+        if (!dot) return;
+        const len = pt.getTotalLength ? pt.getTotalLength() : 0;
+        if (!len || dp <= 0.005 || dp >= 0.995) { dot.style.opacity = 0; return; }
+        const pos = pt.getPointAtLength(len * dp);
+        dot.setAttribute('cx', pos.x.toFixed(1)); dot.setAttribute('cy', pos.y.toFixed(1));
+        dot.style.opacity = '1';
+      });
     });
-    if (bp1) bp1.style.setProperty('--in', easeOut(clamp((innerHeight * 0.86 - bp1.getBoundingClientRect().top) / (innerHeight * 0.14))).toFixed(3));
+    if (bp1) bp1.style.setProperty('--in', easeOut(clamp((vh * 0.86 - rect1.top) / (vh * 0.2))).toFixed(3));
+    const t2 = bx.querySelector('.bxt2');
+    if (t2) t2.style.setProperty('--in', easeOut(clamp((vh * 0.92 - t2.getBoundingClientRect().top) / (vh * 0.2))).toFixed(3));
     if (!bxb) return;
     if (!bgeo) {
       const W = bf.offsetWidth, H = bf.offsetHeight, P = bpage.offsetHeight;
@@ -533,6 +577,10 @@
       const [a, len] = win[i] || win[0];
       el.style.setProperty('--q', easeInOut(clamp((p - a) / len)).toFixed(3));
     });
+    // depth of field while the collection arrives: nearer pieces drift and sharpen as the stage settles
+    const par = clamp(r.top / innerHeight);
+    bitems.forEach((el) => el.style.setProperty('--par', par.toFixed(3)));
+    bx.style.setProperty('--hue', (p * 70).toFixed(1));
     bf.style.setProperty('--pq', seg(0.18, 0.18).toFixed(3));
     bf.style.setProperty('--bq', seg(0.4, 0.2).toFixed(3));
     bf.style.setProperty('--eq', seg(0.5, 0.15).toFixed(3));

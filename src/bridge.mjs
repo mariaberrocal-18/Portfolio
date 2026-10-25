@@ -67,6 +67,7 @@ function art(b) {
 }
 
 // desktop (frame 100 x 45.5 cqw) and mobile (frame 100 x 125 cqw): collection position [x, y, w, rotation] and website position [x, y, w]
+const DZ = { lib: 1, art: 1.5, dc: 0.7, pl: 1.2, id: 1.7 };
 const items = (b) => [
   { id: 'lib', ar: 1.6, z: 3, a: [3, 5, 36, -2], b: [47, 8.5, 49], m: { a: [4, 6, 70, -2], b: [6, 72, 88] }, html: library(b) },
   { id: 'art', ar: 1, z: 4, a: [41, 2.5, 19, 4], b: [6, 51.5, 36], m: { a: [56, 36, 38, 4], b: [6, 140, 88] }, html: art(b) },
@@ -77,7 +78,7 @@ const items = (b) => [
 
 const itemHtml = (c) => {
   const m = c.m ? `;--max:${c.m.a[0]};--may:${c.m.a[1]};--maw:${c.m.a[2]};--mr0:${c.m.a[3]};--mbx:${c.m.b[0]};--mby:${c.m.b[1]};--mbw:${c.m.b[2]}` : '';
-  return `<div class="bxi bxi--${c.id}${c.m ? '' : ' bxi--d'}" data-bxi style="--ar:${c.ar};--z:${c.z};--dax:${c.a[0]};--day:${c.a[1]};--daw:${c.a[2]};--dr0:${c.a[3]};--dbx:${c.b[0]};--dby:${c.b[1]};--dbw:${c.b[2]}${m}">${c.html}</div>`;
+  return `<div class="bxi bxi--${c.id}${c.m ? '' : ' bxi--d'}" data-bxi style="--dz:${DZ[c.id]};--ar:${c.ar};--z:${c.z};--dax:${c.a[0]};--day:${c.a[1]};--daw:${c.a[2]};--dr0:${c.a[3]};--dbx:${c.b[0]};--dby:${c.b[1]};--dbw:${c.b[2]}${m}">${c.html}</div>`;
 };
 
 function frame(kind, b) {
@@ -107,17 +108,19 @@ function frame(kind, b) {
 
 export function bridgeSection(b) {
   // brace: drawn in JS at pixel size (so strokes stay uniform); this static fallback is the same shape
-  const brace = `<svg class="bxbrace bxdraw" data-brace viewBox="0 0 1000 120" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M2 0C2 58 32 90 130 94L430 100C478 102 500 108 500 120"/><path pathLength="1" d="M998 0C998 58 968 90 870 94L570 100C522 102 500 108 500 120"/></svg>`;
+  const brace = `<svg class="bxbrace bxdraw" data-brace viewBox="0 0 1000 120" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M2 0C2 58 32 90 130 94L430 100C478 102 500 108 500 120"/><path pathLength="1" d="M998 0C998 58 968 90 870 94L570 100C522 102 500 108 500 120"/><circle class="bxdot" r="4" cx="2" cy="0"/><circle class="bxdot" r="4" cx="998" cy="0"/></svg>`;
+  const thread = (n) => `<svg class="bxl bxl--${n} bxdraw" data-thread="${n}" viewBox="0 0 120 160" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M60 0V160"/><circle class="bxdot" r="4" cx="60" cy="0"/></svg>`;
   return `<section class="bx" data-bx aria-label="From product design to visual design">
     <div class="bxa wrap">
       ${brace}
-      <i class="bxl bxl--1 bxdraw" aria-hidden="true"></i>
+      ${thread(1)}
       <p class="bxp1" data-bxrv><b>${esc(b.text[0])}</b></p>
-      <i class="bxl bxl--2 bxdraw" aria-hidden="true"></i>
+      ${thread(2)}
     </div>
     <div class="bxb" data-bxb>
       <div class="bxstage">
-        <p class="bxt2"><b>${esc(b.text[1])}</b></p>
+        <div class="bxfx" aria-hidden="true"><i class="bxfx__a"></i><i class="bxfx__b"></i><i class="bxfx__c"></i></div>
+        <p class="bxt2" data-bxrv><b>${esc(b.text[1])}</b></p>
         ${frame('c', b)}
         ${frame('w', b)}
       </div>
