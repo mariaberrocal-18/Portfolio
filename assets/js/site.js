@@ -480,7 +480,7 @@
   const bpage = bf && bf.querySelector('[data-bxpage]');
   const bitems = bf ? [...bf.querySelectorAll('[data-bxi]')] : [];
   const brv = bf ? [...bf.querySelectorAll('[data-rv]')] : [];
-  const bdraw = bx ? [...bx.querySelectorAll('.bxdraw')] : [];
+  const bdraw = bx ? [...document.querySelectorAll('.bxdraw')] : [];
   const brace = null;
   const bp1 = bx && bx.querySelector('[data-bxrv]');
   let bgeo = null;
@@ -510,7 +510,7 @@
     const l1el = bx.querySelector('.bxl--1');
     const l1 = l1el ? l1el.getBoundingClientRect() : null;
     const dIn = l1 ? easeInOut(clamp((vh * 0.36 - l1.top) / (vh * 0.42))) : 0;
-    const dOut = bxb ? easeInOut(clamp((vh * 0.98 - bxb.getBoundingClientRect().bottom) / (vh * 0.5))) : 0;
+    const dOut = bxb ? easeInOut(clamp((vh * 1.0 - bxb.getBoundingClientRect().bottom) / (vh * 0.34))) : 0;
     const dk = dIn * (1 - dOut);
     const mix = (a, b, t) => a.map((v, i) => Math.round(lerpN(v, b[i], t))).join(',');
     root.style.setProperty('--bxbg', `rgb(${mix([254, 254, 254], [8, 17, 13], dk)})`);
@@ -523,6 +523,7 @@
       const dp = easeInOut(clamp((vh * 0.88 - r.top) / (r.height + vh * 0.06)));
       el.style.setProperty('--dp', dp.toFixed(3));
       if (el.dataset.thread === '1') bx.style.setProperty('--sp', (0.25 + 0.75 * clamp(dp * 6)).toFixed(3));
+      if (el.dataset.thread === '3' && el.nextElementSibling) el.nextElementSibling.style.setProperty('--ep', (0.25 + 0.75 * clamp(dp * 6)).toFixed(3));
       const paths = el.querySelectorAll('path'), dots = el.querySelectorAll('.bxdot');
       if (el.dataset.thread === '2' && r.bottom > -40 && r.top < vh + 40) {
         // a meandering river: the line winds more and more towards the second phrase, drifting with the scroll
@@ -535,7 +536,7 @@
         }
         el.setAttribute('viewBox', `0 0 ${w} ${h}`);
         paths[0].setAttribute('d', d);
-      } else if (el.dataset.thread === '1') {
+      } else if (el.dataset.thread === '1' || el.dataset.thread === '3') {
         const w = el.clientWidth || 120, h = el.clientHeight || 160;
         el.setAttribute('viewBox', `0 0 ${w} ${h}`);
         paths[0].setAttribute('d', `M${w / 2} 0V${h}`);

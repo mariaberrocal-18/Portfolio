@@ -69,8 +69,9 @@ export const bridge = {
 // "what I can do now" (placeholder until the real before/after assets exist). Replace the `Description coming
 // soon.` / `Category` placeholders when each project is defined. No links yet: none of these has a destination.
 export const visual = {
-  title: 'Visual Design',
-  lede: 'Exploring how brands look, feel, and communicate — through art direction, web design, and AI-assisted image-making.',
+  kicker: 'Visual Design',
+  title: 'I can help shape that story into a real piece of communication.',
+  lede: 'Take a look at how I explore how brands look, feel, and communicate, through art direction, web design, and AI-assisted image-making.',
   stateLabels: ['What was shipped', 'What I can do now'],
   projects: [
     { name: 'Waterplan', descriptor: 'The AI-native platform for water-dependent industries.', tags: ['Art direction', 'Web design', 'AI-assisted imagery'], labels: ['Independent concept', 'My exploration'] },

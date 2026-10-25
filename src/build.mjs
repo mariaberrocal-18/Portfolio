@@ -263,10 +263,12 @@ ${header('', true)}
 
   <section class="visual-section" id="visual" aria-labelledby="visual-h">
     <div class="wrap">
-      <div class="vhead-wrap"><header class="vhead" data-reveal>
+      <div class="vlink" aria-hidden="true"><svg class="bxl bxl--3 bxdraw" data-thread="3" viewBox="0 0 120 160" preserveAspectRatio="none"><path pathLength="1" d="M60 0V160"/></svg><i class="bxend"></i></div>
+      <header class="vhead" data-reveal>
+        <p class="vkick">${esc(visual.kicker)}</p>
         <h2 id="visual-h" class="h2">${esc(visual.title)}</h2>
         <p class="sec-head__lede">${esc(visual.lede)}</p>
-      </header></div>
+      </header>
       <div class="vgrid">
         ${visual.projects.map(visualProject).join('\n        ')}
       </div>
