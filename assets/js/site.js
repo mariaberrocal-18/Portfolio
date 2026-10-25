@@ -502,17 +502,20 @@
     const { W, H, top, fin, dist } = pvGeo;
     const seg = (a, len) => easeOut(clamp((p - a) / len));
     const set = (k, v) => pv.style.setProperty(k, typeof v === 'number' ? v.toFixed(3) : v);
-    // 1 · the product: three web-app screens fan out and come alive
-    const spread = seg(0, 0.1);
+    // 1 · the product: one big, readable web-app screen at a time (dashboard → projects → timeline),
+    // each sliding in over the last, then all three fly into the website
     set('--ph', seg(0.02, 0.16));
-    pvWin.forEach((el, k) => {
-      const c = el.classList.contains('hw--l') ? -1 : el.classList.contains('hw--r') ? 1 : 0;
-      const [fx, fy, fw] = fin[k];
-      el.style.setProperty('--tx', `${(W / 2 + c * 0.29 * W * spread - fx).toFixed(1)}px`);
-      el.style.setProperty('--ty', `${((H - top) / 2 + (c ? -0.04 : 0.02) * H * spread - fy).toFixed(1)}px`);
+    pvWin.forEach((el) => {
+      const ord = +el.dataset.hw;
+      const [fx, fy, fw] = fin[pvWin.indexOf(el)];
+      const appear = ord === 0 ? 1 : easeInOut(clamp((p - 0.02 - (ord - 1) * 0.055) / 0.05));
+      const q = easeInOut(clamp((p - 0.17 - (ord ? 0.03 : 0) - (ord === 2 ? 0.03 : 0)) / 0.26));
+      el.style.setProperty('--tx', `${(W / 2 - fx).toFixed(1)}px`);
+      el.style.setProperty('--ty', `${((H - top) / 2 - ord * 0.03 * H + (1 - appear) * H * 0.95 - fy).toFixed(1)}px`);
       el.style.setProperty('--r', '0deg');
-      el.style.setProperty('--s', (((c ? 0.42 : 0.74) * W) / fw - 1).toFixed(3));
-      el.style.setProperty('--q', easeInOut(clamp((p - 0.17 - (c ? 0.035 : 0) - (c > 0 ? 0.035 : 0)) / 0.26)).toFixed(3));
+      el.style.setProperty('--s', ((0.78 * W) / fw - 1).toFixed(3));
+      el.style.setProperty('--q', q.toFixed(3));
+      el.style.zIndex = q < 0.5 ? String(3 + ord) : ord === 0 ? '4' : '3';
     });
     // 2 · the front door: browser frame, nav, then the hero copy line by line
     set('--fq', seg(0.2, 0.12));
