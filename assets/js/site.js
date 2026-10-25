@@ -10,6 +10,14 @@
   const easeOut = (t) => 1 - Math.pow(1 - t, 3);
   const easeSine = (t) => -(Math.cos(Math.PI * t) - 1) / 2;
   window.__ok = true;
+  // version badge on branch previews (or ?stamp) so you can tell which build you are looking at
+  const bm = document.querySelector('meta[name="build"]');
+  if (bm && (location.hostname.includes('-git-') || /[?&]stamp\b/.test(location.search))) {
+    const b = document.createElement('div');
+    b.className = 'stamp';
+    b.textContent = `build ${bm.content}`;
+    document.body.append(b);
+  }
 
   // smooth scroll ---------------------------------------------------------
   let lenis = null;

@@ -1092,3 +1092,5 @@ body.nf { background-color: #0b0b0b; background-image: var(--grain-light); color
 .nf .btn { background: #f4f4f1; color: #0b0b0b; }
 html:has(body.nf) { background: #0b0b0b; }
 .nf__main { background: #0b0b0b; max-width: none; padding-inline: max(var(--pad), calc((100vw - var(--max)) / 2 + var(--pad))); }
+
+.stamp { position: fixed; left: 12px; bottom: 12px; z-index: 9999; padding: 5px 9px; border-radius: 7px; background: var(--ink); color: #fff; font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.01em; opacity: 0.85; pointer-events: none; font-feature-settings: 'tnum' 1; }

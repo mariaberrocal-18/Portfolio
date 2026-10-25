@@ -2,6 +2,7 @@
 // No dependencies. Copy lives in content.mjs, drawings in visuals.mjs.
 import { mkdirSync, writeFileSync, readFileSync, cpSync, rmSync } from 'node:fs';
 import { createHash } from 'node:crypto';
+import { execSync } from 'node:child_process';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { site, hero, visual, journey, toolkit, about, contact, projects } from './content.mjs';
@@ -13,6 +14,11 @@ import { existsSync } from 'node:fs';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 // cache-busting: asset URLs change whenever their content does
 const hash = (f) => createHash('md5').update(readFileSync(join(root, f))).digest('hex').slice(0, 8);
+// build stamp: shown only on branch-preview URLs (-git-) or with ?stamp, to tell which version a page is
+const stamp = (() => {
+  const sha = process.env.VERCEL_GIT_COMMIT_SHA || (() => { try { return execSync('git rev-parse HEAD', { cwd: root }).toString().trim(); } catch { return 'local'; } })();
+  return `${sha.slice(0, 7)} · ${new Date().toISOString().slice(5, 16).replace('T', ' ')}Z`;
+})();
 const V = { css: hash('assets/css/site.css'), js: hash('assets/js/site.js') };
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
@@ -49,6 +55,7 @@ function head({ title, desc, p, noindex, path = '' }) {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="build" content="${stamp}">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
 <meta name="theme-color" content="#fefefe">
