@@ -470,83 +470,6 @@
 
   const nav = document.querySelector('.nav');
   let lastY = scrollY, hx = 0;
-  // pivot: three dummy web-app screens fan out, fly into a browser that builds a whole marketing home
-  // (hero copy, then the page scrolls through logos, features, bento, quote, close), then it shines
-  const pivot = document.querySelector('[data-pivot]');
-  const pv = pivot && pivot.querySelector('[data-pv]');
-  const pvWin = pv ? [...pv.querySelectorAll('.hw')] : [];
-  const pvRv = pv ? [...pv.querySelectorAll('[data-rv]')] : [];
-  const pvTexts = pivot ? [...pivot.querySelectorAll('.pivot__text')] : [];
-  const pvCap = pivot && pivot.querySelector('.pivot__cap');
-  const pvNum = pivot && pivot.querySelector('.pivot__n span');
-  const pvMQ = matchMedia('(min-width: 720px)');
-  let pvGeo = null;
-  const setPivot = () => { root.classList.toggle('is-pivot', !!pivot && !reduce && pvMQ.matches); pvGeo = null; };
-  setPivot();
-  pvMQ.addEventListener('change', () => { setPivot(); update(); });
-  addEventListener('resize', () => { pvGeo = null; });
-  const layoutPivot = () => {
-    const frame = pv.querySelector('.pv__frame');
-    const page = pv.querySelector('.pv__page');
-    pvGeo = {
-      W: frame.offsetWidth, H: frame.offsetHeight, top: page.offsetTop,
-      fin: pvWin.map((el) => [el.offsetLeft + el.offsetWidth / 2, el.offsetTop + el.offsetHeight / 2, el.offsetWidth]),
-      dist: Math.max(0, page.offsetHeight - (frame.offsetHeight - page.offsetTop)),
-    };
-  };
-  const updatePivot = () => {
-    if (!pivot || reduce || !root.classList.contains('is-pivot')) return;
-    if (!pvGeo) layoutPivot();
-    const r = pivot.getBoundingClientRect();
-    const p = clamp(-r.top / Math.max(1, r.height - innerHeight));
-    const { W, H, top, fin, dist } = pvGeo;
-    const seg = (a, len) => easeOut(clamp((p - a) / len));
-    const set = (k, v) => pv.style.setProperty(k, typeof v === 'number' ? v.toFixed(3) : v);
-    // 1 · the product: one big, readable web-app screen at a time (dashboard → projects → timeline),
-    // each sliding in over the last, then all three fly into the website
-    set('--ph', seg(0.02, 0.16));
-    pvWin.forEach((el) => {
-      const ord = +el.dataset.hw;
-      const [fx, fy, fw] = fin[pvWin.indexOf(el)];
-      const appear = ord === 0 ? 1 : easeInOut(clamp((p - 0.02 - (ord - 1) * 0.055) / 0.05));
-      const q = easeInOut(clamp((p - 0.17 - (ord ? 0.03 : 0) - (ord === 2 ? 0.03 : 0)) / 0.26));
-      el.style.setProperty('--tx', `${(W / 2 - fx).toFixed(1)}px`);
-      el.style.setProperty('--ty', `${((H - top) / 2 - ord * 0.03 * H + (1 - appear) * H * 0.95 - fy).toFixed(1)}px`);
-      el.style.setProperty('--r', '0deg');
-      el.style.setProperty('--s', ((0.78 * W) / fw - 1).toFixed(3));
-      el.style.setProperty('--q', q.toFixed(3));
-      el.style.zIndex = q < 0.5 ? String(3 + ord) : ord === 0 ? '4' : '3';
-    });
-    // 2 · the front door: browser frame, nav, then the hero copy line by line
-    set('--fq', seg(0.2, 0.12));
-    set('--nq', seg(0.3, 0.08));
-    [['--h1', 0.32], ['--h2', 0.34], ['--h3', 0.37], ['--h4', 0.41], ['--h5', 0.45]].forEach(([k, a]) => set(k, seg(a, 0.06)));
-    // 3 · the whole home: the page scrolls inside the browser, sections reveal as they arrive
-    const t = clamp((p - 0.5) / 0.38);
-    const sc = lerp(t, t * t * (3 - 2 * t), 0.45);
-    set('--pgy', `${(-sc * dist).toFixed(1)}px`);
-    set('--nb', clamp(sc * 10));
-    const fr = pv.querySelector('.pv__frame').getBoundingClientRect();
-    pvRv.forEach((el) => {
-      const er = el.getBoundingClientRect();
-      el.style.setProperty('--in', easeOut(clamp((fr.bottom - er.top) / (fr.height * 0.34))).toFixed(3));
-    });
-    // 4 · the shine
-    const ps = clamp((p - 0.9) / 0.1);
-    set('--ps', ps); set('--po', Math.sin(ps * Math.PI) * 0.9);
-    set('--hl', seg(0.9, 0.05));
-    set('--zs', 1 - 0.05 * seg(0.9, 0.08));
-    // captions: one at a time, then the hand-off to Visual Design
-    const idx = p < 0.16 ? 0 : p < 0.84 ? 1 : 2;
-    const edges = [0, 0.16, 0.84, 2];
-    pvTexts.forEach((el, i) => {
-      const inn = i === 0 ? 1 : easeOut(clamp((p - edges[i]) / 0.04));
-      const out = i === pvTexts.length - 1 ? 0 : easeOut(clamp((p - edges[i + 1] + 0.03) / 0.03));
-      el.style.setProperty('--ca', (inn * (1 - out)).toFixed(3));
-    });
-    if (pvNum) pvNum.textContent = `0${idx + 1}`;
-    pvCap.style.setProperty('--p', p.toFixed(3));
-  };
   function update() {
     const vh = innerHeight;
     if (nav) {
@@ -569,7 +492,6 @@
     }
 
     updateBridge();
-    updatePivot();
     if (!fly) updateWork();
     updateCase();
     updateThread();

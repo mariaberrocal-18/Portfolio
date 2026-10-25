@@ -39,34 +39,6 @@ export const hero = {
 // staggered two-column rhythm (add Mafalda, Gabi López, Palmarium here later).
 // Media slot: set `media` to { src, alt } for an image or { video, poster, alt } for an animation.
 export const visual = {
-  // Scroll moment between the product work and this section: dummy web-app screens become a full marketing home.
-  // Everything inside the browser is a fictional product ("Orbit"), only there to show product → brand.
-  pivot: {
-    captions: [
-      'A great product is only half the story.',
-      'The other half is how it looks, feels, and speaks.',
-      'That’s where visual design begins.',
-    ],
-    brand: 'orbit',
-    nav: ['Product', 'Solutions', 'Pricing', 'Docs'],
-    eyebrow: 'New · Portfolio view',
-    headline: ['Plan work that', 'actually ships.'],
-    sub: 'Orbit gives teams one clear view of projects, risks and progress, without the status meetings.',
-    cta: 'Start free',
-    ghost: 'Book a demo',
-    logosLabel: 'Trusted by product teams everywhere',
-    rows: [
-      { eyebrow: 'Projects', title: 'Every project, one clear view.', text: 'Owners, status and progress in a single table your whole team can read.', win: 'projects' },
-      { eyebrow: 'Timeline', title: 'Plan the road together.', text: 'Drag, drop and see how a change ripples across every team.', win: 'timeline' },
-    ],
-    bentoTitle: 'Built for how teams really work',
-    bento: [['Automations', 'Routine updates run themselves.'], ['Insights', 'See where time really goes.'], ['Integrations', 'Plays well with your stack.']],
-    quote: 'Orbit replaced three tools and two weekly meetings.',
-    quoteBy: 'Maya R. · Head of Product',
-    stats: [['4.9', 'Average rating'], ['38%', 'Faster delivery'], ['12k', 'Teams on Orbit']],
-    closing: 'Ready to ship with less noise?',
-    footer: ['Product', 'Pricing', 'Docs', 'Contact'],
-  },
   title: 'Visual Design',
   lede: 'Exploring how brands look, feel, and communicate — through art direction, web design, and AI-assisted image-making.',
   projects: [
