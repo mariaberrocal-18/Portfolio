@@ -65,17 +65,18 @@ export const bridge = {
 
 // Visual Design section: real projects only. The first is Waterplan (media is a placeholder until final assets).
 // More (Mafalda, Gabi López, Palmarium) go in this array. Media slot: { src, alt } image or { video, poster, alt }.
+// Visual Design: a 2 x 2 grid of previews. Each preview is meant to animate between "what was shipped" and
+// "what I can do now" (placeholder until the real before/after assets exist). Replace the `Description coming
+// soon.` / `Category` placeholders when each project is defined. No links yet: none of these has a destination.
 export const visual = {
   title: 'Visual Design',
   lede: 'Exploring how brands look, feel, and communicate — through art direction, web design, and AI-assisted image-making.',
+  stateLabels: ['What was shipped', 'What I can do now'],
   projects: [
-    {
-      name: 'Waterplan',
-      descriptor: 'The AI-native platform for water-dependent industries.',
-      categories: ['Art direction', 'Web design', 'AI-assisted imagery'],
-      labels: ['Independent concept', 'My exploration'],
-      media: null,
-    },
+    { name: 'Waterplan', descriptor: 'The AI-native platform for water-dependent industries.', tags: ['Art direction', 'Web design', 'AI-assisted imagery'], labels: ['Independent concept', 'My exploration'] },
+    { name: 'Mafalda', descriptor: 'Description coming soon.', tags: ['Category', 'Category'], placeholder: true },
+    { name: 'Gabi López', descriptor: 'Description coming soon.', tags: ['Category', 'Category'], placeholder: true },
+    { name: 'Palmarium', descriptor: 'Description coming soon.', tags: ['Category', 'Category'], placeholder: true },
   ],
 };
 

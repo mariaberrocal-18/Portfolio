@@ -481,7 +481,7 @@
   const bitems = bf ? [...bf.querySelectorAll('[data-bxi]')] : [];
   const brv = bf ? [...bf.querySelectorAll('[data-rv]')] : [];
   const bdraw = bx ? [...bx.querySelectorAll('.bxdraw')] : [];
-  const brace = bx && bx.querySelector('[data-brace]');
+  const brace = null;
   const bp1 = bx && bx.querySelector('[data-bxrv]');
   let bgeo = null;
   const setBx = () => { root.classList.toggle('is-bx', !!bx && !reduce); bgeo = null; bracePath(); };
@@ -507,7 +507,8 @@
     const vh = innerHeight;
     const lerpN = (a, b, t) => a + (b - a) * t;
     const rect1 = bp1 ? bp1.getBoundingClientRect() : null;
-    const l1 = bdraw[1] ? bdraw[1].getBoundingClientRect() : null;
+    const l1el = bx.querySelector('.bxl--1');
+    const l1 = l1el ? l1el.getBoundingClientRect() : null;
     const dIn = l1 ? easeInOut(clamp((vh * 0.36 - l1.top) / (vh * 0.42))) : 0;
     const dOut = bxb ? easeInOut(clamp((vh * 0.98 - bxb.getBoundingClientRect().bottom) / (vh * 0.5))) : 0;
     const dk = dIn * (1 - dOut);
@@ -521,6 +522,7 @@
       const r = el.getBoundingClientRect();
       const dp = easeInOut(clamp((vh * 0.88 - r.top) / (r.height + vh * 0.06)));
       el.style.setProperty('--dp', dp.toFixed(3));
+      if (el.dataset.thread === '1') bx.style.setProperty('--sp', (0.25 + 0.75 * clamp(dp * 6)).toFixed(3));
       const paths = el.querySelectorAll('path'), dots = el.querySelectorAll('.bxdot');
       if (el.dataset.thread === '2' && r.bottom > -40 && r.top < vh + 40) {
         // a meandering river: the line winds more and more towards the second phrase, drifting with the scroll

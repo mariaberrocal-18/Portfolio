@@ -154,23 +154,18 @@ function workCard(proj, i, all) {
 }
 
 function visualProject(p, i) {
-  const m = p.media;
-  const inner = !m
-    ? `<span class="vmedia__slot" aria-hidden="true">Image or animation</span>`
-    : m.video
-      ? `<video src="${m.video}"${m.poster ? ` poster="${m.poster}"` : ''} autoplay muted loop playsinline aria-label="${esc(m.alt || p.name)}"></video>`
-      : `<img src="${m.src}" alt="${esc(m.alt || p.name)}" loading="lazy">`;
-  return `<article class="vproj ${i === 0 ? 'vproj--feature' : 'vproj--half'}">
-    <div class="vmedia${m ? '' : ' vmedia--empty'}" data-reveal>
-      ${inner}
-      <ul class="vlabels" aria-label="Project type">${p.labels.map((l) => `<li>${esc(l)}</li>`).join('')}</ul>
+  const [was, now] = visual.stateLabels;
+  return `<article class="vcard${p.placeholder ? ' vcard--ph' : ''}" data-reveal>
+    <div class="vm" style="--i:${i}" role="img" aria-label="Placeholder preview that will animate between ${esc(was.toLowerCase())} and ${esc(now.toLowerCase())}">
+      <div class="vm__l vm__l--a"><span>${esc(was)}</span></div>
+      <div class="vm__clip" aria-hidden="true"><div class="vm__l vm__l--b"><span>${esc(now)}</span></div></div>
+      <div class="vm__barw" aria-hidden="true"><i class="vm__bar"></i></div>
+      ${p.labels ? `<ul class="vlabels" aria-label="Project type">${p.labels.map((l) => `<li>${esc(l)}</li>`).join('')}</ul>` : ''}
     </div>
-    <div class="vproj__text">
-      <h3 class="vproj__name">${esc(p.name)}</h3>
-      <div class="vproj__side">
-        <p class="vproj__desc">${esc(p.descriptor)}</p>
-        <p class="vproj__cats">${p.categories.map(esc).join(' · ')}</p>
-      </div>
+    <div class="vcard__t">
+      <h3 class="vcard__name">${esc(p.name)}</h3>
+      <ul class="tags" aria-label="Disciplines">${p.tags.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
+      <p class="vcard__desc">${esc(p.descriptor)}</p>
     </div>
   </article>`;
 }
@@ -272,7 +267,7 @@ ${header('', true)}
         <h2 id="visual-h" class="h2">${esc(visual.title)}</h2>
         <p class="sec-head__lede">${esc(visual.lede)}</p>
       </header></div>
-      <div class="vlist">
+      <div class="vgrid">
         ${visual.projects.map(visualProject).join('\n        ')}
       </div>
     </div>

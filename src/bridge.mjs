@@ -178,13 +178,11 @@ function frame(kind, b) {
 }
 
 export function bridgeSection(b) {
-  // brace: drawn in JS at pixel size (so strokes stay uniform); this static fallback is the same shape
-  const brace = `<svg class="bxbrace bxdraw" data-brace viewBox="0 0 1000 100" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M2 0L2 36C2 62 16 78 42 78L420 78C480 78 500 88 500 100"/><path pathLength="1" d="M998 0L998 36C998 62 984 78 958 78L580 78C520 78 500 88 500 100"/><circle class="bxdot" r="4" cx="2" cy="0"/><circle class="bxdot" r="4" cx="998" cy="0"/></svg>`;
   const thread = (n) => `<svg class="bxl bxl--${n} bxdraw" data-thread="${n}" viewBox="0 0 120 160" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M60 0V160"/><circle class="bxdot" r="4" cx="60" cy="0"/></svg>`;
   return `<section class="bx" data-bx aria-label="From product design to visual design">
     <div class="bxfx" aria-hidden="true"><i class="bxfx__a"></i><i class="bxfx__b"></i><i class="bxfx__c"></i></div>
     <div class="bxa wrap">
-      ${brace}
+      <i class="bxstart" aria-hidden="true"></i>
       ${thread(1)}
       <p class="bxp1" data-bxrv><b>${esc(b.text[0])}</b></p>
       ${thread(2)}
