@@ -508,10 +508,10 @@
     pvWin.forEach((el, k) => {
       const c = el.classList.contains('hw--l') ? -1 : el.classList.contains('hw--r') ? 1 : 0;
       const [fx, fy, fw] = fin[k];
-      el.style.setProperty('--tx', `${(W / 2 + c * 0.3 * W * spread - fx).toFixed(1)}px`);
-      el.style.setProperty('--ty', `${((H - top) / 2 + (c ? -0.02 : 0.03) * H * spread - fy).toFixed(1)}px`);
+      el.style.setProperty('--tx', `${(W / 2 + c * 0.29 * W * spread - fx).toFixed(1)}px`);
+      el.style.setProperty('--ty', `${((H - top) / 2 + (c ? -0.04 : 0.02) * H * spread - fy).toFixed(1)}px`);
       el.style.setProperty('--r', '0deg');
-      el.style.setProperty('--s', (((c ? 0.4 : 0.58) * W) / fw - 1).toFixed(3));
+      el.style.setProperty('--s', (((c ? 0.42 : 0.74) * W) / fw - 1).toFixed(3));
       el.style.setProperty('--q', easeInOut(clamp((p - 0.17 - (c ? 0.035 : 0) - (c > 0 ? 0.035 : 0)) / 0.26)).toFixed(3));
     });
     // 2 · the front door: browser frame, nav, then the hero copy line by line
