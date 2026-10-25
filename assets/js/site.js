@@ -470,78 +470,79 @@
 
   const nav = document.querySelector('.nav');
   let lastY = scrollY, hx = 0;
-  // Bridge scene. Four moments driven by scroll (no audio, no scroll hijacking, fully reversible):
-  //  1 a product has a purpose: the text and the interface of a fictional audio product arrive together
-  //  2 we understand it: a song is picked, its cover goes to the player and its waveform is drawn
-  //  3 it finds an expression: cover, palette and waveform build its landing page around the interface
-  //  4 resolution: the whole landing is held for a moment, then it leaves and "Visual Design" follows.
+  // Bridge (follows the sketch). Everything is a pure function of scroll, reversible, no scroll hijacking.
+  //  act A  a green brace + thread draw themselves under the last project and lead to the first phrase
+  //  act B  a pinned stage: the collection of materials → they fly into one overview of a homepage
+  //         → the camera zooms into the hero → the page scrolls through its sections → a short hold
   const bx = document.querySelector('[data-bx]');
-  const bxs = bx && bx.querySelector('.bxs');
+  const bxb = bx && bx.querySelector('[data-bxb]');
   const bf = bx && bx.querySelector('[data-bxf]');
-  const bw = bf && bf.querySelector('.bxw');
-  const bsite = bf && bf.querySelector('.bxsite');
-  const bps = bf && bf.querySelector('[data-bps]');
-  const bbars = bf ? [...bf.querySelectorAll('.bwave i')] : [];
-  let bgeo = null, bplayed = -1;
-  const setBx = () => { root.classList.toggle('is-bx', !!bx && !reduce); bgeo = null; };
+  const bpage = bf && bf.querySelector('[data-bxpage]');
+  const bitems = bf ? [...bf.querySelectorAll('[data-bxi]')] : [];
+  const brv = bf ? [...bf.querySelectorAll('[data-rv]')] : [];
+  const bdraw = bx ? [...bx.querySelectorAll('.bxdraw')] : [];
+  const brace = bx && bx.querySelector('[data-brace]');
+  const bp1 = bx && bx.querySelector('[data-bxrv]');
+  let bgeo = null;
+  const setBx = () => { root.classList.toggle('is-bx', !!bx && !reduce); bgeo = null; bracePath(); };
+  // brace drawn at pixel size so the stroke stays uniform at every width
+  const bracePath = () => {
+    if (!brace) return;
+    const w = brace.clientWidth || 1000, h = brace.clientHeight || 120;
+    const r = Math.min(h * 0.7, w * 0.07), cx = w / 2, yb = h * 0.8;
+    const left = `M1.5 0C1.5 ${(yb * 0.55).toFixed(1)} ${(1.5 + r * 0.45).toFixed(1)} ${(yb - 3).toFixed(1)} ${(1.5 + r * 2.1).toFixed(1)} ${yb.toFixed(1)}L${(cx - r * 2.1).toFixed(1)} ${(yb + h * 0.03).toFixed(1)}C${(cx - r * 0.6).toFixed(1)} ${(yb + h * 0.045).toFixed(1)} ${cx} ${(yb + (h - yb) * 0.45).toFixed(1)} ${cx} ${h}`;
+    const right = `M${(w - 1.5).toFixed(1)} 0C${(w - 1.5).toFixed(1)} ${(yb * 0.55).toFixed(1)} ${(w - 1.5 - r * 0.45).toFixed(1)} ${(yb - 3).toFixed(1)} ${(w - 1.5 - r * 2.1).toFixed(1)} ${yb.toFixed(1)}L${(cx + r * 2.1).toFixed(1)} ${(yb + h * 0.03).toFixed(1)}C${(cx + r * 0.6).toFixed(1)} ${(yb + h * 0.045).toFixed(1)} ${cx} ${(yb + (h - yb) * 0.45).toFixed(1)} ${cx} ${h}`;
+    brace.setAttribute('viewBox', `0 0 ${w} ${h}`);
+    brace.setAttribute('preserveAspectRatio', 'none');
+    const ps = brace.querySelectorAll('path');
+    ps[0].setAttribute('d', left); ps[1].setAttribute('d', right);
+  };
   setBx();
-  addEventListener('resize', () => { bgeo = null; });
+  addEventListener('resize', () => { bgeo = null; bracePath(); });
   const updateBx = () => {
     if (!bx || reduce) return;
+    // act A: draw the thread as each piece is reached
+    bdraw.forEach((el) => {
+      const r = el.getBoundingClientRect();
+      el.style.setProperty('--dp', easeInOut(clamp((innerHeight * 0.88 - r.top) / (r.height + innerHeight * 0.06))).toFixed(3));
+    });
+    if (bp1) bp1.style.setProperty('--in', easeOut(clamp((innerHeight * 0.86 - bp1.getBoundingClientRect().top) / (innerHeight * 0.14))).toFixed(3));
+    if (!bxb) return;
     if (!bgeo) {
-      const W = bf.offsetWidth, H = bf.offsetHeight;
-      const pl = bps.offsetLeft, pt = bps.offsetTop, pw = bps.offsetWidth, ph = bps.offsetHeight;
-      const narrow = W < 520;
-      bgeo = { W, H, pl, pt, pw, ph, S0: narrow ? Math.min(1.14, (0.94 * innerWidth) / pw) : Math.min((0.94 * H) / ph, (0.86 * innerWidth) / pw) };
+      const W = bf.offsetWidth, H = bf.offsetHeight, P = bpage.offsetHeight;
+      const S0 = Math.min(0.94 * H / P, 0.5);
+      bgeo = { W, H, P, S0, Tx0: (W - W * S0) / 2, Ty0: (H - P * S0) / 2, dist: Math.max(0, P - H) };
     }
-    const { W, H, pl, pt, pw, ph, S0 } = bgeo;
-    const r = bxs.getBoundingClientRect();
+    const { W, H, S0, Tx0, Ty0, dist } = bgeo;
+    const r = bxb.getBoundingClientRect();
     const p = clamp(-r.top / Math.max(1, r.height - innerHeight));
-    const enter = clamp((innerHeight * 0.8 - r.top) / (innerHeight * 0.3));
     const seg = (a, len) => easeOut(clamp((p - a) / len));
-    const setF = (k, v) => bf.style.setProperty(k, typeof v === 'number' ? v.toFixed(3) : v);
-    const setS = (k, v) => bx.style.setProperty(k, typeof v === 'number' ? v.toFixed(3) : v);
-    // the two phrases (outside the fictional interface): the first arrives with the interface, the second
-    // takes the same reading position when the product starts to become a website
-    setS('--mm1', easeOut(enter));
-    setS('--mm2', seg(0.46, 0.07));
-    setS('--dm', seg(0.48, 0.07));
-    // moment 2: pick a song → the cover goes to the player → its waveform is drawn
-    setF('--cu', easeInOut(clamp((p - 0.07) / 0.13)));
-    setF('--cuo', clamp((p - 0.04) / 0.03) * (1 - clamp((p - 0.28) / 0.04)));
-    setF('--cp', Math.sin(clamp((p - 0.2) / 0.04) * Math.PI));
-    setF('--sel', seg(0.21, 0.05));
-    setF('--t1', easeInOut(clamp((p - 0.23) / 0.12)));
-    setF('--np', seg(0.29, 0.06));
-    setF('--wd', easeOut(clamp((p - 0.31) / 0.14)));
-    const played = Math.round(72 * 0.42 * easeOut(clamp((p - 0.37) / 0.18)));
-    if (played !== bplayed) { bplayed = played; bbars.forEach((el, i) => el.classList.toggle('on', i < played)); }
-    // moment 3: the camera pulls back, the mask opens, cover + waveform take their place in the hero
-    const eA = easeInOut(clamp((p - 0.46) / 0.3));
-    const eB = easeInOut(clamp((p - 0.72) / 0.18));
-    const S = lerp(lerp(S0, 0.96, eA), 1, eB);
-    const fx = lerp(pl + pw / 2, W / 2, eA), fy = lerp(pt + ph / 2, H / 2, eA);
-    bw.style.setProperty('--cs', S.toFixed(3));
-    bw.style.setProperty('--cx', `${(W / 2 - S * fx).toFixed(1)}px`);
-    bw.style.setProperty('--cy', `${(H / 2 - S * fy).toFixed(1)}px`);
-    const m = easeOut(clamp((p - 0.5) / 0.28));
-    bsite.style.setProperty('--mt', `${(pt * (1 - m)).toFixed(1)}px`);
-    bsite.style.setProperty('--ml', `${(pl * (1 - m)).toFixed(1)}px`);
-    bsite.style.setProperty('--mr', `${((W - pl - pw) * (1 - m)).toFixed(1)}px`);
-    bsite.style.setProperty('--mb', `${((H - pt - ph) * (1 - m)).toFixed(1)}px`);
-    setF('--t2', easeInOut(clamp((p - 0.5) / 0.3)));
-    setF('--bq', seg(0.52, 0.32));
-    setF('--eq', seg(0.5, 0.2));
-    setF('--wa', 1 + 0.7 * seg(0.62, 0.25));
-    setF('--nq', seg(0.62, 0.08));
-    setF('--hq', seg(0.66, 0.1));
-    setF('--hq2', seg(0.7, 0.1));
-    setF('--sq', seg(0.75, 0.08));
-    setF('--cq', seg(0.78, 0.08));
-    setF('--e1', seg(0.74, 0.1));
-    setF('--e2', seg(0.79, 0.1));
-    setF('--bd', seg(0.82, 0.08));
-    // moment 4 is the hold: nothing changes after ~0.9 so the landing and the second phrase can be read
+    // camera: 1 · materials fly in and the page appears as an overview · 2 · zoom into the hero · 3 · scroll the page
+    const e1 = easeInOut(clamp((p - 0.1) / 0.3));
+    const e2 = easeInOut(clamp((p - 0.44) / 0.2));
+    const e3 = easeInOut(clamp((p - 0.66) / 0.22));
+    const S = p < 0.44 ? lerp(1, S0, e1) : lerp(S0, 1, e2);
+    const Tx = p < 0.44 ? lerp(0, Tx0, e1) : lerp(Tx0, 0, e2);
+    const Ty = (p < 0.44 ? lerp(0, Ty0, e1) : lerp(Ty0, 0, e2)) - e3 * dist * S;
+    bpage.style.setProperty('--s', S.toFixed(4));
+    bpage.style.setProperty('--tx', `${Tx.toFixed(1)}px`);
+    bpage.style.setProperty('--ty', `${Ty.toFixed(1)}px`);
+    // the five materials leave the collection one after another, each towards its place in the website
+    const win = [[0.12, 0.24], [0.14, 0.24], [0.18, 0.24], [0.16, 0.24], [0.2, 0.24]];
+    bitems.forEach((el, i) => {
+      const [a, len] = win[i] || win[0];
+      el.style.setProperty('--q', easeInOut(clamp((p - a) / len)).toFixed(3));
+    });
+    bf.style.setProperty('--pq', seg(0.18, 0.18).toFixed(3));
+    bf.style.setProperty('--bq', seg(0.4, 0.2).toFixed(3));
+    bf.style.setProperty('--eq', seg(0.5, 0.15).toFixed(3));
+    // website copy appears in order; lower sections as the page scrolls them into view
+    const fb = bf.getBoundingClientRect().bottom, fh = bf.offsetHeight;
+    brv.forEach((el) => {
+      const gate = seg(parseFloat(el.dataset.t) || 0.6, 0.05);
+      const pos = clamp((fb - el.getBoundingClientRect().top) / (fh * 0.3));
+      el.style.setProperty('--in', (gate * (pos > 0 ? pos : 0)).toFixed(3));
+    });
   };
   function update() {
     const vh = innerHeight;

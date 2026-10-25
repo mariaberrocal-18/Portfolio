@@ -41,8 +41,8 @@ export const hero = {
 // Bridge animation between Product Design and Visual Design. FICTIONAL product ("Resona"): it only exists
 // for the transition (product interface → hero of its landing page) and is not a project.
 export const bridge = {
-  // the two phrases of the narrative, outside the fictional interface
-  text: ['A product has a purpose.', 'And a story to tell.'],
+  // the two phrases of the narrative (from the sketch), outside the fictional materials
+  text: ['Every product has a purpose.', 'And a story to tell.'],
   brand: 'resona',
   nav: ['Listen', 'Library', 'Artists', 'Pricing'],
   navCta: 'Get started',
@@ -50,6 +50,10 @@ export const bridge = {
   sub: 'Resona is the home for the albums you love. Play, discover and share in high fidelity.',
   cta: 'Start listening',
   ghost: 'See plans',
+  art: { kicker: 'Cover stories', title: 'Artwork that sounds like the music.', text: 'Every release gets a world of its own: color, shape and rhythm.', link: 'Meet the artists' },
+  features: { title: 'Play. Discover. Share.', captions: ['Your library, always in tune.', 'Find what to play next.'] },
+  identity: { title: 'One sound, one look.', text: 'Type, color and shape, applied everywhere.' },
+  footer: ['Listen', 'Library', 'Artists', 'Pricing'],
   albums: [
     ['Golden Hour', 'Mara Voss'], ['Paper Moons', 'The Lowlands'], ['Night Drive', 'Kito'], ['Low Tide', 'Sela'],
     ['Halcyon', 'Ivo Reed'], ['Soft Static', 'Nami'], ['Violet Hours', 'Juno Park'], ['After Rain', 'Okta'],

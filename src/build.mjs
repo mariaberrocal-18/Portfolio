@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 import { site, hero, bridge, visual, journey, toolkit, about, contact, projects } from './content.mjs';
 import { render, ratio, ttEvolve } from './visuals.mjs';
 import { mini } from './mini.mjs';
-import { bridgeScene } from './bridge.mjs';
+import { bridgeSection } from './bridge.mjs';
 import { marks } from './logos.mjs';
 import { existsSync } from 'node:fs';
 
@@ -264,9 +264,7 @@ ${header('', true)}
     </div>
   </section>
 
-  <section class="bx" data-bx aria-label="From product interface to landing page">
-    <div class="bxs"><div class="bxstage">${bridgeScene(bridge)}</div></div>
-  </section>
+  ${bridgeSection(bridge)}
 
   <section class="visual-section" id="visual" aria-labelledby="visual-h">
     <div class="wrap">
