@@ -470,17 +470,19 @@
 
   const nav = document.querySelector('.nav');
   let lastY = scrollY, hx = 0;
-  // Bridge scene: a fictional audio product (interface) becomes the hero of its landing page.
-  // One continuous camera move (scale + translate on the "world") plus a mask that opens around the interface.
-  // The album cover and the waveform are the same two objects throughout. Everything is a pure function of
-  // scroll progress, so it plays backwards too. Exit is natural scroll: the stage leaves, the title follows.
+  // Bridge scene. Four moments driven by scroll (no audio, no scroll hijacking, fully reversible):
+  //  1 a product has a purpose: the text and the interface of a fictional audio product arrive together
+  //  2 we understand it: a song is picked, its cover goes to the player and its waveform is drawn
+  //  3 it finds an expression: cover, palette and waveform build its landing page around the interface
+  //  4 resolution: the whole landing is held for a moment, then it leaves and "Visual Design" follows.
   const bx = document.querySelector('[data-bx]');
   const bxs = bx && bx.querySelector('.bxs');
   const bf = bx && bx.querySelector('[data-bxf]');
   const bw = bf && bf.querySelector('.bxw');
   const bsite = bf && bf.querySelector('.bxsite');
   const bps = bf && bf.querySelector('[data-bps]');
-  let bgeo = null;
+  const bbars = bf ? [...bf.querySelectorAll('.bwave i')] : [];
+  let bgeo = null, bplayed = -1;
   const setBx = () => { root.classList.toggle('is-bx', !!bx && !reduce); bgeo = null; };
   setBx();
   addEventListener('resize', () => { bgeo = null; });
@@ -490,41 +492,56 @@
       const W = bf.offsetWidth, H = bf.offsetHeight;
       const pl = bps.offsetLeft, pt = bps.offsetTop, pw = bps.offsetWidth, ph = bps.offsetHeight;
       const narrow = W < 520;
-      bgeo = { W, H, pl, pt, pw, ph, S0: narrow ? Math.min(1.14, (0.94 * innerWidth) / pw) : Math.min((0.92 * (innerHeight - 190)) / ph, (0.86 * innerWidth) / pw) };
+      bgeo = { W, H, pl, pt, pw, ph, S0: narrow ? Math.min(1.14, (0.94 * innerWidth) / pw) : Math.min((0.94 * H) / ph, (0.86 * innerWidth) / pw) };
     }
     const { W, H, pl, pt, pw, ph, S0 } = bgeo;
     const r = bxs.getBoundingClientRect();
     const p = clamp(-r.top / Math.max(1, r.height - innerHeight));
+    const enter = clamp((innerHeight * 0.8 - r.top) / (innerHeight * 0.3));
     const seg = (a, len) => easeOut(clamp((p - a) / len));
-    const set = (el, k, v) => el.style.setProperty(k, typeof v === 'number' ? v.toFixed(3) : v);
-    // camera: pull back from the interface, then let the landing grow into full presence
-    const eA = easeInOut(clamp((p - 0.04) / 0.36));
-    const eB = easeInOut(clamp((p - 0.4) / 0.42));
-    const S = lerp(lerp(S0, 0.94, eA), 1, eB);
+    const setF = (k, v) => bf.style.setProperty(k, typeof v === 'number' ? v.toFixed(3) : v);
+    const setS = (k, v) => bx.style.setProperty(k, typeof v === 'number' ? v.toFixed(3) : v);
+    // the two phrases (outside the fictional interface): the first arrives with the interface, the second
+    // takes the same reading position when the product starts to become a website
+    setS('--mm1', easeOut(enter));
+    setS('--mm2', seg(0.46, 0.07));
+    setS('--dm', seg(0.48, 0.07));
+    // moment 2: pick a song → the cover goes to the player → its waveform is drawn
+    setF('--cu', easeInOut(clamp((p - 0.07) / 0.13)));
+    setF('--cuo', clamp((p - 0.04) / 0.03) * (1 - clamp((p - 0.28) / 0.04)));
+    setF('--cp', Math.sin(clamp((p - 0.2) / 0.04) * Math.PI));
+    setF('--sel', seg(0.21, 0.05));
+    setF('--t1', easeInOut(clamp((p - 0.23) / 0.12)));
+    setF('--np', seg(0.29, 0.06));
+    setF('--wd', easeOut(clamp((p - 0.31) / 0.14)));
+    const played = Math.round(72 * 0.42 * easeOut(clamp((p - 0.37) / 0.18)));
+    if (played !== bplayed) { bplayed = played; bbars.forEach((el, i) => el.classList.toggle('on', i < played)); }
+    // moment 3: the camera pulls back, the mask opens, cover + waveform take their place in the hero
+    const eA = easeInOut(clamp((p - 0.46) / 0.3));
+    const eB = easeInOut(clamp((p - 0.72) / 0.18));
+    const S = lerp(lerp(S0, 0.96, eA), 1, eB);
     const fx = lerp(pl + pw / 2, W / 2, eA), fy = lerp(pt + ph / 2, H / 2, eA);
-    set(bw, '--cs', S);
-    set(bw, '--cx', `${(W / 2 - S * fx).toFixed(1)}px`);
-    set(bw, '--cy', `${(H / 2 - S * fy).toFixed(1)}px`);
-    // the landing page is revealed around the interface
-    const m = easeOut(clamp((p - 0.08) / 0.34));
-    set(bsite, '--mt', `${(pt * (1 - m)).toFixed(1)}px`);
-    set(bsite, '--ml', `${(pl * (1 - m)).toFixed(1)}px`);
-    set(bsite, '--mr', `${((W - pl - pw) * (1 - m)).toFixed(1)}px`);
-    set(bsite, '--mb', `${((H - pt - ph) * (1 - m)).toFixed(1)}px`);
-    // the traveling objects: cover and waveform leave the interface and take their place in the hero
-    set(bf, '--tq', easeInOut(clamp((p - 0.1) / 0.42)));
-    set(bf, '--wa', 1 + 0.7 * seg(0.45, 0.4));
-    set(bf, '--bq', seg(0.26, 0.46));
-    set(bf, '--eq', seg(0.3, 0.2));
-    // landing copy and graphics, in sequence
-    set(bf, '--nq', seg(0.3, 0.08));
-    set(bf, '--hq', seg(0.34, 0.1));
-    set(bf, '--hq2', seg(0.4, 0.1));
-    set(bf, '--sq', seg(0.46, 0.08));
-    set(bf, '--cq', seg(0.5, 0.08));
-    set(bf, '--bd', seg(0.52, 0.09));
-    set(bf, '--e1', seg(0.5, 0.1));
-    set(bf, '--e2', seg(0.56, 0.1));
+    bw.style.setProperty('--cs', S.toFixed(3));
+    bw.style.setProperty('--cx', `${(W / 2 - S * fx).toFixed(1)}px`);
+    bw.style.setProperty('--cy', `${(H / 2 - S * fy).toFixed(1)}px`);
+    const m = easeOut(clamp((p - 0.5) / 0.28));
+    bsite.style.setProperty('--mt', `${(pt * (1 - m)).toFixed(1)}px`);
+    bsite.style.setProperty('--ml', `${(pl * (1 - m)).toFixed(1)}px`);
+    bsite.style.setProperty('--mr', `${((W - pl - pw) * (1 - m)).toFixed(1)}px`);
+    bsite.style.setProperty('--mb', `${((H - pt - ph) * (1 - m)).toFixed(1)}px`);
+    setF('--t2', easeInOut(clamp((p - 0.5) / 0.3)));
+    setF('--bq', seg(0.52, 0.32));
+    setF('--eq', seg(0.5, 0.2));
+    setF('--wa', 1 + 0.7 * seg(0.62, 0.25));
+    setF('--nq', seg(0.62, 0.08));
+    setF('--hq', seg(0.66, 0.1));
+    setF('--hq2', seg(0.7, 0.1));
+    setF('--sq', seg(0.75, 0.08));
+    setF('--cq', seg(0.78, 0.08));
+    setF('--e1', seg(0.74, 0.1));
+    setF('--e2', seg(0.79, 0.1));
+    setF('--bd', seg(0.82, 0.08));
+    // moment 4 is the hold: nothing changes after ~0.9 so the landing and the second phrase can be read
   };
   function update() {
     const vh = innerHeight;

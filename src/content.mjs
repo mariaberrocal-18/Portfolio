@@ -41,6 +41,8 @@ export const hero = {
 // Bridge animation between Product Design and Visual Design. FICTIONAL product ("Resona"): it only exists
 // for the transition (product interface → hero of its landing page) and is not a project.
 export const bridge = {
+  // the two phrases of the narrative, outside the fictional interface
+  text: ['A product has a purpose.', 'And a story to tell.'],
   brand: 'resona',
   nav: ['Listen', 'Library', 'Artists', 'Pricing'],
   navCta: 'Get started',
