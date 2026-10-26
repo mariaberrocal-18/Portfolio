@@ -60,7 +60,8 @@ function pilot(c, next, p, style) {
       <div class="vc-orig__t" ${rv}><h3>The brand and its audience</h3><p>${esc(o.about)}</p><p>${esc(o.audience)}</p></div>
       <div class="vc-orig__t" ${rv}><h3>Needs and constraints</h3>${o.needs ? `<p>${esc(o.needs)}</p>` : pendText('The needs and constraints that defined the original work.')}</div>
     </div>
-    <div class="vc-orig__m">${o.materials.map(([k, l, ar], i) => `<figure class="vc-fig vc-fig--o${i}" ${rv}><div class="vc-fig__m" style="--ar:${ar}">${pend(l, ar, 'Pending asset')}</div><figcaption>${tag(k, 'is-orig')}<span>${esc(l)}</span></figcaption></figure>`).join('')}</div>
+    <div class="vc-orig__m">${o.materials.map((m, i) => `<figure class="vc-fig vc-fig--o vc-fig--o-${m.key}" ${rv}><div class="vc-fig__m" style="--ar:${m.ar}">${m.src ? `<img src="../${m.src}" alt="${esc(m.alt || m.label)}" loading="lazy" decoding="async">` : pend(m.label, m.ar, 'Pending asset')}</div><figcaption>${tag('Original design', 'is-orig')}<span>${esc(m.label)}</span></figcaption></figure>`).join('')}</div>
+    ${o.sourceNote ? `<p class="vc-source">${esc(o.sourceNote)}</p>` : ''}
     ${o.credit ? `<p class="vc-credit">${esc(o.credit)}</p>` : `<p class="vc-credit vc-credit--p">${pendText('Credits: which parts of the original were my contribution and which were the work of other people.')}</p>`}
   </section>`;
 
@@ -70,7 +71,7 @@ function pilot(c, next, p, style) {
     const art = { hero: `<div class="vc-b vc-b--hero">${webHero(w)}</div>`, section: `<div class="vc-b vc-b--sec">${webSection(w)}</div>`, motion: `<div class="vc-b vc-b--mo">${motion(w)}</div>` }[x.reimagined];
     const ar = x.reimagined === 'section' ? '16 / 9' : x.reimagined === 'motion' ? '16 / 8.4' : '16 / 9';
     return `<div class="vc-pair vc-pair--${x.kind}" ${rv}>
-      ${x.kind === 'pair' ? `<figure class="vc-fig vc-pair__o"><div class="vc-fig__m" style="--ar:${ar}">${pend(x.original, ar, 'Pending asset')}</div><figcaption>${tag('Original design', 'is-orig')}<span>${esc(x.original)}</span></figcaption></figure>` : ''}
+      ${x.kind === 'pair' ? `<figure class="vc-fig vc-pair__o"><div class="vc-fig__m" style="--ar:${ar}">${(() => { const m = o.materials.find((q) => q.key === x.originalKey); return m && m.src ? `<img src="../${m.src}" alt="${esc(m.alt || x.original)}" loading="lazy" decoding="async">` : pend(x.original, ar, 'Pending asset'); })()}</div><figcaption>${tag('Original design', 'is-orig')}<span>${esc(x.original)}</span></figcaption></figure>` : ''}
       <figure class="vc-fig vc-pair__r"><div class="vc-fig__m" style="--ar:${ar}">${art}</div><figcaption>${tag(x.kind === 'new' ? 'New exploration' : 'Reimagined concept', x.kind === 'new' ? 'is-new' : 'is-re')}<span>${esc(x.caption)}</span></figcaption></figure>
     </div>`;
   }).join('');

@@ -22,7 +22,14 @@ export const vcases = [
       // pending: the needs and constraints that defined the original work
       needs: null,
       credit: null,
-      materials: [['Original design', 'Original website hero', '16 / 9'], ['Original design', 'Original visual material', '4 / 5'], ['Original design', 'Original communication piece', '1 / 1']],
+      // screens captured from the published website (not the 2024 version): see `sourceNote`
+      materials: [
+        { key: 'hero', label: 'Website hero', ar: '16 / 9', src: 'assets/visual/waterplan/original-hero.webp', alt: 'Waterplan website hero: "The AI-native platform for water-dependent industries" over a dotted globe, with client logos' },
+        { key: 'risk', label: 'Website · Water Risk section', ar: '16 / 10', src: 'assets/visual/waterplan/original-water-risk.webp', alt: 'Waterplan website section on Water Risk, with a product illustration of a site map and risk score' },
+        { key: 'steward', label: 'Website · Water Stewardship section', ar: '16 / 10', src: 'assets/visual/waterplan/original-stewardship.webp', alt: 'Waterplan website section on Water Stewardship, with a product illustration of a project and a map' },
+        { key: 'mobile', label: 'Website · mobile hero', ar: '9 / 19', src: 'assets/visual/waterplan/original-mobile-hero.webp', alt: 'Waterplan website hero on a phone' },
+      ],
+      sourceNote: 'Screens captured from waterplan.com on 26 Oct 2026. The published site may have changed since the project shipped.',
     },
     reimagined: {
       intro: 'This is not a redesign of something that failed, and AI does not make work better on its own. It is a second look: what I would decide differently if I started from the same brief today, and how current tools let me test those decisions quickly.',
@@ -44,8 +51,8 @@ export const vcases = [
         title: 'What does that become?',
         text: 'The same territory, read in layers: first the ground, then the signals, the relations between them, two scenarios and the actions worth taking first.',
         pairs: [
-          { kind: 'pair', original: 'Original website hero', reimagined: 'hero', caption: 'The hero stops illustrating water and starts showing a decision: a facility, its signals and two scenarios.' },
-          { kind: 'pair', original: 'Original data visual', reimagined: 'section', caption: 'Data and image share one surface. The map is no longer decoration next to the explanation.' },
+          { kind: 'pair', original: 'Original website hero', originalKey: 'hero', reimagined: 'hero', caption: 'The hero stops illustrating water and starts showing a decision: a facility, its signals and two scenarios.' },
+          { kind: 'pair', original: 'Original Water Risk section', originalKey: 'risk', reimagined: 'section', caption: 'Data and image share one surface. The map is no longer decoration next to the explanation.' },
           { kind: 'new', reimagined: 'motion', caption: 'A new exploration with no original equivalent: switching scenarios and watching a priority list answer.' },
         ],
       },
