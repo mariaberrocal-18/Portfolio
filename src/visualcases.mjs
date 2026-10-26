@@ -14,12 +14,8 @@ export const vcases = [
     pilot: true,
     theme: { dark: '#06223a', tide: '#0d4a73', clear: '#bfe0f5', tint: '#eef6fb', accent: '#f2a93b', accentInk: '#06223a' },
     phrase: 'Making the link between territory, data and water-risk decisions visible.',
-    responsibilities: [
-      'Concept and creative direction of the exploration',
-      'Art direction and image-making with AI tools',
-      'Website design: hero and key sections',
-      'Applications: mobile and communication pieces',
-    ],
+    shipped: 'Sep 2024',
+    duration: '8 months',
     original: {
       about: 'Waterplan is a platform that helps large companies understand and manage their water use. Its customers, such as beverage makers and brewers, commit to water targets and track their progress toward them.',
       audience: 'Large companies with water-dependent operations, and the teams that report and decide on water risk.',

@@ -23,18 +23,19 @@ export function vcasePage(c, next, p = '../') {
 }
 
 // ---------------------------------------------------------------------------------------------------------------
-function opening(c, art, phrase, resp) {
+const BADGES = ['Independent exploration', 'Web design', 'AI visual design'];
+function opening(c, art, phrase) {
+  const meta = [['Shipped', c.shipped], ['Project duration', c.duration]]
+    .map(([k, v]) => `<div><dt>${k}</dt><dd>${v ? esc(v) : '<em class="vc-pendinline">Pending</em>'}</dd></div>`).join('');
   return `<header class="vc-open wrap">
     <div class="vc-open__top">
-      <a class="vc-back" href="../index.html#visual">${`<svg class="ico" width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M14 9H4m4.5-4.5L4 9l4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`}<span>Web &amp; Visual Design</span></a>
-      ${tag('Independent exploration', 'is-ind')}
+      <a class="vc-back" href="../index.html#visual"><svg class="ico" width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M14 9H4m4.5-4.5L4 9l4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Web &amp; Visual Design</span></a>
     </div>
     <div class="vc-open__stack">
-      <h1 class="vc-open__title"><span class="vc-open__phrase">${phrase}</span><span class="vc-open__name">${esc(c.name)}</span></h1>
-      <dl class="vc-open__meta">
-        <div><dt>Disciplines</dt><dd><ul class="tags">${c.tags.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></dd></div>
-        <div><dt>Responsibilities</dt><dd>${resp}</dd></div>
-      </dl>
+      <h1 class="vc-open__phrase">${phrase}</h1>
+      <div class="vc-open__who"><p class="vc-open__name">${esc(c.name)}</p><ul class="tags" aria-label="Project type">${BADGES.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>
+      <p class="vc-open__desc">This is an independent exploration of what was actually shipped. As tools and AI evolve, my approach to this kind of project has changed, so here is what I would do today instead of what I did.</p>
+      <dl class="vc-open__facts">${meta}</dl>
     </div>
     ${art}
   </header>`;
@@ -160,7 +161,7 @@ function pilot(c, next, p, style) {
 
   return `<main class="vc" style="${style}">
   <article>
-    ${opening(c, heroArt, esc(c.phrase), `<ul class="vc-resp">${c.responsibilities.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>`)}
+    ${opening(c, heroArt, esc(c.phrase))}
     <nav class="vc-toc" aria-label="On this page" data-toc><div class="vc-toc__in"><a href="#original">Original project</a><a href="#reimagined">Reimagined with AI</a><a href="#direction">Visual direction</a><a href="#life">Bringing it to life</a><a href="#process">Exploration process</a></div></nav>
     ${s2}${s3}${s4}${s5}${s6}${s7}
   </article>
@@ -174,7 +175,7 @@ function skeleton(c, next, p) {
   const q = (n, title) => `<div class="vc-q" ${rv}><p class="vc-q__n">${n}</p><div><h3>${title}</h3>${pendText('Written once the project is defined.').replace('<p class="vc-pendtext">', '<p class="vc-pendtext on-dark">')}</div></div>`;
   return `<main class="vc">
   <article>
-    ${opening(c, `<figure class="vc-hero" ${rv}><div class="vc-hero__m">${pend('Hero image of the reimagined concept', '21 / 9', 'Pending asset')}</div><figcaption>${tag('Reimagined concept', 'is-re')}<span>Pending image.</span></figcaption></figure>`, `<span class="vc-pendinline">Pending · one sentence that sums up the new vision</span>`, `<span class="vc-pendinline">Pending · disciplines and responsibilities</span>`)}
+    ${opening(c, `<figure class="vc-hero" ${rv}><div class="vc-hero__m">${pend('Hero image of the reimagined concept', '21 / 9', 'Pending asset')}</div><figcaption>${tag('Reimagined concept', 'is-re')}<span>Pending image.</span></figcaption></figure>`, `<span class="vc-pendinline">Pending · one sentence that sums up the new vision</span>`)}
     <nav class="vc-toc" aria-label="On this page" data-toc><div class="vc-toc__in"><a href="#original">Original project</a><a href="#reimagined">Reimagined with AI</a><a href="#direction">Visual direction</a><a href="#life">Bringing it to life</a><a href="#process">Exploration process</a></div></nav>
     <section class="vc-s vc-s--orig wrap" id="original" aria-labelledby="h-orig">
       ${sectionHead('01', 'The original project')}
