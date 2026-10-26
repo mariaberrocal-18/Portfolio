@@ -9,6 +9,8 @@ import { site, hero, bridge, visual, journey, toolkit, about, contact, projects 
 import { render, ratio, ttEvolve } from './visuals.mjs';
 import { mini } from './mini.mjs';
 import { bridgeSection } from './bridge.mjs';
+import { vcases } from './visualcases.mjs';
+import { vcasePage } from './vcase.mjs';
 import { marks } from './logos.mjs';
 import { existsSync } from 'node:fs';
 
@@ -155,7 +157,8 @@ function workCard(proj, i, all) {
 
 function visualProject(p, i) {
   const [was, now] = visual.stateLabels;
-  return `<article class="vcard${p.placeholder ? ' vcard--ph' : ''}" data-reveal>
+  const slug = vcases.find((v) => v.name === p.name)?.slug;
+  return `<a class="vcard${p.placeholder ? ' vcard--ph' : ''}" data-reveal href="visual/${slug}.html" data-cursor="View project">
     <div class="vm" style="--i:${i}" role="img" aria-label="Placeholder preview that will animate between ${esc(was.toLowerCase())} and ${esc(now.toLowerCase())}">
       <div class="vm__l vm__l--a"><span>${esc(was)}</span></div>
       <div class="vm__clip" aria-hidden="true"><div class="vm__l vm__l--b"><span>${esc(now)}</span></div></div>
@@ -167,7 +170,7 @@ function visualProject(p, i) {
       <ul class="tags" aria-label="Disciplines">${p.tags.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
       <p class="vcard__desc">${esc(p.descriptor)}</p>
     </div>
-  </article>`;
+  </a>`;
 }
 
 function chars(text) {
@@ -416,6 +419,19 @@ ${scripts(p)}`;
 
 // Write ---------------------------------------------------------------------
 
+function visualCase(c, i) {
+  const p = '../';
+  const next = vcases[(i + 1) % vcases.length];
+  return `${head({ title: `${c.name}: Web & Visual Design | ${site.name}`, desc: c.phrase || `${c.name}: an independent exploration in web and visual design.`, p, noindex: c.draft, path: `visual/${c.slug}.html` })}
+<body class="vcase">
+<a class="skip" href="#original">Skip to the story</a>
+${header(p, false)}
+${vcasePage(c, next, p)}
+${footer(p)}
+<div class="cursor" aria-hidden="true"><span></span></div>
+${scripts(p)}`;
+}
+
 function notFound() {
   return `${head({ title: `Page not found | ${site.name}`, desc: hero.lede, p: '/', noindex: true, path: '404.html' })}
 <body class="nf">
@@ -428,17 +444,21 @@ function notFound() {
 mkdirSync(join(root, 'work'), { recursive: true });
 writeFileSync(join(root, 'index.html'), home());
 projects.forEach((proj, i) => writeFileSync(join(root, 'work', `${proj.slug}.html`), caseStudy(proj, i)));
+mkdirSync(join(root, 'visual'), { recursive: true });
+vcases.forEach((c, i) => writeFileSync(join(root, 'visual', `${c.slug}.html`), visualCase(c, i)));
 
 writeFileSync(join(root, 'robots.txt'), `User-agent: *\nAllow: /\n${site.url ? `Sitemap: ${site.url}/sitemap.xml\n` : ''}`);
 if (site.url) writeFileSync(join(root, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${['', ...projects.filter((x) => !x.draft).map((x) => `work/${x.slug}.html`)].map((u) => `  <url><loc>${site.url}/${u}</loc></url>`).join('\n')}\n</urlset>\n`);
 writeFileSync(join(root, '404.html'), notFound());
 const drafts = projects.filter((x) => x.draft).map((x) => x.slug);
-console.log(`Built index.html + ${projects.length} case studies.`);
+console.log(`Built index.html + ${projects.length} case studies + ${vcases.length} web & visual design pages.`);
+const vdrafts = vcases.filter((x) => x.draft).map((x) => x.slug);
+if (vdrafts.length) console.warn(`DRAFT visual pages (noindex): ${vdrafts.join(', ')}`);
 if (drafts.length) console.warn(`DRAFT copy (noindex) needs María's review: ${drafts.join(', ')}`);
 
 // dist/: only what the public site needs (deploy this folder; the repo's working files stay private)
 rmSync(join(root, 'dist'), { recursive: true, force: true });
 mkdirSync(join(root, 'dist'), { recursive: true });
-for (const f of ['index.html', '404.html', 'robots.txt', 'sitemap.xml', 'work', 'assets']) {
+for (const f of ['index.html', '404.html', 'robots.txt', 'sitemap.xml', 'work', 'visual', 'assets']) {
   if (existsSync(join(root, f))) cpSync(join(root, f), join(root, 'dist', f), { recursive: true, filter: (s) => !s.endsWith('README.md') });
 }
