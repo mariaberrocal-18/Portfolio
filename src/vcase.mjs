@@ -29,9 +29,8 @@ function opening(c, art, phrase, resp) {
       <a class="vc-back" href="../index.html#visual">${`<svg class="ico" width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M14 9H4m4.5-4.5L4 9l4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`}<span>Web &amp; Visual Design</span></a>
       ${tag('Independent exploration', 'is-ind')}
     </div>
-    <h1 class="vc-open__name">${esc(c.name)}</h1>
-    <div class="vc-open__row">
-      <p class="vc-open__phrase">${phrase}</p>
+    <div class="vc-open__stack">
+      <h1 class="vc-open__title"><span class="vc-open__phrase">${phrase}</span><span class="vc-open__name">${esc(c.name)}</span></h1>
       <dl class="vc-open__meta">
         <div><dt>Disciplines</dt><dd><ul class="tags">${c.tags.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></dd></div>
         <div><dt>Responsibilities</dt><dd>${resp}</dd></div>
@@ -55,10 +54,9 @@ function pilot(c, next, p, style) {
   const heroArt = `<figure class="vc-hero" ${rv}><div class="vc-hero__m">${scene({ id: 'op', layers: ['contours', 'signals', 'relations', 'scenario', 'priorities'], split: true, label: false })}</div><figcaption>${tag('Reimagined concept', 'is-re')}<span>Illustrative: territory, signals, scenarios and priorities in one view.</span></figcaption></figure>`;
 
   const s2 = `<section class="vc-s vc-s--orig wrap" id="original" aria-labelledby="h-orig">
-    ${sectionHead('01', 'The original project', 'Original project')}
+    ${sectionHead('01', 'The original project')}
     <div class="vc-orig__grid">
       <div class="vc-orig__t" ${rv}><h3>The brand and its audience</h3><p>${esc(o.about)}</p><p>${esc(o.audience)}</p></div>
-      <div class="vc-orig__t" ${rv}><h3>My role and what I designed</h3>${o.role ? `<p>${esc(o.role)}</p>` : pendText('What I designed originally, and which parts were mine.')}<p class="vc-prod">${esc(o.product)}</p><ul class="vc-links">${o.productLinks.map(([n, s]) => `<li><a href="../work/${s}.html">${esc(n)}${arrow}</a></li>`).join('')}</ul></div>
       <div class="vc-orig__t" ${rv}><h3>Needs and constraints</h3>${o.needs ? `<p>${esc(o.needs)}</p>` : pendText('The needs and constraints that defined the original work.')}</div>
     </div>
     <div class="vc-orig__m">${o.materials.map(([k, l, ar], i) => `<figure class="vc-fig vc-fig--o${i}" ${rv}><div class="vc-fig__m" style="--ar:${ar}">${pend(l, ar, 'Pending asset')}</div><figcaption>${tag(k, 'is-orig')}<span>${esc(l)}</span></figcaption></figure>`).join('')}</div>
@@ -163,7 +161,7 @@ function pilot(c, next, p, style) {
   return `<main class="vc" style="${style}">
   <article>
     ${opening(c, heroArt, esc(c.phrase), `<ul class="vc-resp">${c.responsibilities.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>`)}
-    <nav class="vc-toc wrap" aria-label="On this page"><a href="#original">Original project</a><a href="#reimagined">Reimagined with AI</a><a href="#direction">Visual direction</a><a href="#life">Bringing it to life</a><a href="#process">Exploration process</a></nav>
+    <nav class="vc-toc" aria-label="On this page" data-toc><div class="vc-toc__in"><a href="#original">Original project</a><a href="#reimagined">Reimagined with AI</a><a href="#direction">Visual direction</a><a href="#life">Bringing it to life</a><a href="#process">Exploration process</a></div></nav>
     ${s2}${s3}${s4}${s5}${s6}${s7}
   </article>
 </main>`;
@@ -177,26 +175,26 @@ function skeleton(c, next, p) {
   return `<main class="vc">
   <article>
     ${opening(c, `<figure class="vc-hero" ${rv}><div class="vc-hero__m">${pend('Hero image of the reimagined concept', '21 / 9', 'Pending asset')}</div><figcaption>${tag('Reimagined concept', 'is-re')}<span>Pending image.</span></figcaption></figure>`, `<span class="vc-pendinline">Pending · one sentence that sums up the new vision</span>`, `<span class="vc-pendinline">Pending · disciplines and responsibilities</span>`)}
-    <section class="vc-s vc-s--orig wrap" aria-labelledby="h-orig">
-      ${sectionHead('01', 'The original project', 'Original project')}
+    <nav class="vc-toc" aria-label="On this page" data-toc><div class="vc-toc__in"><a href="#original">Original project</a><a href="#reimagined">Reimagined with AI</a><a href="#direction">Visual direction</a><a href="#life">Bringing it to life</a><a href="#process">Exploration process</a></div></nav>
+    <section class="vc-s vc-s--orig wrap" id="original" aria-labelledby="h-orig">
+      ${sectionHead('01', 'The original project')}
       <div class="vc-orig__grid">
         <div class="vc-orig__t"><h3>The brand and its audience</h3>${pendText('What the brand or product is and who it is for.')}</div>
-        <div class="vc-orig__t"><h3>My role and what I designed</h3>${pendText('My role and what I designed originally.')}</div>
         <div class="vc-orig__t"><h3>Needs and constraints</h3>${pendText('What shaped the original work.')}</div>
       </div>
       <div class="vc-orig__m">${['16 / 9', '4 / 5', '1 / 1'].map((ar, i) => `<figure class="vc-fig vc-fig--o${i}"><div class="vc-fig__m" style="--ar:${ar}">${pend('Original material', ar, 'Pending asset')}</div><figcaption>${tag('Original design', 'is-orig')}<span>Pending</span></figcaption></figure>`).join('')}</div>
       <p class="vc-credit vc-credit--p">${pendText('Credits: my contribution versus other people’s work.')}</p>
     </section>
-    <section class="vc-s vc-s--re" aria-labelledby="h-re">
+    <section class="vc-s vc-s--re" id="reimagined" aria-labelledby="h-re">
       <div class="vc-re__intro wrap"><p class="vc-re__k">${tag('Reimagined concept', 'is-re on-dark')}<span>02</span></p><h2 class="vc-re__t" id="h-re">Reimagined<br>with AI</h2></div>
       <div class="vc-re__q wrap">${q(1, 'What would I rethink today?')}</div>
       <div class="vc-re__q wrap">${q(2, 'What could I explore further?')}</div>
       <div class="vc-re__q wrap">${q(3, 'What does that become?')}<div class="vc-pairs"><div class="vc-pair vc-pair--pair"><figure class="vc-fig"><div class="vc-fig__m" style="--ar:16 / 9">${pend('Original design', '16 / 9')}</div><figcaption>${tag('Original design', 'is-orig')}</figcaption></figure><figure class="vc-fig"><div class="vc-fig__m" style="--ar:16 / 9">${pend('Reimagined concept', '16 / 9')}</div><figcaption>${tag('Reimagined concept', 'is-re')}</figcaption></figure></div></div></div>
     </section>
-    <section class="vc-s vc-s--dir" aria-labelledby="h-dir"><div class="wrap">${sectionHead('03', 'The new visual direction', 'Reimagined concept')}<div class="vc-dir vc-dir--p">${['Typography and hierarchy', 'Palette and use of colour', 'Image direction', 'Composition and graphic resources', 'Interaction and motion principles'].map((t) => `<article class="vc-d"><h3>${t}</h3>${P('Applied example with short annotations', '16 / 10')}</article>`).join('')}</div></div></section>
-    <section class="vc-s vc-s--life wrap" aria-labelledby="h-life">${sectionHead('04', 'Bringing it to life', 'Reimagined concept')}
+    <section class="vc-s vc-s--dir" id="direction" aria-labelledby="h-dir"><div class="wrap">${sectionHead('03', 'The new visual direction', 'Reimagined concept')}<div class="vc-dir vc-dir--p">${['Typography and hierarchy', 'Palette and use of colour', 'Image direction', 'Composition and graphic resources', 'Interaction and motion principles'].map((t) => `<article class="vc-d"><h3>${t}</h3>${P('Applied example with short annotations', '16 / 10')}</article>`).join('')}</div></div></section>
+    <section class="vc-s vc-s--life wrap" id="life" aria-labelledby="h-life">${sectionHead('04', 'Bringing it to life', 'Reimagined concept')}
       <div class="vc-life__skel">${['Website · hero and key sections', 'Mobile adaptation', 'Motion or interaction', 'Communication piece'].map((t, i) => `<figure class="vc-fig"><div class="vc-fig__m" style="--ar:${i === 1 ? '9 / 14' : '16 / 10'}">${pend(t, i === 1 ? '9 / 14' : '16 / 10')}</div><figcaption>${tag('Reimagined concept', 'is-re')}<span>${t}</span></figcaption></figure>`).join('')}</div></section>
-    <section class="vc-s vc-s--proc wrap" aria-labelledby="h-proc">${sectionHead('05', 'Behind the exploration', 'Exploration process')}
+    <section class="vc-s vc-s--proc wrap" id="process" aria-labelledby="h-proc">${sectionHead('05', 'Behind the exploration', 'Exploration process')}
       <ol class="vc-steps vc-steps--p">${['Starting point', 'Alternatives', 'Selection', 'Refinement', 'Application'].map((t, i) => `<li class="vc-p"><p class="vc-p__n">${String(i + 1).padStart(2, '0')}</p><div class="vc-p__v">${pend(t, '16 / 9')}</div><div class="vc-p__x"><h4>${t}</h4>${pendText('What I directed, what AI was used for, and what I adjusted.')}</div></li>`).join('')}</ol></section>
     <section class="vc-s vc-s--close" aria-labelledby="h-close"><div class="wrap vc-close__in vc-close__in--p"><div class="vc-close__t"><p class="vc-close__k">${tag('Independent exploration', 'is-ind on-dark')}</p><h2 id="h-close"><span class="vc-pendinline">Pending · a short reflection on the exploration</span></h2></div><div>${nextCard(next, p)}</div></div></section>
   </article>

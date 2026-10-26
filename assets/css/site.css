@@ -1182,15 +1182,15 @@ html:has(body.nf) { background: #0b0b0b; }
 .vc-open { padding-bottom: clamp(48px, 7vw, 96px); }
 .vc-open__top { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: clamp(24px, 4vw, 48px); }
 .vc-back { display: inline-flex; align-items: center; gap: 8px; font-size: 0.9375rem; font-weight: 500; } .vc-back .ico { transition: transform 0.4s var(--ease); } .vc-back:hover .ico { transform: translateX(-3px); }
-.vc-open__name { font-size: clamp(3.5rem, 1.5rem + 9vw, 10rem); line-height: 0.9; font-weight: 650; letter-spacing: -0.055em; }
-.vc-open__row { display: grid; gap: 28px; margin: clamp(20px, 3vw, 40px) 0 clamp(32px, 5vw, 64px); }
-.vc-open__phrase { font-size: clamp(1.5rem, 1rem + 1.8vw, 2.5rem); line-height: 1.08; font-weight: 600; letter-spacing: -0.035em; text-wrap: balance; max-width: 22ch; }
+.vc-open__stack { display: grid; gap: clamp(20px, 3vw, 36px); justify-items: start; margin-bottom: clamp(32px, 5vw, 64px); }
+.vc-open__title { display: grid; gap: clamp(14px, 2vw, 24px); justify-items: start; }
+.vc-open__phrase { order: 1; font-size: clamp(2.25rem, 1.2rem + 4.6vw, 5.25rem); line-height: 1; font-weight: 650; letter-spacing: -0.05em; text-wrap: balance; max-width: 18ch; }
+.vc-open__name { order: 2; font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.5rem); line-height: 1; font-weight: 650; letter-spacing: -0.04em; color: var(--ink-2); }
 .vc-open__meta { display: grid; gap: 20px; align-content: start; } .vc-open__meta dt { font-size: 0.8125rem; font-weight: 600; color: var(--ink-2); margin-bottom: 8px; } .vc-open__meta dd { margin: 0; }
 .vc-resp { display: grid; gap: 5px; font-size: 0.9375rem; line-height: 1.35; } .vc-resp li::before { content: '–'; margin-right: 8px; color: var(--ink-2); }
 .vc-hero { margin: 0; display: grid; gap: 12px; } .vc-hero figcaption { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: 0.8125rem; color: var(--ink-2); }
 .vc-hero__m { position: relative; overflow: hidden; border-radius: 20px; aspect-ratio: 2 / 1; background: var(--vt-dark); box-shadow: 0 40px 90px -50px rgba(6, 34, 58, 0.6); }
 .vc-hero__m .wps { position: absolute; inset: 0; }
-.vc-toc { display: flex; flex-wrap: wrap; gap: 6px 22px; padding-block: 10px 0; font-size: 0.875rem; font-weight: 500; color: var(--ink-2); box-shadow: 0 -1px 0 var(--line); } .vc-toc a { padding-block: 14px 0; } .vc-toc a:hover { color: var(--ink); }
 /* 1 original */
 .vc-orig__grid { display: grid; gap: 28px; margin-bottom: clamp(32px, 5vw, 64px); }
 .vc-orig__t h3 { font-size: 1.0625rem; font-weight: 650; letter-spacing: -0.02em; margin-bottom: 10px; } .vc-orig__t p { color: var(--ink-2); font-size: 1rem; line-height: 1.5; margin-bottom: 10px; } .vc-prod { margin-top: 14px; }
@@ -1262,8 +1262,7 @@ html:has(body.nf) { background: #0b0b0b; }
 .vc-life__skel { display: grid; gap: var(--gap); }
 .vc-dir--p .vc-d .vc-fig__m { aspect-ratio: 16 / 10; }
 @media (min-width: 820px) {
-  .vc-open__row { grid-template-columns: 1.3fr 1fr; align-items: end; gap: var(--gap); }
-  .vc-orig__grid { grid-template-columns: repeat(3, 1fr); gap: var(--gap); }
+    .vc-orig__grid { grid-template-columns: repeat(2, 1fr); gap: var(--gap); }
   .vc-orig__m { grid-template-columns: 1.7fr 0.8fr 0.8fr; }
   .vc-dec li { grid-template-columns: 7rem 1fr 1fr; align-items: baseline; }
   .vc-evo { grid-template-columns: repeat(4, 1fr); }
@@ -1324,3 +1323,15 @@ html:has(body.nf) { background: #0b0b0b; }
 .wpq__big { position: absolute; left: 8cqw; bottom: 22cqw; font-size: 22cqw; line-height: 0.9; font-weight: 650; letter-spacing: -0.06em; color: #f2a93b; font-feature-settings: 'tnum' 1; } .wpq--social .wpq__sm { position: absolute; left: 8cqw; bottom: 10cqw; font-size: 6cqw; font-weight: 650; letter-spacing: -0.02em; } .wpq__tag { position: absolute; right: 6cqw; top: 6cqw; padding: 1.4cqw 3cqw; border-radius: 99px; background: rgba(255, 255, 255, 0.92); color: #06223a; font-size: 3.4cqw; font-weight: 650; }
 .wpq--report { background: #fff; color: #06223a; box-shadow: 0 0 0 1px rgba(6, 34, 58, 0.14), 0 4cqw 8cqw -4cqw rgba(6, 34, 58, 0.4); border-radius: 3cqw; } .wpq--report .wpq__k { position: absolute; left: 9cqw; top: 9cqw; font-size: 4cqw; font-weight: 650; color: #0d4a73; } .wpq--report h4 { position: absolute; left: 9cqw; top: 16cqw; font-size: 14cqw; line-height: 0.92; font-weight: 650; letter-spacing: -0.055em; } .wpq--report h4 span { display: block; }
 .wpq__map { position: absolute; left: 9cqw; right: 9cqw; bottom: 14cqw; height: 38cqw; border-radius: 3cqw; overflow: hidden; } .wpq__map .wps { position: absolute; inset: 0; } .wpq__f { position: absolute; left: 9cqw; bottom: 6cqw; font-size: 3.2cqw; color: #5b7390; font-weight: 600; }
+
+/* sticky project navigation: it sits under the floating pill (or at the top when that pill is hidden); the pill of the section in view is lit */
+.vc-toc { position: sticky; top: 84px; z-index: 40; display: flex; justify-content: center; padding: 8px var(--pad); pointer-events: none; transition: top 0.5s var(--ease); }
+body:has(.nav.is-hidden) .vc-toc { top: 14px; }
+.vc-toc__in { display: flex; gap: 4px; max-width: 100%; overflow-x: auto; scrollbar-width: none; padding: 5px; border-radius: 99px; background: rgba(255, 255, 255, 0.86); -webkit-backdrop-filter: blur(14px) saturate(1.4); backdrop-filter: blur(14px) saturate(1.4); box-shadow: 0 0 0 1px rgba(12, 12, 12, 0.08), 0 10px 30px -14px rgba(12, 12, 12, 0.3); pointer-events: auto; }
+.vc-toc__in::-webkit-scrollbar { display: none; }
+.vc-toc a { flex: none; padding: 9px 15px; border-radius: 99px; font-size: 0.875rem; font-weight: 500; letter-spacing: -0.01em; color: var(--ink-2); white-space: nowrap; transition: background 0.4s var(--ease), color 0.4s var(--ease); }
+.vc-toc a:hover { color: var(--ink); }
+.vc-toc a.is-on { background: var(--ink); color: #fff; }
+.vc-toc a:focus-visible { outline: 2px solid var(--sage); outline-offset: 1px; }
+@media (max-width: 819px) { .vc-toc { top: 72px; justify-content: flex-start; } .vc-toc a { padding: 8px 12px; font-size: 0.8125rem; } }
+@media (prefers-reduced-motion: reduce) { .vc-toc, .vc-toc a { transition: none; } }

@@ -23,13 +23,10 @@ export const vcases = [
     original: {
       about: 'Waterplan is a platform that helps large companies understand and manage their water use. Its customers, such as beverage makers and brewers, commit to water targets and track their progress toward them.',
       audience: 'Large companies with water-dependent operations, and the teams that report and decide on water risk.',
-      // pending: what was originally designed for the brand/website, and under which needs and constraints
-      role: null,
+      // pending: the needs and constraints that defined the original work
       needs: null,
       credit: null,
       materials: [['Original design', 'Original website hero', '16 / 9'], ['Original design', 'Original visual material', '4 / 5'], ['Original design', 'Original communication piece', '1 / 1']],
-      product: 'My day-to-day work at Waterplan is product design. The interfaces are covered in separate case studies:',
-      productLinks: [['Target Tracking', 'target-tracking'], ['Platform Navigation', 'platform-navigation']],
     },
     reimagined: {
       intro: 'This is not a redesign of something that failed, and AI does not make work better on its own. It is a second look: what I would decide differently if I started from the same brief today, and how current tools let me test those decisions quickly.',

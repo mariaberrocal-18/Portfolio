@@ -595,6 +595,21 @@
       el.style.setProperty('--in', (gate * (pos > 0 ? pos : 0)).toFixed(3));
     });
   };
+  // project pages: light the nav pill of the section being read
+  const tocEl = document.querySelector('[data-toc]');
+  const tocLinks = tocEl ? [...tocEl.querySelectorAll('a[href^="#"]')] : [];
+  const tocSecs = tocLinks.map((a) => document.querySelector(a.getAttribute('href')));
+  let tocOn = -2;
+  const updateToc = () => {
+    if (!tocEl) return;
+    let on = -1;
+    tocSecs.forEach((s, i) => { if (s && s.getBoundingClientRect().top < innerHeight * 0.42) on = i; });
+    if (on === tocOn) return;
+    tocOn = on;
+    tocLinks.forEach((a, i) => { a.classList.toggle('is-on', i === on); if (i === on) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current'); });
+    const act = tocLinks[on];
+    if (act && tocEl.firstElementChild.scrollWidth > tocEl.firstElementChild.clientWidth) act.scrollIntoView({ inline: 'center', block: 'nearest' });
+  };
   function update() {
     const vh = innerHeight;
     if (nav) {
@@ -618,6 +633,7 @@
 
     updateBridge();
     updateBx();
+    updateToc();
     if (!fly) updateWork();
     updateCase();
     updateThread();
