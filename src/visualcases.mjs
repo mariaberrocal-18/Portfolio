@@ -42,11 +42,6 @@ export const vcases = [
           ['Kept', null, 'Pending: what carries over from the original, and why.'],
         ],
       },
-      q2: {
-        title: 'What could I explore further?',
-        text: 'Current tools make it fast to try many images, compositions and motion studies. The work is not generating more: it is deciding which layer earns its place, and in what order it should appear.',
-        tools: null,
-      },
       q3: {
         title: 'What does that become?',
         text: 'The same territory, read in layers: first the ground, then the signals, the relations between them, two scenarios and the actions worth taking first.',
@@ -89,20 +84,6 @@ export const vcases = [
       mobileNote: 'On mobile the hero keeps one idea: a place, its risk and a single action.',
       motionNote: 'A sequence that shows the idea in seconds: switch the scenario and the exposure and the priorities respond.',
       commsNote: 'Three pieces that reuse the same territory in different formats.',
-    },
-    process: {
-      intro: 'One image, from first prompt to final use.',
-      steps: [
-        ['Starting point', 'An aerial image of water and territory, and a one-line intention: show how place, data and decisions connect.'],
-        ['Alternatives', 'Three directions: photograph with a grid, abstract data forms, and the layered territory.'],
-        ['Selection', 'The layered territory. It was the only one where the image and the message were the same thing.'],
-        ['Refinement', 'Fewer labels, a single accent colour, and the layer order made consistent.'],
-        ['Application', 'Used as the website hero, then adapted to mobile, a poster, a social post and a report cover.'],
-      ],
-      directed: ['The intention and the layer order', 'What to cut: labels, extra colours, decorative elements', 'Composition, hierarchy and typography'],
-      ai: ['Generating and varying aerial territory images', 'Exploring compositions quickly before committing', 'Pending: confirm which tools and which assets'],
-      adjusted: ['Rebuilt the layers by hand so they stay precise', 'Re-balanced colour and contrast for legibility', 'Wrote and set every label'],
-      tools: null,
     },
     closing: {
       reflection: 'The most useful part of this exploration was not producing images. It was deciding what each layer should say, and what to leave out.',
