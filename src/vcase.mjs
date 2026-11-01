@@ -64,16 +64,12 @@ function pilot(c, next, p, style) {
     ${o.sourceNote ? `<p class="vc-source">${esc(o.sourceNote)}</p>` : ''}
   </section>`;
 
-  const ba = r.q1.shifts.map((x) => {
-    const m = o.materials.find((q) => q.key === x.before);
-    const before = m && m.src ? `<img src="../${m.src}" alt="${esc(m.alt || x.today)}" loading="lazy" decoding="async">` : pend(x.today, '16 / 10', 'Pending asset');
-    return `<article class="vc-ba__row" ${rv}>
-      <figure class="vc-ba__side vc-ba__side--a"><div class="vc-ba__m">${before}</div><figcaption>${tag('Today', 'is-orig')}<p>${esc(x.today)}</p></figcaption></figure>
-      <i class="vc-ba__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22"><path d="M5 12h14m-5-5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i>
-      <figure class="vc-ba__side vc-ba__side--b"><div class="vc-ba__m">${scene({ id: 'ba' + x.before, layers: x.after, label: false })}</div><figcaption>${tag('What I would change', 'is-re')}<p>${esc(x.change)}</p></figcaption></figure>
-      <p class="vc-ba__why"><b>Why</b>${esc(x.why)}</p>
-    </article>`;
-  }).join('') + `<article class="vc-ba__row vc-ba__row--kept" ${rv}><p class="vc-ba__kept">${tag('Kept', 'is-orig')}<em class="vc-pendinline on-dark">Pending: what carries over from the original, and why</em></p></article>`;
+  const arrowSvg = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M5 12h14m-5-5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const ba = `<div class="vc-ba__head" aria-hidden="true"><span>${tag('Today', 'is-orig')}</span><span></span><span>${tag('What I would change', 'is-re')}</span></div>` + r.q1.shifts.map((x) => `<article class="vc-ba__row" ${rv}>
+      <p class="vc-ba__a">${esc(x.today)}</p>
+      <i class="vc-ba__arrow" aria-hidden="true">${arrowSvg}</i>
+      <div class="vc-ba__b"><p>${esc(x.change)}</p><p class="vc-ba__why"><b>Why</b>${esc(x.why)}</p></div>
+    </article>`).join('') + `<article class="vc-ba__row vc-ba__row--kept" ${rv}><p class="vc-ba__kept">${tag('Kept', 'is-orig')}<em class="vc-pendinline on-dark">Pending: what carries over from the original, and why</em></p></article>`;
   const _evo = evolution.map((e, i) => `<li ${rv}><div class="vc-evo__m">${scene({ id: 'e' + i, layers: e.layers, split: e.split, label: false })}<span>${i + 1}</span></div><h4>${esc(e.title)}</h4><p>${esc(e.text)}</p></li>`).join('');
   const pairs = r.q3.pairs.map((x, i) => {
     const art = { hero: `<div class="vc-b vc-b--hero">${webHero(w)}</div>`, section: `<div class="vc-b vc-b--sec">${webSection(w)}</div>`, motion: `<div class="vc-b vc-b--mo">${motion(w)}</div>` }[x.reimagined];
