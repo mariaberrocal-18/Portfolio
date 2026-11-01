@@ -24,7 +24,7 @@ export function vcasePage(c, next, p = '../') {
 
 // ---------------------------------------------------------------------------------------------------------------
 const BADGES = ['Independent exploration', 'Web design', 'AI visual design'];
-function opening(c, art, phrase) {
+function opening(c, phrase) {
   const meta = [['Shipped', c.shipped], ['Project duration', c.duration]]
     .map(([k, v]) => `<div><dt>${k}</dt><dd>${v ? esc(v) : '<em class="vc-pendinline">Pending</em>'}</dd></div>`).join('');
   return `<header class="vc-open wrap">
@@ -37,7 +37,6 @@ function opening(c, art, phrase) {
       <p class="vc-open__desc">This is an independent exploration of what was actually shipped. As tools and AI evolve, my approach to this kind of project has changed, so here is what I would do today instead of what I did.</p>
       <dl class="vc-open__facts">${meta}</dl>
     </div>
-    ${art}
   </header>`;
 }
 
@@ -52,8 +51,6 @@ function nextCard(next, p) {
 // ---------------------------------------------------------------------------------------------------------------
 function pilot(c, next, p, style) {
   const w = c.life.web, o = c.original, r = c.reimagined, d = c.direction, pr = c.process;
-  const heroArt = `<figure class="vc-hero" ${rv}><div class="vc-hero__m">${scene({ id: 'op', layers: ['contours', 'signals', 'relations', 'scenario', 'priorities'], split: true, label: false })}</div><figcaption>${tag('Reimagined concept', 'is-re')}<span>Illustrative: territory, signals, scenarios and priorities in one view.</span></figcaption></figure>`;
-
   const s2 = `<section class="vc-s vc-s--orig wrap" id="original" aria-labelledby="h-orig">
     ${sectionHead('01', 'The original project')}
     <div class="vc-orig__grid">
@@ -162,7 +159,7 @@ function pilot(c, next, p, style) {
 
   return `<main class="vc" style="${style}">
   <article>
-    ${opening(c, heroArt, esc(c.phrase))}
+    ${opening(c, esc(c.phrase))}
     <nav class="vc-toc" aria-label="On this page" data-toc><div class="vc-toc__in"><a href="#original">Original project</a><a href="#reimagined">Reimagined with AI</a><a href="#direction">Visual direction</a><a href="#life">Bringing it to life</a><a href="#process">Exploration process</a></div></nav>
     ${s2}${s3}${s4}${s5}${s6}${s7}
   </article>
@@ -176,7 +173,7 @@ function skeleton(c, next, p) {
   const q = (n, title) => `<div class="vc-q" ${rv}><p class="vc-q__n">${n}</p><div><h3>${title}</h3>${pendText('Written once the project is defined.').replace('<p class="vc-pendtext">', '<p class="vc-pendtext on-dark">')}</div></div>`;
   return `<main class="vc">
   <article>
-    ${opening(c, `<figure class="vc-hero" ${rv}><div class="vc-hero__m">${pend('Hero image of the reimagined concept', '21 / 9', 'Pending asset')}</div><figcaption>${tag('Reimagined concept', 'is-re')}<span>Pending image.</span></figcaption></figure>`, `<span class="vc-pendinline">Pending · one sentence that sums up the new vision</span>`)}
+    ${opening(c, `<span class="vc-pendinline">Pending · one sentence that sums up the new vision</span>`)}
     <nav class="vc-toc" aria-label="On this page" data-toc><div class="vc-toc__in"><a href="#original">Original project</a><a href="#reimagined">Reimagined with AI</a><a href="#direction">Visual direction</a><a href="#life">Bringing it to life</a><a href="#process">Exploration process</a></div></nav>
     <section class="vc-s vc-s--orig wrap" id="original" aria-labelledby="h-orig">
       ${sectionHead('01', 'The original project')}
