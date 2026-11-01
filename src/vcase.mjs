@@ -2,7 +2,7 @@
 // Seven sections: Opening · The original project · Reimagined with AI · The new visual direction ·
 // Bringing it to life · Behind the exploration · Closing.
 // Every slot that has no verified content renders a clearly labelled "Pending" box. Nothing is invented.
-import { scene, evolution, webHero, webSection, phone, motion, poster, social, report, typeSpecimen, palette, layerKit } from './wpart.mjs';
+import { scene, evolution, slice, sliceAr, phones, motion, poster, social, report, typeSpecimen, palette, layerKit } from './wpart.mjs';
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const arrow = `<svg class="ico" width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M4.5 13.5l9-9M6 4.5h7.5V12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
@@ -72,7 +72,7 @@ function pilot(c, next, p, style) {
     </article>`).join('') + `<article class="vc-ba__row vc-ba__row--kept" ${rv}><p class="vc-ba__kept">${tag('Kept', 'is-orig')}<em class="vc-pendinline on-dark">Pending: what carries over from the original, and why</em></p></article>`;
   const _evo = evolution.map((e, i) => `<li ${rv}><div class="vc-evo__m">${scene({ id: 'e' + i, layers: e.layers, split: e.split, label: false })}<span>${i + 1}</span></div><h4>${esc(e.title)}</h4><p>${esc(e.text)}</p></li>`).join('');
   const pairs = r.q3.pairs.map((x, i) => {
-    const art = { hero: `<div class="vc-b vc-b--hero">${webHero(w)}</div>`, section: `<div class="vc-b vc-b--sec">${webSection(w)}</div>`, motion: `<div class="vc-b vc-b--mo">${motion(w)}</div>` }[x.reimagined];
+    const art = { hero: `<div class="vc-b">${slice(w, 'hero', 'pr' + i)}</div>`, section: `<div class="vc-b">${slice(w, 's1', 'pr' + i)}</div>`, motion: `<div class="vc-b vc-b--mo">${motion(w)}</div>` }[x.reimagined];
     const ar = x.reimagined === 'section' ? '16 / 9' : x.reimagined === 'motion' ? '16 / 8.4' : '16 / 9';
     return `<div class="vc-pair vc-pair--${x.kind}" ${rv}>
       ${x.kind === 'pair' ? `<figure class="vc-fig vc-pair__o"><div class="vc-fig__m" style="--ar:${ar}">${(() => { const m = o.materials.find((q) => q.key === x.originalKey); return m && m.src ? `<img src="../${m.src}" alt="${esc(m.alt || x.original)}" loading="lazy" decoding="async">` : pend(x.original, ar, 'Pending asset'); })()}</div><figcaption>${tag('Original design', 'is-orig')}<span>${esc(x.original)}</span></figcaption></figure>` : ''}
@@ -112,13 +112,19 @@ function pilot(c, next, p, style) {
 
   const s5 = `<section class="vc-s vc-s--life wrap" id="life" aria-labelledby="h-life">
     ${sectionHead('04', 'Bringing it to life', 'Reimagined concept')}
-    ${frame(`<div class="vc-b vc-b--hero">${webHero(w)}</div>`, 'Website · hero', 'Reimagined concept', '16 / 9', 'vc-fig--full')}
-    <div class="vc-life__duo">
-      ${frame(`<div class="vc-b vc-b--phone">${phone(w)}</div>`, 'Mobile adaptation', 'Reimagined concept', '9 / 14', 'vc-fig--phone')}
-      <div class="vc-life__side">
-        <p class="vc-note vc-note--l" ${rv}>${esc(c.life.mobileNote)}</p>
-        ${frame(`<div class="vc-b vc-b--sec">${webSection(w)}</div>`, 'Website · key section: comparing scenarios', 'Reimagined concept', '16 / 9')}
+    <p class="vc-note vc-note--l" ${rv}>${esc(c.life.webNote)}</p>
+    ${frame(`<div class="vc-b">${slice(w, 'hero', 'lh')}</div>`, 'Website · hero', 'Reimagined concept', sliceAr('hero'), 'vc-fig--full')}
+    <div class="vc-life__web">
+      ${frame(`<div class="vc-b">${slice(w, 'full', 'lf')}</div>`, 'The full homepage: hero, three key sections and closing', 'Reimagined concept', sliceAr('full'), 'vc-fig--tall')}
+      <div class="vc-life__secs">
+        ${frame(`<div class="vc-b">${slice(w, 's1', 'l1')}</div>`, 'Section · understand each site', 'Reimagined concept', sliceAr('s1'))}
+        ${frame(`<div class="vc-b">${slice(w, 's2', 'l2')}</div>`, 'Section · compare scenarios', 'Reimagined concept', sliceAr('s2'))}
+        ${frame(`<div class="vc-b">${slice(w, 's3', 'l3')}</div>`, 'Section · decide what to do first', 'Reimagined concept', sliceAr('s3'))}
       </div>
+    </div>
+    <div class="vc-life__duo">
+      ${frame(`<div class="vc-b vc-b--phone">${phones(w)}</div>`, 'Mobile adaptation: hero and scenarios', 'Reimagined concept', '16 / 11', 'vc-fig--phones')}
+      <p class="vc-note vc-note--l" ${rv}>${esc(c.life.mobileNote)}</p>
     </div>
     <div class="vc-life__mo">
       <p class="vc-note vc-note--l" ${rv}>${esc(c.life.motionNote)}</p>
