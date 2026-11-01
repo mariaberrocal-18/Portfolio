@@ -58,13 +58,22 @@ function pilot(c, next, p, style) {
     ${sectionHead('01', 'The original project')}
     <div class="vc-orig__grid">
       <div class="vc-orig__t" ${rv}><h3>The brand and its audience</h3><p>${esc(o.about)}</p><p>${esc(o.audience)}</p></div>
-      <div class="vc-orig__t" ${rv}><h3>Needs and constraints</h3>${o.needs ? `<p>${esc(o.needs)}</p>` : pendText('The needs and constraints that defined the original work.')}</div>
+      <div class="vc-orig__t" ${rv}><h3>Needs and constraints</h3>${Array.isArray(o.needs) ? `<ul class="vc-bullets">${o.needs.map((n) => `<li>${esc(n)}</li>`).join('')}</ul>` : o.needs ? `<p>${esc(o.needs)}</p>` : pendText('The needs and constraints that defined the original work.')}</div>
     </div>
     <div class="vc-orig__m">${o.materials.map((m, i) => `<figure class="vc-fig vc-fig--o vc-fig--o-${m.key}" ${rv}><div class="vc-fig__m" style="--ar:${m.ar}">${m.src ? `<img src="../${m.src}" alt="${esc(m.alt || m.label)}" loading="lazy" decoding="async">` : pend(m.label, m.ar, 'Pending asset')}</div><figcaption>${tag('Original design', 'is-orig')}<span>${esc(m.label)}</span></figcaption></figure>`).join('')}</div>
     ${o.sourceNote ? `<p class="vc-source">${esc(o.sourceNote)}</p>` : ''}
   </section>`;
 
-  const dec = r.q1.decisions.map(([k, v, why]) => `<li class="${k === 'Kept' ? 'is-kept' : 'is-chg'}"><b>${k}</b><span>${v ? esc(v) : '<em class="vc-pendinline on-dark">Pending</em>'}</span><em>${esc(why)}</em></li>`).join('');
+  const ba = r.q1.shifts.map((x) => {
+    const m = o.materials.find((q) => q.key === x.before);
+    const before = m && m.src ? `<img src="../${m.src}" alt="${esc(m.alt || x.today)}" loading="lazy" decoding="async">` : pend(x.today, '16 / 10', 'Pending asset');
+    return `<article class="vc-ba__row" ${rv}>
+      <figure class="vc-ba__side vc-ba__side--a"><div class="vc-ba__m">${before}</div><figcaption>${tag('Today', 'is-orig')}<p>${esc(x.today)}</p></figcaption></figure>
+      <i class="vc-ba__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22"><path d="M5 12h14m-5-5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i>
+      <figure class="vc-ba__side vc-ba__side--b"><div class="vc-ba__m">${scene({ id: 'ba' + x.before, layers: x.after, label: false })}</div><figcaption>${tag('What I would change', 'is-re')}<p>${esc(x.change)}</p></figcaption></figure>
+      <p class="vc-ba__why"><b>Why</b>${esc(x.why)}</p>
+    </article>`;
+  }).join('') + `<article class="vc-ba__row vc-ba__row--kept" ${rv}><p class="vc-ba__kept">${tag('Kept', 'is-orig')}<em class="vc-pendinline on-dark">Pending: what carries over from the original, and why</em></p></article>`;
   const _evo = evolution.map((e, i) => `<li ${rv}><div class="vc-evo__m">${scene({ id: 'e' + i, layers: e.layers, split: e.split, label: false })}<span>${i + 1}</span></div><h4>${esc(e.title)}</h4><p>${esc(e.text)}</p></li>`).join('');
   const pairs = r.q3.pairs.map((x, i) => {
     const art = { hero: `<div class="vc-b vc-b--hero">${webHero(w)}</div>`, section: `<div class="vc-b vc-b--sec">${webSection(w)}</div>`, motion: `<div class="vc-b vc-b--mo">${motion(w)}</div>` }[x.reimagined];
@@ -83,7 +92,7 @@ function pilot(c, next, p, style) {
     </div>
     <div class="vc-re__q wrap">
       <div class="vc-q" ${rv}><p class="vc-q__n">1</p><div><h3>${esc(r.q1.title)}</h3><p>${esc(r.q1.text)}</p></div></div>
-      <ul class="vc-dec" ${rv}>${dec}</ul>
+      <div class="vc-ba">${ba}</div>
     </div>
     <div class="vc-re__q wrap">
       <div class="vc-q" ${rv}><p class="vc-q__n">2</p><div><h3>${esc(r.q3.title)}</h3><p>${esc(r.q3.text)}</p></div></div>

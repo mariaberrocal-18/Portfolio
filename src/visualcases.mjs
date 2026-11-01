@@ -19,8 +19,10 @@ export const vcases = [
     original: {
       about: 'Waterplan is a platform that helps large companies understand and manage their water use. Its customers, such as beverage makers and brewers, commit to water targets and track their progress toward them.',
       audience: 'Large companies with water-dependent operations, and the teams that report and decide on water risk.',
-      // pending: the needs and constraints that defined the original work
-      needs: null,
+      needs: [
+        'Components and general layout were defined by a third-party agency using Framer.',
+        'The real app could not be shown, so representative illustrations had to be created.',
+      ],
       credit: null,
       // screens captured from the published website (not the 2024 version): see `sourceNote`
       materials: [
@@ -32,15 +34,16 @@ export const vcases = [
       sourceNote: 'Screens captured from waterplan.com on 26 Oct 2026. The published site may have changed since the project shipped.',
     },
     reimagined: {
-      intro: 'This is not a redesign of something that failed, and AI does not make work better on its own. It is a second look: what I would decide differently if I started from the same brief today, and how current tools let me test those decisions quickly.',
+      intro: 'This is not a redesign of something that failed. It is a second look: what I would decide differently if I started from the same brief today, and how current tools let me test those decisions quickly.',
       q1: {
         title: 'What would I rethink today?',
         text: 'Water risk is about places: a river, an aquifer, a facility. Water imagery can easily become generic. The opportunity I see is to show how territory, data and decisions connect, so what the platform is for is understood before any screen is opened.',
-        decisions: [
-          ['Changed', 'Generic water imagery becomes one recognisable territory, seen from above.', 'A specific place makes risk tangible; a stock image makes it abstract.'],
-          ['Changed', 'Data graphics sit on the landscape instead of next to it.', 'The relation between a signal and the facility it affects is the message.'],
-          ['Kept', null, 'Pending: what carries over from the original, and why.'],
+        // before / after: `today` describes what the published site shows (see the original screens); `after` is the concept
+        shifts: [
+          { today: 'A dotted globe as the hero image.', change: 'One recognisable territory, seen from above.', why: 'A specific place makes risk tangible; a globe keeps it abstract.', before: 'hero', after: ['contours'] },
+          { today: 'Product illustrations sit in cards next to the text.', change: 'Data graphics sit on the landscape itself.', why: 'The relation between a signal and the facility it affects is the message.', before: 'risk', after: ['contours', 'signals', 'relations', 'priorities'] },
         ],
+        kept: null, // pending: what carries over from the original, and why
       },
       q3: {
         title: 'What does that become?',
