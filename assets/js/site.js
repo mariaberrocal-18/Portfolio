@@ -600,8 +600,16 @@
   const tocLinks = tocEl ? [...tocEl.querySelectorAll('a[href^="#"]')] : [];
   const tocSecs = tocLinks.map((a) => document.querySelector(a.getAttribute('href')));
   let tocOn = -2;
+  const vcMain = document.querySelector('main.vc');
+  const vcDark = vcMain ? vcMain.querySelector('.vc-s--re') : null;
+  let vcFade = '';
   const updateToc = () => {
     if (!tocEl) return;
+    if (vcMain && vcDark) {
+      const r = vcDark.getBoundingClientRect();
+      const col = r.top < 70 && r.bottom > 70 ? getComputedStyle(vcMain).getPropertyValue('--vt-dark').trim() || '#0e0e0e' : '#fefefe';
+      if (col !== vcFade) { vcFade = col; vcMain.style.setProperty('--vfade', col); }
+    }
     let on = -1;
     tocSecs.forEach((s, i) => { if (s && s.getBoundingClientRect().top < innerHeight * 0.42) on = i; });
     if (on === tocOn) return;

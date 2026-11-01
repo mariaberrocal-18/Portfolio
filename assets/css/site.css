@@ -1342,11 +1342,12 @@ body:has(.nav.is-hidden) .vc-toc { top: 14px; }
 @media (max-width: 819px) { .vc-toc { top: 72px; justify-content: flex-start; } .vc-toc a { padding: 8px 12px; font-size: 0.8125rem; } }
 @media (prefers-reduced-motion: reduce) { .vc-toc, .vc-toc a { transition: none; } }
 
-/* project pages: content softly blurs and fades away under the floating nav and the sticky project nav */
-main.vc::before { content: ''; position: fixed; left: 0; right: 0; top: 0; height: 176px; z-index: 30; pointer-events: none;
-  -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
-  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 46%, transparent 100%); mask-image: linear-gradient(to bottom, #000 0%, #000 46%, transparent 100%);
-  background: linear-gradient(to bottom, rgba(254, 254, 254, 0.5), rgba(254, 254, 254, 0));
+/* project pages: content fades out under the floating nav and the sticky project nav. The fade takes the colour of the section underneath (set from JS) */
+main.vc { --vfade: #fefefe; }
+main.vc::before { content: ''; position: fixed; left: 0; right: 0; top: 0; height: 150px; z-index: 30; pointer-events: none;
+  background: linear-gradient(to bottom, var(--vfade) 0%, color-mix(in srgb, var(--vfade) 92%, transparent) 42%, color-mix(in srgb, var(--vfade) 55%, transparent) 70%, transparent 100%);
+  -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 60%, transparent 100%); mask-image: linear-gradient(to bottom, #000 0%, #000 60%, transparent 100%);
   transition: height 0.5s var(--ease); }
-body:has(.nav.is-hidden) main.vc::before { height: 112px; }
-@media (max-width: 819px) { main.vc::before { height: 160px; } body:has(.nav.is-hidden) main.vc::before { height: 104px; } }
+body:has(.nav.is-hidden) main.vc::before { height: 96px; }
+@media (max-width: 819px) { main.vc::before { height: 138px; } body:has(.nav.is-hidden) main.vc::before { height: 92px; } }
